@@ -1,4 +1,4 @@
-name: Build and Commit Assets
+name: Can build assets
 
 on:
   pull_request_target:
@@ -16,7 +16,15 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Install dependencies
-        run: npm install  # Adjust this based on your project's requirements
+        run: npm install
 
       - name: Build assets
-        run: npm run build  # Adjust this based on your project's build command
+        run: npm vite build
+
+      # - name: Commit built assets
+      #   run: |
+      #     git config --global user.name "Github Action"
+      #     git config --global user.email "github-action@example.com"
+      #     git add .
+      #     git commit -m "Add built assets"
+      #     git push origin ${{ github.event.pull_request.base.ref }}
