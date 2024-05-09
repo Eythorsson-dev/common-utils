@@ -12,7 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-          
+
+      - name: Echo LS
+        run: ls
       - name: Install dependencies
         run: npm install  # Adjust this based on your project's requirements
 
