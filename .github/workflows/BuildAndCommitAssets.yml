@@ -12,13 +12,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set Permissions
-        run: chmod -R a-x .
         
       - name: Echo LS
-        run: ls
-        
+        run: ls -a -l
+
+      - name: Set Permissions
+        run: sudo chmod -R a-x .
+
+      - name: Echo LS
+        run: ls 
+
       - name: Install dependencies
         run: npm install  # Adjust this based on your project's requirements
 
