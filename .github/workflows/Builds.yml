@@ -19,7 +19,7 @@ jobs:
         run: npm install
 
       - name: Build assets
-        run: npm vite build
+        run: npm run build
 
       # - name: Commit built assets
       #   run: |
