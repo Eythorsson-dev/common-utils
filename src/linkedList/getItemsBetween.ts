@@ -1,6 +1,5 @@
 import { Item } from "./item";
 
-/** @internal */
 function searchItems(block: Item, end: Item, ignoreChildren: boolean = false): Item[] {
     if (block == undefined) return [];
     if (block.id == end.id) return [end];
