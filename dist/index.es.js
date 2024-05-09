@@ -1,69 +1,79 @@
-function l(t) {
-  return t.nextItem ? [t.nextItem, ...l(t.nextItem)] : [];
+function I(t) {
+  return t.nextItem ? [t.nextItem, ...I(t.nextItem)] : [];
 }
-function a(t) {
+function u(t) {
   return t.firstChildItem ? [
     t.firstChildItem,
-    ...a(t.firstChildItem),
-    ...l(t.firstChildItem).flatMap((e) => [e, ...a(e)])
+    ...u(t.firstChildItem),
+    ...I(t.firstChildItem).flatMap((e) => [e, ...u(e)])
   ] : [];
 }
-function d(t, e, i = !1) {
-  var o;
+function o(t, e, n = !1) {
+  var i;
   if (t == null)
     return [];
   if (t.id == e.id)
     return [e];
-  const r = i ? [] : d(t.firstChildItem, e);
-  if (((o = r.slice(-1)[0]) == null ? void 0 : o.id) == e.id)
+  const r = n ? [] : o(t.firstChildItem, e);
+  if (((i = r.slice(-1)[0]) == null ? void 0 : i.id) == e.id)
     return [t, ...r];
   if (t.nextItem)
-    return [t, ...r, ...d(t.nextItem, e)];
+    return [t, ...r, ...o(t.nextItem, e)];
   if (t.parentItem)
-    return [t, ...r, ...d(t.parentItem, e, !0)].filter((I) => I.id != t.parentItem.id);
+    return [t, ...r, ...o(t.parentItem, e, !0)].filter((l) => l.id != t.parentItem.id);
   throw Error("Something went wrong. Please make sure that the start, and the end has a common parent");
 }
-function p(t, e) {
-  return d(t, e);
+function h(t, e) {
+  return o(t, e);
 }
-function h(t) {
+function c(t) {
   if (t.firstChildItem)
     return t.firstChildItem;
   if (t.nextItem)
     return t.nextItem;
-  function e(i) {
-    if (i.nextItem)
-      return i.nextItem;
-    if (i.parentItem)
-      return e(i.parentItem);
+  function e(n) {
+    if (n.nextItem)
+      return n.nextItem;
+    if (n.parentItem)
+      return e(n.parentItem);
   }
   return e(t);
 }
-function u(t, e, i) {
-  const r = t.find((o) => o.parentId == e && o.previousId == i);
-  return r ? (t = t.filter((o) => o.id != r.id), [
+function p(t, e) {
+  function n(r) {
+    if (r.id == e)
+      return r;
+    let i;
+    return r.firstChildItem && (i || (i = n(r.firstChildItem))), r.nextItem && (i || (i = n(r.nextItem))), i;
+  }
+  return n(t);
+}
+function a(t, e, n) {
+  const r = t.find((i) => i.parentId == e && i.previousId == n);
+  return r ? (t = t.filter((i) => i.id != r.id), [
     r,
-    ...u(t, r.id, void 0),
-    ...u(t, e, r.id)
+    ...a(t, r.id, void 0),
+    ...a(t, e, r.id)
   ]) : [];
 }
-function c(t) {
-  if (t.filter((n) => n.parentId == null && n.previousId == null).length != 1 && t.length > 0)
+function v(t) {
+  if (t.filter((d) => d.parentId == null && d.previousId == null).length != 1 && t.length > 0)
     throw new Error("Cannot set value, failed to determine the start of the linked list");
-  if (t.map((n) => n.id).some((n, s, f) => f.indexOf(n) != s))
+  if (t.map((d) => d.id).some((d, f, s) => s.indexOf(d) != f))
     throw new Error("Cannot set value, found duplicated instances of ids");
-  if (t.map((n) => n.previousId + "_" + n.parentId).some((n, s, f) => f.indexOf(n) != s))
+  if (t.map((d) => d.previousId + "_" + d.parentId).some((d, f, s) => s.indexOf(d) != f))
     throw new Error("Cannot set value, some of the blocks have the same prevId");
 }
-const v = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const x = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  getChildItems: a,
-  getItemsBetween: p,
-  getNextItem: h,
-  getNextSiblings: l,
-  sortList: u,
-  validateList: c
+  getChildItems: u,
+  getItemsBetween: h,
+  getNextItem: c,
+  getNextOrChildById: p,
+  getNextSiblings: I,
+  sortList: a,
+  validateList: v
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  v as linkedList
+  x as linkedList
 };
