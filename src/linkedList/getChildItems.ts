@@ -3,10 +3,10 @@ import { Item } from "./item";
 
 
 export function getChildItems<T extends Item>(item: T): T[] {
-    if (!item.firstChild) return [];
+    if (!item.firstChildItem) return [];
     return [
-        item.firstChild as T,
-        ...getChildItems(item.firstChild) as T[],
-        ...getNextSiblings(item.firstChild).flatMap(x => [x as T, ...getChildItems<T>(x as T)])
+        item.firstChildItem as T,
+        ...getChildItems(item.firstChildItem) as T[],
+        ...getNextSiblings(item.firstChildItem).flatMap(x => [x as T, ...getChildItems<T>(x as T)])
     ]
 }

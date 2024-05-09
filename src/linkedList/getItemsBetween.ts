@@ -4,11 +4,11 @@ function searchItems(block: Item, end: Item, ignoreChildren: boolean = false): I
     if (block == undefined) return [];
     if (block.id == end.id) return [end];
 
-    const children = ignoreChildren ? [] : searchItems(block.firstChild!, end);
+    const children = ignoreChildren ? [] : searchItems(block.firstChildItem!, end);
     if (children.slice(-1)[0]?.id == end.id) return [block, ...children];
 
-    if (block.next) return [block, ...children, ...searchItems(block.next, end)];
-    if (block.parent) return [block, ...children, ...searchItems(block.parent, end, true)].filter(x => x.id != block.parent!.id);
+    if (block.nextItem) return [block, ...children, ...searchItems(block.nextItem, end)];
+    if (block.parentItem) return [block, ...children, ...searchItems(block.parentItem, end, true)].filter(x => x.id != block.parentItem!.id);
 
     throw Error("Something went wrong. Please make sure that the start, and the end has a common parent")
 

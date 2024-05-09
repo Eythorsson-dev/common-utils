@@ -2,10 +2,10 @@
 
 export interface Item {
     get id(): string,
-    get parent(): Item | undefined,
-    get firstChild(): Item | undefined
-    get next(): Item | undefined,
-    get previous(): Item | undefined
+    get parentItem(): Item | undefined,
+    get firstChildItem(): Item | undefined
+    get nextItem(): Item | undefined,
+    get previousItem(): Item | undefined
 }
 
 export interface ItemData {
@@ -21,10 +21,10 @@ export function render(...items: ItemData[]): Item[] {
     const itemById = items.reduce((obj, curr) => {
         obj[curr.id] = {
             ...curr,
-            get parent() { return obj[curr.parentId!] },
-            get next() { return obj[curr.nextId ?? items.find(x => x.previousId == curr.id)?.id!] },
-            get previous() { return obj[curr.previousId ?? items.find(x => x.nextId == curr.id)?.id!] },
-            get firstChild() { return obj[curr.firstChildId ?? items.find(x => x.parentId == curr.id && x.previousId == undefined)?.id!] },
+            get parentItem() { return obj[curr.parentId!] },
+            get nextItem() { return obj[curr.nextId ?? items.find(x => x.previousId == curr.id)?.id!] },
+            get previousItem() { return obj[curr.previousId ?? items.find(x => x.nextId == curr.id)?.id!] },
+            get firstChildItem() { return obj[curr.firstChildId ?? items.find(x => x.parentId == curr.id && x.previousId == undefined)?.id!] },
         };
 
         return obj
