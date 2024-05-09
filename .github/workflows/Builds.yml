@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-commit:
-    name: Build and Commit
+    name: Can Build
     runs-on: ubuntu-latest
 
     steps:
