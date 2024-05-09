@@ -15,6 +15,6 @@ function searchItems<T extends Item>(item: T, end: T, ignoreChildren: boolean = 
 }
 
 
-export function getItemsBetween(start: Item | undefined, end: Item): Item[] {
+export function getItemsBetween<T extends Item>(start: T | undefined, end: T): T[] {
     return searchItems(start!, end);
 }
