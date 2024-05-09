@@ -1,14 +1,14 @@
 import { Item } from "./item";
 
-function searchItems(block: Item, end: Item, ignoreChildren: boolean = false): Item[] {
-    if (block == undefined) return [];
-    if (block.id == end.id) return [end];
+function searchItems<T extends Item>(item: T, end: T, ignoreChildren: boolean = false): T[] {
+    if (item == undefined) return [];
+    if (item.id == end.id) return [end];
 
-    const children = ignoreChildren ? [] : searchItems(block.firstChildItem!, end);
-    if (children.slice(-1)[0]?.id == end.id) return [block, ...children];
+    const children = ignoreChildren ? [] : searchItems<T>(item.firstChildItem! as T, end);
+    if (children.slice(-1)[0]?.id == end.id) return [item, ...children];
 
-    if (block.nextItem) return [block, ...children, ...searchItems(block.nextItem, end)];
-    if (block.parentItem) return [block, ...children, ...searchItems(block.parentItem, end, true)].filter(x => x.id != block.parentItem!.id);
+    if (item.nextItem) return [item, ...children, ...searchItems<T>(item.nextItem as T, end)];
+    if (item.parentItem) return [item, ...children, ...searchItems<T>(item.parentItem as T, end, true) as T[]].filter(x => x.id != item.parentItem!.id);
 
     throw Error("Something went wrong. Please make sure that the start, and the end has a common parent")
 

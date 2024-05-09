@@ -20,13 +20,13 @@ function f(t, e, n = !1) {
   if (t.nextItem)
     return [t, ...r, ...f(t.nextItem, e)];
   if (t.parentItem)
-    return [t, ...r, ...f(t.parentItem, e, !0)].filter((s) => s.id != t.parentItem.id);
+    return [t, ...r, ...f(t.parentItem, e, !0)].filter((o) => o.id != t.parentItem.id);
   throw Error("Something went wrong. Please make sure that the start, and the end has a common parent");
 }
-function a(t, e) {
+function s(t, e) {
   return f(t, e);
 }
-function m(t) {
+function a(t) {
   if (t.firstChildItem)
     return t.firstChildItem;
   if (t.nextItem)
@@ -47,14 +47,14 @@ function d(t, e, n) {
     ...d(t, e, r.id)
   ]) : [];
 }
-const h = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const l = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   getChildItems: u,
-  getItemsBetween: a,
-  getNextBlock: m,
+  getItemsBetween: s,
+  getNextBlock: a,
   getNextSiblings: I,
   sortList: d
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  h as linkedList
+  l as linkedList
 };
