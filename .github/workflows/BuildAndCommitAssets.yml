@@ -27,4 +27,4 @@ jobs:
           git config --global user.email "github-action@example.com"
           git add .
           git commit -m "Add built assets"
-          git push origin ${{ github.event.pull_request.base.ref }}
+          git push origin HEAD:${{ github.event.pull_request.base.ref }}
