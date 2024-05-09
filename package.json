@@ -1,5 +1,5 @@
 {
-  "name": "common-utils",
+  "name": "@eythorsson-dev/common-utils",
   "private": true,
   "version": "0.0.0",
   "type": "module",
