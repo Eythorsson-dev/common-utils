@@ -22,7 +22,7 @@ jobs:
         run: npm install  # Adjust this based on your project's requirements
 
       - name: Build assets
-        run: npm run build  # Adjust this based on your project's build command
+        run: npx vite build  # Adjust this based on your project's build command
 
       - name: Commit built assets
         run: |
