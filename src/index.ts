@@ -1,1 +1,1 @@
-export * as linkedList from "./linkedList/index";
+export * as linkedList from "./linkedList/index"
