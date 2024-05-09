@@ -1,7 +1,6 @@
 import { ItemData } from "./item";
 
 
-
 export function validateList<T extends ItemData>(items: T[]): void {
     const rootBlocks = items.filter(x => x.parentId == undefined && x.previousId == undefined);
 
