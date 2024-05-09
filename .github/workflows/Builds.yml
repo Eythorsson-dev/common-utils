@@ -1,0 +1,30 @@
+name: Can build assets
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  build-and-commit:
+    name: Build and Commit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build assets
+        run: npm vite build
+
+      # - name: Commit built assets
+      #   run: |
+      #     git config --global user.name "Github Action"
+      #     git config --global user.email "github-action@example.com"
+      #     git add .
+      #     git commit -m "Add built assets"
+      #     git push origin ${{ github.event.pull_request.base.ref }}
