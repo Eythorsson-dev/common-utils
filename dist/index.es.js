@@ -1,60 +1,60 @@
-function s(t) {
-  return t.next ? [t.next, ...s(t.next)] : [];
+function I(t) {
+  return t.nextItem ? [t.nextItem, ...I(t.nextItem)] : [];
 }
 function u(t) {
-  return t.firstChild ? [
-    t.firstChild,
-    ...u(t.firstChild),
-    ...s(t.firstChild).flatMap((r) => [r, ...u(r)])
+  return t.firstChildItem ? [
+    t.firstChildItem,
+    ...u(t.firstChildItem),
+    ...I(t.firstChildItem).flatMap((e) => [e, ...u(e)])
   ] : [];
 }
-function f(t, r, n = !1) {
+function f(t, e, n = !1) {
   var i;
   if (t == null)
     return [];
-  if (t.id == r.id)
-    return [r];
-  const e = n ? [] : f(t.firstChild, r);
-  if (((i = e.slice(-1)[0]) == null ? void 0 : i.id) == r.id)
-    return [t, ...e];
-  if (t.next)
-    return [t, ...e, ...f(t.next, r)];
-  if (t.parent)
-    return [t, ...e, ...f(t.parent, r, !0)].filter((a) => a.id != t.parent.id);
+  if (t.id == e.id)
+    return [e];
+  const r = n ? [] : f(t.firstChildItem, e);
+  if (((i = r.slice(-1)[0]) == null ? void 0 : i.id) == e.id)
+    return [t, ...r];
+  if (t.nextItem)
+    return [t, ...r, ...f(t.nextItem, e)];
+  if (t.parentItem)
+    return [t, ...r, ...f(t.parentItem, e, !0)].filter((s) => s.id != t.parentItem.id);
   throw Error("Something went wrong. Please make sure that the start, and the end has a common parent");
 }
-function h(t, r) {
-  return f(t, r);
+function a(t, e) {
+  return f(t, e);
 }
-function o(t) {
-  if (t.firstChild)
-    return t.firstChild;
-  if (t.next)
-    return t.next;
-  function r(n) {
-    if (n.next)
-      return n.next;
-    if (n.parent)
-      return r(n.parent);
+function m(t) {
+  if (t.firstChildItem)
+    return t.firstChildItem;
+  if (t.nextItem)
+    return t.nextItem;
+  function e(n) {
+    if (n.nextItem)
+      return n.nextItem;
+    if (n.parentItem)
+      return e(n.parentItem);
   }
-  return r(t);
+  return e(t);
 }
-function d(t, r, n) {
-  const e = t.find((i) => i.parentId == r && i.previousId == n);
-  return e ? (t = t.filter((i) => i.id != e.id), [
-    e,
-    ...d(t, e.id, void 0),
-    ...d(t, r, e.id)
+function d(t, e, n) {
+  const r = t.find((i) => i.parentId == e && i.previousId == n);
+  return r ? (t = t.filter((i) => i.id != r.id), [
+    r,
+    ...d(t, r.id, void 0),
+    ...d(t, e, r.id)
   ]) : [];
 }
-const x = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const h = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   getChildItems: u,
-  getItemsBetween: h,
-  getNextBlock: o,
-  getNextSiblings: s,
+  getItemsBetween: a,
+  getNextBlock: m,
+  getNextSiblings: I,
   sortList: d
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  x as linkedList
+  h as linkedList
 };

@@ -1,9 +1,9 @@
 export interface Item {
     get id(): string;
-    get parent(): Item | undefined;
-    get firstChild(): Item | undefined;
-    get next(): Item | undefined;
-    get previous(): Item | undefined;
+    get parentItem(): Item | undefined;
+    get firstChildItem(): Item | undefined;
+    get nextItem(): Item | undefined;
+    get previousItem(): Item | undefined;
 }
 export interface ItemData {
     id: string;
