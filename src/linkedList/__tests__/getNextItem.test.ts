@@ -5,7 +5,7 @@
 // 4
 
 import { describe, expect, test } from "vitest"
-import { getNextBlock } from "../getNextBlock"
+import { getNextItem } from "../getNextItem"
 import { ItemData, render } from "../item"
 
 const data0: ItemData = { id: "Block0", parentId: undefined }
@@ -32,22 +32,22 @@ const [
 describe("getNextBlock", () => {
 
     test("First Child (0 -> 1)", () => {
-        const next = getNextBlock(block0);
+        const next = getNextItem(block0);
         expect(next!.id).toBe(block1.id)
     })
 
     test("Next Sibling (1 -> 2)", () => {
-        const next = getNextBlock(block1);
+        const next = getNextItem(block1);
         expect(next!.id).toBe(block2.id)
     })
 
     test("Parent Sibling (3 -> 4)", () => {
-        const next = getNextBlock(block3);
+        const next = getNextItem(block3);
         expect(next!.id).toBe(block4.id)
     })
 
     test("Last Child (4 -> Undefined)", () => {
-        const next = getNextBlock(block4);
+        const next = getNextItem(block4);
         expect(next).toBe(undefined)
     })
 })
