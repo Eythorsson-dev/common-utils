@@ -39,7 +39,7 @@ test("No roots -> Throws", () => {
     expect(() => validateList([data0, data1])).toThrow()
 })
 
-test("Multiple on same previous node -> Throws", () => {
+test("Multiple on same previous -> Throws", () => {
 
     const data0: ItemData = { id: "Item0" }
     const data1: ItemData = { id: "Item1", previousId: data0.id }
@@ -48,7 +48,7 @@ test("Multiple on same previous node -> Throws", () => {
     expect(() => validateList([data0, data1, data2])).toThrow()
 })
 
-test("Multiple on same parent node -> Throws", () => {
+test("Multiple on same parent -> Throws", () => {
 
     const data0: ItemData = { id: "Item0" }
     const data1: ItemData = { id: "Item1", parentId: data0.id }
@@ -57,7 +57,7 @@ test("Multiple on same parent node -> Throws", () => {
     expect(() => validateList([data0, data1, data2])).toThrow()
 })
 
-test("unlined parent list -> Throws", () => {
+test("Missing dependency (parent) -> Throws", () => {
 
     const data0: ItemData = { id: "Item0" }
     const data1: ItemData = { id: "Item1", parentId: "NO_ITEM"  }
@@ -65,10 +65,40 @@ test("unlined parent list -> Throws", () => {
     expect(() => validateList([data0, data1])).toThrow()
 })
 
-test("unlined previous list -> Throws", () => {
+test("Missing dependency (previous) -> Throws", () => {
 
     const data0: ItemData = { id: "Item0" }
     const data1: ItemData = { id: "Item1", previousId: "NO_ITEM"  }
 
     expect(() => validateList([data0, data1])).toThrow()
+})
+
+test("Circular dependency (parent) -> throws", () => {
+
+    const data0: ItemData = { id: "Item0" }
+    const data1: ItemData = { id: "Item1", parentId: "Item2" }
+    const data2: ItemData = { id: "Item2", parentId: "Item1" }
+
+    expect(() => validateList([data0, data1, data2]))
+        .toThrow();
+})
+
+test("Circular dependency (previous) -> throws", () => {
+
+    const data0: ItemData = { id: "Item0" }
+    const data1: ItemData = { id: "Item1", previousId: "Item2" }
+    const data2: ItemData = { id: "Item2", previousId: "Item1" }
+
+    expect(() => validateList([data0, data1, data2]))
+        .toThrow();
+})
+
+test("Duplicates -> throws", () => {
+
+    const data0: ItemData = { id: "Item0" }
+    const data1: ItemData = { id: "Item1", previousId: data0.id }
+    const data2: ItemData = { id: "Item1", previousId: data0.id }
+
+    expect(() => validateList([data0, data1, data2]))
+        .toThrow();
 })
