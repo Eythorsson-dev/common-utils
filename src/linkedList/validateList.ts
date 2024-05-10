@@ -1,4 +1,5 @@
 import { ItemData } from "./item";
+import { sortList } from "./sortList";
 
 
 export function validateList<T extends ItemData>(items: T[]): void {
@@ -16,4 +17,9 @@ export function validateList<T extends ItemData>(items: T[]): void {
     const prevIdDuplicated = prevIds.some((x, i, a) => a.indexOf(x) != i);
     if (prevIdDuplicated)
         throw new Error("Cannot set value, some of the blocks have the same prevId");
+
+    const sortedList = sortList(items, undefined, undefined);
+    if (sortedList.length != items.length){
+        throw new Error("Linked list is not valid")
+    }
 }
