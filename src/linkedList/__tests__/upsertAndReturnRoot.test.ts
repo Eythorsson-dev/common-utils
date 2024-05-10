@@ -1,6 +1,6 @@
 import { test, expect, vi, beforeEach } from "vitest";
 import { upsertAndReturnRoot } from "../upsertAndReturnRoot"
-import { ActionableItem, ItemData, render } from "../item";
+import { ActionableItem, ItemData } from "../item";
 import { generateUId } from "./utils";
 import { validateList } from "../validateList"
 
