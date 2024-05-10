@@ -16,6 +16,18 @@ export interface ItemData {
     previousId?: string,
 }
 
+export interface ActionableItem<TData> extends Item {
+    update(data: TData): void;
+
+    remove(): void;
+    insert(
+        parentItem: Item | undefined,
+        previousItem: Item | undefined,
+        nextItem: Item | undefined
+    ): void;
+}
+
+
 /** @internal */
 export function render(...items: ItemData[]): Item[] {
     const itemById = items.reduce((obj, curr) => {
