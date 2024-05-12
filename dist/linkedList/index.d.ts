@@ -3,6 +3,7 @@ export * from './getItemsBetween';
 export * from './getNextItem';
 export * from './getNextSiblings';
 export * from './getNextOrChildById';
-export type { Item, ItemData } from './item';
+export * from './upsertAndReturnRoot';
+export type { Item, ItemData, ItemElement } from './item';
 export * from './sortList';
 export * from './validateList';
