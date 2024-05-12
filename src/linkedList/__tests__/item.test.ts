@@ -16,7 +16,7 @@ interface Data {
 
 class TestElement extends ItemElement<Data> {
 
-    update(data: Data): void { throw new Error("Method not implemented."); }
+    update(): void { throw new Error("Method not implemented."); }
 
     render(data: Data): HTMLElement {
         const wrapper = document.createElement("div");
