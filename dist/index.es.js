@@ -1,111 +1,196 @@
-function c(e) {
-  return e.nextItem ? [e.nextItem, ...c(e.nextItem)] : [];
+var O = (e, t, r) => {
+  if (!t.has(e))
+    throw TypeError("Cannot " + r);
+};
+var o = (e, t, r) => (O(e, t, "read from private field"), r ? r.call(e) : t.get(e)), I = (e, t, r) => {
+  if (t.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  t instanceof WeakSet ? t.add(e) : t.set(e, r);
+}, d = (e, t, r, i) => (O(e, t, "write to private field"), i ? i.call(e, r) : t.set(e, r), r);
+function p(e) {
+  return e.nextItem ? [e.nextItem, ...p(e.nextItem)] : [];
 }
-function I(e) {
+function w(e) {
   return e.firstChildItem ? [
     e.firstChildItem,
-    ...I(e.firstChildItem),
-    ...c(e.firstChildItem).flatMap((t) => [t, ...I(t)])
+    ...w(e.firstChildItem),
+    ...p(e.firstChildItem).flatMap((t) => [t, ...w(t)])
   ] : [];
 }
-function s(e, t, i = !1) {
-  var n;
+function x(e, t, r = !1) {
+  var s;
   if (e == null)
     return [];
   if (e.id == t.id)
     return [t];
-  const r = i ? [] : s(e.firstChildItem, t);
-  if (((n = r.slice(-1)[0]) == null ? void 0 : n.id) == t.id)
-    return [e, ...r];
+  const i = r ? [] : x(e.firstChildItem, t);
+  if (((s = i.slice(-1)[0]) == null ? void 0 : s.id) == t.id)
+    return [e, ...i];
   if (e.nextItem)
-    return [e, ...r, ...s(e.nextItem, t)];
+    return [e, ...i, ...x(e.nextItem, t)];
   if (e.parentItem)
-    return [e, ...r, ...s(e.parentItem, t, !0)].filter((d) => d.id != e.parentItem.id);
+    return [e, ...i, ...x(e.parentItem, t, !0)].filter((h) => h.id != e.parentItem.id);
   throw Error("Something went wrong. Please make sure that the start, and the end has a common parent");
 }
-function a(e, t) {
-  return s(e, t);
+function L(e, t) {
+  return x(e, t);
 }
-function w(e) {
+function S(e) {
   if (e.firstChildItem)
     return e.firstChildItem;
   if (e.nextItem)
     return e.nextItem;
-  function t(i) {
-    if (i.nextItem)
-      return i.nextItem;
-    if (i.parentItem)
-      return t(i.parentItem);
+  function t(r) {
+    if (r.nextItem)
+      return r.nextItem;
+    if (r.parentItem)
+      return t(r.parentItem);
   }
   return t(e);
 }
-function f(e, t) {
-  function i(r) {
-    if (r.id == t)
-      return r;
-    let n;
-    return r.firstChildItem && (n || (n = i(r.firstChildItem))), r.nextItem && (n || (n = i(r.nextItem))), n;
+function C(e, t) {
+  function r(i) {
+    if (i.id == t)
+      return i;
+    let s;
+    return i.firstChildItem && (s || (s = r(i.firstChildItem))), i.nextItem && (s || (s = r(i.nextItem))), s;
   }
-  return i(e);
+  return r(e);
 }
-function m(e, t, i) {
-  var n, d;
+function _(e, t, r) {
+  var s, h;
   if (t == null && (e.parentId || e.previousId))
     throw new Error("the initial upsert must be the root window");
-  let r = t && f(t, e.id);
-  if (r == null || ((n = r.parentItem) == null ? void 0 : n.id) != e.parentId || ((d = r.previousItem) == null ? void 0 : d.id) != e.previousId)
-    if (r == null || r.remove(), r == null && (r = i(e)), t == null)
-      t = r;
+  let i = t && C(t, e.id);
+  if (i == null || ((s = i.parentItem) == null ? void 0 : s.id) != e.parentId || ((h = i.previousItem) == null ? void 0 : h.id) != e.previousId)
+    if (i == null || i.remove(), i == null && (i = r(e)), t == null)
+      t = i;
     else if (e.previousId) {
-      const o = f(t, e.previousId);
-      if (!o)
+      const n = C(t, e.previousId);
+      if (!n)
         throw new Error("Failed to render item, previous item is not rendered");
-      o.after(r);
+      n.after(i);
     } else if (e.parentId) {
-      const o = f(t, e.parentId);
-      if (!o)
+      const n = C(t, e.parentId);
+      if (!n)
         throw new Error("Failed to render item, parent item is not rendered");
-      o.append(r);
+      n.append(i);
     } else
       throw new Error("Failed to render item");
-  return r.update(e), t;
+  return i.update(e), t;
 }
-function p(e, t, i) {
-  const r = e.find((n) => n.parentId == t && n.previousId == i);
-  return r ? (e = e.filter((n) => n.id != r.id), 1 + p(e, r.id, void 0) + p(e, t, r.id)) : 0;
+var m, a, v, c, f, u;
+class k {
+  constructor(t) {
+    I(this, m, void 0);
+    I(this, a, void 0);
+    I(this, v, void 0);
+    I(this, c, void 0);
+    I(this, f, void 0);
+    I(this, u, void 0);
+    if (t.id.trim().length == 0)
+      throw new Error("id is not valid");
+    d(this, m, t.id), d(this, u, this.render(t));
+  }
+  get id() {
+    return o(this, m);
+  }
+  get parentItem() {
+    return o(this, a);
+  }
+  set parentItem(t) {
+    d(this, a, t);
+  }
+  get firstChildItem() {
+    return o(this, v);
+  }
+  set firstChildItem(t) {
+    d(this, v, t);
+  }
+  get nextItem() {
+    return o(this, c);
+  }
+  set nextItem(t) {
+    d(this, c, t);
+  }
+  get previousItem() {
+    return o(this, f);
+  }
+  set previousItem(t) {
+    d(this, f, t);
+  }
+  get target() {
+    return o(this, u);
+  }
+  remove() {
+    var t, r;
+    if (((r = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : r.id) == this.id && (this.parentItem.firstChildItem = this.nextItem), this.firstChildItem) {
+      const i = [this.firstChildItem, ...p(this.firstChildItem)], s = i.map((n) => n.target), h = i.slice(-1)[0];
+      if (this.previousItem) {
+        i.forEach((l) => l.parentItem = this.previousItem);
+        const n = this.previousItem.firstChildItem && p(this.previousItem.firstChildItem).slice(-1)[0];
+        n && (n.nextItem = this.firstChildItem, this.firstChildItem.previousItem = n), this.previousItem.target.append(...s);
+      } else
+        i.forEach((n) => n.parentItem = this.parentItem), this.target.replaceWith(...s), i[0] && (i[0].previousItem = this.previousItem), h && (h.nextItem = this.nextItem), this.nextItem && (this.nextItem.previousItem = i[0]);
+    }
+    this.previousItem && (this.previousItem.nextItem = this.nextItem), this.nextItem && d(this.nextItem, f, o(this, f)), this.parentItem = void 0, this.firstChildItem = void 0, this.nextItem = void 0, this.previousItem = void 0, o(this, u).remove();
+  }
+  append(t) {
+    if (t.id == this.id)
+      throw new Error("Cannot append item before itself");
+    t.remove();
+    const r = this.firstChildItem && [this.firstChildItem, ...p(this.firstChildItem)], i = r == null ? void 0 : r.slice(-1)[0];
+    i ? i.after(t) : (this.firstChildItem = t, t.parentItem = this, this.target.append(t.target));
+  }
+  before(t) {
+    if (t.id == this.id)
+      throw new Error("Cannot append item before itself");
+    t.remove(), t.previousItem = this.previousItem, this.previousItem ? this.previousItem.nextItem = t : this.parentItem && (this.parentItem.firstChildItem = t), t.parentItem = this.parentItem, t.nextItem = this, this.previousItem = t, this.target.before(t.target);
+  }
+  after(t) {
+    if (t.id == this.id)
+      throw new Error("Cannot append item before itself");
+    t.remove(), t.nextItem = this.nextItem, this.nextItem && (this.nextItem.previousItem = t), t.parentItem = this.parentItem, t.previousItem = this, this.nextItem = t, this.target.after(t.target);
+  }
 }
-function v(e) {
-  if (e.filter((o) => o.parentId == null && o.previousId == null).length != 1 && e.length > 0)
+m = new WeakMap(), a = new WeakMap(), v = new WeakMap(), c = new WeakMap(), f = new WeakMap(), u = new WeakMap();
+function E(e, t, r) {
+  const i = e.find((s) => s.parentId == t && s.previousId == r);
+  return i ? (e = e.filter((s) => s.id != i.id), 1 + E(e, i.id, void 0) + E(e, t, i.id)) : 0;
+}
+function F(e) {
+  if (e.filter((n) => n.parentId == null && n.previousId == null).length != 1 && e.length > 0)
     throw new Error("Failed to determine the start of the linked list");
-  if (e.map((o) => o.id).some((o, u, l) => l.indexOf(o) != u))
+  if (e.map((n) => n.id).some((n, l, g) => g.indexOf(n) != l))
     throw new Error("Found duplicated instances of ids");
-  if (e.map((o) => o.previousId + "_" + o.parentId).some((o, u, l) => l.indexOf(o) != u))
+  if (e.map((n) => n.previousId + "_" + n.parentId).some((n, l, g) => g.indexOf(n) != l))
     throw new Error("Some of the items have the same previousId");
-  if (p(e) != e.length)
+  if (E(e) != e.length)
     throw new Error("Linked list is not valid");
 }
-function h(e, t, i) {
-  const r = e.find((n) => n.parentId == t && n.previousId == i);
-  return r ? (e = e.filter((n) => n.id != r.id), [
-    r,
-    ...h(e, r.id, void 0),
-    ...h(e, t, r.id)
+function b(e, t, r) {
+  const i = e.find((s) => s.parentId == t && s.previousId == r);
+  return i ? (e = e.filter((s) => s.id != i.id), [
+    i,
+    ...b(e, i.id, void 0),
+    ...b(e, t, i.id)
   ]) : [];
 }
-function g(e) {
-  return v(e), h(e, void 0, void 0);
+function B(e) {
+  return F(e), b(e, void 0, void 0);
 }
-const x = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const N = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  getChildItems: I,
-  getItemsBetween: a,
-  getNextItem: w,
-  getNextOrChildById: f,
-  getNextSiblings: c,
-  sortList: g,
-  upsertAndReturnRoot: m,
-  validateList: v
+  ItemElement: k,
+  getChildItems: w,
+  getItemsBetween: L,
+  getNextItem: S,
+  getNextOrChildById: C,
+  getNextSiblings: p,
+  sortList: B,
+  upsertAndReturnRoot: _,
+  validateList: F
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  x as linkedList
+  N as linkedList
 };
