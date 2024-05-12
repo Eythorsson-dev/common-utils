@@ -16,11 +16,8 @@ interface Data {
 
 class TestElement extends ItemElement<Data> {
 
-    #data: Data = { id: "", foo: "", bar: "" }
+    update(data: Data): void { throw new Error("Method not implemented."); }
 
-    update(data: Data): void {
-        throw new Error("Method not implemented.");
-    }
     render(data: Data): HTMLElement {
         const wrapper = document.createElement("div");
         wrapper.append(data.id)
@@ -57,37 +54,17 @@ describe("Initialize -> Throws on invalid", () => {
     )
 })
 
-describe("Can insert and move", () => {
+describe("Insert After", () => {
 
-    test("After Sibling", () => {
-
+    test("Can move", () => {
         const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
         const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item1.target);
 
-        item0.insert(undefined, item1, undefined);
-        item1.insert(undefined, item0, undefined);
-
-        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
-        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id });
-        expect([...wrapper.children]).toStrictEqual([item0.target, item1.target]);
-        expect([...wrapper.children]).toStrictEqual([item0.target, item1.target]);
-        expect(item0.target.children.length).toBe(0);
-        expect(item1.target.children.length).toBe(0);
-    })
-
-    test("Before Sibling", () => {
-
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-
-        const wrapper = document.createElement("div")
-        wrapper.append(item0.target);
-
-        item1.insert(undefined, undefined, item0);
-        item0.insert(undefined, undefined, item1);
+        item1.after(item0);
+        item0.after(item1);
 
         expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
         expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id });
@@ -96,8 +73,7 @@ describe("Can insert and move", () => {
         expect(item1.target.children.length).toBe(0);
     })
 
-    test("Between Siblings", () => {
-
+    test("Can move -> To child", () => {
         const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
         const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
         const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
@@ -105,36 +81,185 @@ describe("Can insert and move", () => {
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
 
-        item2.insert(undefined, item0, undefined);
-        item1.insert(undefined, item0, item2);
+        item0.append(item1);
+        item1.after(item2);
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, firstChildId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, parentId: item0.id, nextId: item2.id });
+        expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, parentId: item0.id, previousId: item1.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target]);
+        expect([...item0.target.children]).toStrictEqual([item1.target, item2.target]);
+        expect(item1.target.children.length).toBe(0);
+        expect(item2.target.children.length).toBe(0);
+    })
+
+    test("Can move -> Between siblings", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item0.target);
+
+        item0.after(item2);
+        item0.after(item1);
 
         expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
         expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id, nextId: item2.id });
         expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, previousId: item1.id });
-
         expect([...wrapper.children]).toStrictEqual([item0.target, item1.target, item2.target]);
         expect(item0.target.children.length).toBe(0);
         expect(item1.target.children.length).toBe(0);
         expect(item2.target.children.length).toBe(0);
     })
 
-    test("Swap Parent", () => {
-
+    test("Cant move itself -> Throws", () => {
         const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
         const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-    
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item0.target);
+
+        item0.after(item1);
+        expect(() => item1.after(item1)).toThrow();
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target, item1.target]);
+    })
+})
+
+describe("Insert Before", () => {
+
+    test("Can move", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item0.target);
+
+        item0.before(item1);
+        item1.before(item0);
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target, item1.target]);
+        expect(item0.target.children.length).toBe(0);
+        expect(item1.target.children.length).toBe(0);
+    })
+
+    test("Can move -> To child", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item0.target);
+
+        item0.append(item2);
+        item2.before(item1);
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, firstChildId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, parentId: item0.id, nextId: item2.id });
+        expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, parentId: item0.id, previousId: item1.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target]);
+        expect([...item0.target.children]).toStrictEqual([item1.target, item2.target]);
+        expect(item1.target.children.length).toBe(0);
+        expect(item2.target.children.length).toBe(0);
+    })
+
+    test("Can move -> Between siblings", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item2.target);
+
+        item2.before(item0);
+        item2.before(item1);
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id, nextId: item2.id });
+        expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, previousId: item1.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target, item1.target, item2.target]);
+        expect(item0.target.children.length).toBe(0);
+        expect(item1.target.children.length).toBe(0);
+        expect(item2.target.children.length).toBe(0);
+    })
+
+    test("Cant move itself -> Throws", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+
         const wrapper = document.createElement("div")
         wrapper.append(item1.target);
-    
-        item0.insert(item1, undefined, undefined);
-        item1.insert(item0, undefined, undefined);
-    
+
+        item1.before(item0);
+        expect(() => item1.before(item1)).toThrow();
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target, item1.target]);
+    })
+})
+
+describe("Insert Append", () => {
+    test("Can move", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item0.target);
+
+        item0.before(item2);
+        item0.append(item1);
+        item0.append(item2);
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, firstChildId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, parentId: item0.id, nextId: item2.id });
+        expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, parentId: item0.id, previousId: item1.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target]);
+        expect([...item0.target.children]).toStrictEqual([item1.target, item2.target]);
+        expect(item1.target.children.length).toBe(0);
+        expect(item2.target.children.length).toBe(0);
+    })
+
+    test("Can move -> To child", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item2.target);
+
+        item2.append(item0);
+        item2.append(item1);
+        item1.append(item2);
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, nextId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, previousId: item0.id, firstChildId: item2.id });
+        expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, parentId: item1.id });
+        expect([...wrapper.children]).toStrictEqual([item0.target, item1.target]);
+        expect([...item1.target.children]).toStrictEqual([item2.target]);
+        expect(item0.target.children.length).toBe(0);
+    })
+
+    test("Cant move itself -> Throws", () => {
+        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item0.target);
+
+        item0.append(item1);
+        expect(() => item1.append(item1)).toThrow();
+
         expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, firstChildId: item1.id });
         expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, parentId: item0.id });
-
         expect([...wrapper.children]).toStrictEqual([item0.target]);
         expect([...item0.target.children]).toStrictEqual([item1.target]);
-        expect(item1.target.children.length).toBe(0);
     })
 })
 
@@ -148,13 +273,13 @@ describe("Can remove", () => {
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
 
-        item1.insert(undefined, item0, undefined);
+        item0.after(item1);
 
         item1.remove();
 
         expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id });
-        expect(item1.target.previousElementSibling).toBe(null);
-        expect(item0.target.nextElementSibling).toBe(null);
+        expect([...wrapper.children]).toStrictEqual([item0.target]);
+        expect(item0.target.children.length).toBe(0);
     })
 
 
@@ -166,7 +291,7 @@ describe("Can remove", () => {
         const wrapper = document.createElement("div")
         wrapper.append(item1.target);
 
-        item0.insert(undefined, undefined, item1);
+        item1.before(item0);
 
         item0.remove();
 
@@ -185,8 +310,8 @@ describe("Can remove", () => {
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
 
-        item2.insert(undefined, item0, undefined);
-        item1.insert(undefined, item0, item2);
+        item0.after(item1);
+        item1.after(item2);
 
         item1.remove();
 
@@ -194,10 +319,9 @@ describe("Can remove", () => {
         expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, previousId: item0.id });
         expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id });
 
-        expect(item0.target.nextElementSibling).toBe(item2.target);
-        expect(item2.target.previousElementSibling).toBe(item0.target);
-        expect(item1.target.previousElementSibling).toBe(null);
-        expect(item1.target.nextElementSibling).toBe(null);
+        expect([...wrapper.children]).toStrictEqual([item0.target, item2.target]);
+        expect(item0.target.children.length).toBe(0);
+        expect(item2.target.children.length).toBe(0);
     })
 
 
@@ -211,8 +335,8 @@ describe("Can remove", () => {
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
 
-        item1.insert(item0, undefined, undefined);
-        item2.insert(item0, item1, undefined);
+        item0.append(item1);
+        item0.append(item2);
 
         item1.remove();
 
@@ -220,8 +344,9 @@ describe("Can remove", () => {
         expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, parentId: item0.id });
         expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id });
 
-        expect(item0.target.firstElementChild).toBe(item2.target);
-        expect(item2.target.parentElement).toBe(item0.target);
+        expect([...wrapper.children]).toStrictEqual([item0.target]);
+        expect([...item0.target.children]).toStrictEqual([item2.target]);
+        expect(item2.target.children.length).toBe(0);
     })
 
     test("Parent", () => {
@@ -233,18 +358,14 @@ describe("Can remove", () => {
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
 
-        item1.insert(item0, undefined, undefined);
-        item2.insert(item0, item1, undefined);
+        item0.append(item1);
+        item0.append(item2);
 
         item0.remove();
 
-        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id });
         expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, nextId: item2.id });
         expect(getIds(item2)).toMatchObject({ ...emptyObject, id: item2.id, previousId: item1.id });
 
-        expect(item1.target.parentElement).toBe(wrapper);
-        expect(item1.target.nextElementSibling).toBe(item2.target);
-        expect(item2.target.previousElementSibling).toBe(item1.target);
-        expect(item2.target.parentElement).toBe(wrapper);
+        expect([...wrapper.children]).toStrictEqual([item1.target, item2.target]);
     })
 })

@@ -19,13 +19,22 @@ export interface ItemData {
 
 export interface ActionableItem<TData> extends Item {
     update(data: TData): void;
-
     remove(): void;
-    insert(
-        parentItem: Item | undefined,
-        previousItem: Item | undefined,
-        nextItem: Item | undefined
-    ): void;
+
+    /**
+    * Inserts the item after the last child
+    */
+    append(item: Item): void;
+
+    /**
+     * Inserts the item just before this item
+     */
+    before(item: Item): void;
+
+    /**
+     * Inserts the item just after this item
+     */
+    after(item: Item): void;
 }
 
 /** @internal */
@@ -78,7 +87,7 @@ export abstract class ItemElement<TData extends { id: string }>
         if (this.parentItem?.firstChildItem?.id == this.id) {
             this.parentItem.firstChildItem = this.nextItem
         }
-        if (this.firstChildItem) {  
+        if (this.firstChildItem) {
             const children = [this.firstChildItem, ...getNextSiblings(this.firstChildItem)];
             const childElements = children.map(x => x.target);
             const lastChild = children.slice(-1)[0]
@@ -123,40 +132,57 @@ export abstract class ItemElement<TData extends { id: string }>
         this.#target.remove();
     }
 
-    insert(parentItem: ItemElement<any> | undefined, previousItem: ItemElement<any> | undefined, nextItem: ItemElement<any> | undefined): void {
+    append(item: ItemElement<any>): void {
+        if (item.id == this.id)
+            throw new Error("Cannot append item before itself");
 
-        if (previousItem && previousItem.parentItem?.id != parentItem?.id)
-            throw new Error("Invalid previous.parentId");
+        item.remove();
 
-        if (nextItem && nextItem.parentItem?.id != parentItem?.id)
-            throw new Error("Invalid next.parentId");
+        const children = this.firstChildItem && [this.firstChildItem, ...getNextSiblings(this.firstChildItem)];
+        const lastChild = children?.slice(-1)[0];
 
-        if (!parentItem && !previousItem && !nextItem)
-            throw new Error("All of parent, previous and next cannot be null");
-
-        if (parentItem?.firstChildItem && !previousItem && !nextItem)
-            throw new Error("The parent contains a child. Please specify where to insert the item")
-
-        this.remove();
-
-        if (previousItem) {
-            previousItem.nextItem = this;
-            if (nextItem) nextItem.previousItem = this;
-
-            previousItem.target.after(this.target);
+        if (lastChild) {
+            lastChild.after(item);
         }
-        else if (nextItem) {
-            nextItem.previousItem = this;
-            nextItem.target.before(this.target)
-        }
-        else if (parentItem) {
-            parentItem.firstChildItem = this;
-            parentItem.target.append(this.target);
+        else {
+            this.firstChildItem = item;
+            item.parentItem = this;
+            this.target.append(item.target);
         }
 
-        this.parentItem = parentItem;
-        this.previousItem = previousItem;
-        this.nextItem = nextItem;
+    }
+
+    before(item: ItemElement<any>): void {
+        if (item.id == this.id)
+            throw new Error("Cannot append item before itself");
+
+        item.remove();
+
+        item.previousItem = this.previousItem
+        if (this.previousItem) this.previousItem.nextItem = item;
+        else if (this.parentItem) this.parentItem.firstChildItem = item;
+
+        item.parentItem = this.parentItem;
+        item.nextItem = this
+        this.previousItem = item;
+
+        this.target.before(item.target);
+    }
+
+    after(item: ItemElement<any>): void {
+        if (item.id == this.id)
+            throw new Error("Cannot append item before itself");
+
+        item.remove();
+
+        item.nextItem = this.nextItem;
+        if (this.nextItem) this.nextItem.previousItem = item;
+
+        item.parentItem = this.parentItem;
+        item.previousItem = this;
+        this.nextItem = item;
+
+        this.target.after(item.target);
     }
 
     constructor(data: TData) {
