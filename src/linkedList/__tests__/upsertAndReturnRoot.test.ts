@@ -1,4 +1,4 @@
-import { test, expect, vi, beforeEach } from "vitest";
+import { test, expect, vi, beforeEach, Mock } from "vitest";
 import { upsertAndReturnRoot } from "../upsertAndReturnRoot"
 import { ActionableItem, ItemData } from "../item";
 import { generateUId } from "./utils";
@@ -10,18 +10,23 @@ interface TestItemData extends ItemData {
     baz?: string
 }
 
-const insertMock = vi.fn();
+const appendMock = vi.fn();
+const beforeMock = vi.fn();
+const afterMock = vi.fn();
 const updateMock = vi.fn();
 const removeMock = vi.fn();
+
 
 function createItem(data: ItemData): ActionableItem<any> {
     return {
         id: data.id,
-        parentItem: undefined,
-        nextItem: undefined,
-        previousItem: undefined,
-        firstChildItem: undefined,
-        insert: insertMock,
+        parentItem: data.parentId && { id: data.parentId! } as any,
+        nextItem: data.nextId && { id: data.nextId! } as any,
+        previousItem: data.previousId && { id: data.previousId! } as any,
+        firstChildItem: data.firstChildId && { id: data.firstChildId! }as any,
+        append: appendMock,
+        before: beforeMock,
+        after: afterMock,
         update: updateMock,
         remove: removeMock
     };
@@ -34,7 +39,9 @@ export function renderActionable<T extends ItemData>(...items: ItemData[]): Acti
     const itemById = items.reduce((obj, curr) => {
         obj[curr.id] = {
             ...curr,
-            insert: vi.fn(),
+            append: vi.fn(),
+            before: vi.fn(),
+            after: vi.fn(),
             update: vi.fn(),
             remove: vi.fn(),
 
@@ -51,7 +58,7 @@ export function renderActionable<T extends ItemData>(...items: ItemData[]): Acti
 }
 
 function getData<T extends ActionableItem<any>>(item: T): ItemData {
-    const { insert, update, remove, firstChildItem, parentItem, nextItem, previousItem, ...data } = item;
+    const { append, before, after, update, remove, firstChildItem, parentItem, nextItem, previousItem, ...data } = item;
 
     return {
         ...data,
@@ -62,8 +69,13 @@ function getData<T extends ActionableItem<any>>(item: T): ItemData {
     }
 }
 
+const emptyObject = getData({} as ActionableItem<any>);
+
+
 beforeEach(() => {
-    insertMock.mockClear();
+    appendMock.mockClear();
+    beforeMock.mockClear();
+    afterMock.mockClear();
     updateMock.mockClear();
     removeMock.mockClear();
 })
@@ -98,7 +110,9 @@ test("can update root", () => {
     const response = upsertAndReturnRoot(data0, items[0], createItem);
 
     expect(response!.id).toBe(data0.id);
-    expect(response?.insert).not.toHaveBeenCalledOnce();
+    expect(response?.append).not.toHaveBeenCalledOnce();
+    expect(response?.before).not.toHaveBeenCalledOnce();
+    expect(response?.after).not.toHaveBeenCalledOnce();
     expect(response?.update).toHaveBeenCalledOnce();
     expect(response?.update).toHaveBeenCalledWith(data0);
 })
@@ -116,12 +130,11 @@ test("can insert sibling", () => {
 
     expect(updateMock).toHaveBeenCalledOnce();
     expect(updateMock).toHaveBeenCalledWith(data1);
-
-    expect(insertMock).toHaveBeenCalledOnce();
-    const [parent, previous, next] = insertMock.mock.calls[0]
-    expect(parent).toBe(undefined);
-    expect(getData(previous)).toMatchObject(data0);
-    expect(getData(next)).toMatchObject(data2);
+    expect(items[0].append).not.toHaveBeenCalledOnce();
+    expect(items[0].before).not.toHaveBeenCalledOnce();
+    expect(items[0].after).toHaveBeenCalledOnce();
+    const [afterItem] = (items[0].after as Mock).mock.calls[0]
+    expect(getData(afterItem)).toMatchObject({ ...emptyObject, ...data1 });
 })
 
 test("can update sibling", () => {
@@ -141,7 +154,9 @@ test("can update sibling", () => {
 
     expect(items[1].update).toHaveBeenCalledOnce();
     expect(items[1].update).toHaveBeenCalledWith(data1);
-    expect(items[1].insert).not.toHaveBeenCalledOnce();
+    expect(items[0].append).not.toHaveBeenCalledOnce();
+    expect(items[0].before).not.toHaveBeenCalledOnce();
+    expect(items[0].after).not.toHaveBeenCalledOnce();
 })
 
 
@@ -167,11 +182,11 @@ test("can insert child (3)", () => {
     expect(updateMock).toHaveBeenCalledOnce();
     expect(updateMock).toHaveBeenCalledWith(data3);
 
-    expect(insertMock).toHaveBeenCalledOnce();
-    const [parent, previous, next] = insertMock.mock.calls[0]
-    expect(parent).toMatchObject(data1);
-    expect(getData(previous)).toMatchObject(data2);
-    expect(getData(next)).toMatchObject(data4);
+    expect(items[2].append).not.toHaveBeenCalledOnce();
+    expect(items[2].before).not.toHaveBeenCalledOnce();
+    expect(items[2].after).toHaveBeenCalledOnce();
+    const [afterItem] = (items[2].after as Mock).mock.calls[0]
+    expect(getData(afterItem)).toMatchObject({...emptyObject, ...data3});
 })
 
 test("can update child (3)", () => {
@@ -199,6 +214,8 @@ test("can update child (3)", () => {
 
     expect(items[3].update).toHaveBeenCalledOnce();
     expect(items[3].update).toHaveBeenCalledWith(data3);
-    expect(insertMock).not.toHaveBeenCalledOnce();
+    expect(appendMock).not.toHaveBeenCalledOnce();
+    expect(beforeMock).not.toHaveBeenCalledOnce();
+    expect(afterMock).not.toHaveBeenCalledOnce();
 })
 

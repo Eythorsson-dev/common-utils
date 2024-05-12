@@ -5,7 +5,7 @@ type Data<T extends ItemData> = Omit<T, "id" | "previousId" | "parentId" | "firs
 
 
 export function upsertAndReturnRoot<
-    TData extends ItemData,
+    TData extends Omit<ItemData, "nextId">,
     TItem extends ActionableItem<Data<TData>>
 >(
     data: TData,
@@ -32,17 +32,16 @@ export function upsertAndReturnRoot<
             const previous = getNextOrChildById(root, data.previousId);
             if (!previous) throw new Error("Failed to render item, previous item is not rendered");
 
-            item.insert(previous.parentItem, previous, previous.nextItem);
+            previous.after(item)
         }
         else if (data.parentId) {
             const parent = getNextOrChildById(root, data.parentId);
             if (!parent) throw new Error("Failed to render item, parent item is not rendered");
 
-            item.insert(parent.parentItem, undefined, parent);
+            parent.append(item)
         }
         else {
-            item.insert(undefined, undefined, root);
-            root = item;
+            throw new Error("Failed to render item")
         }
     }
     item.update(data)
