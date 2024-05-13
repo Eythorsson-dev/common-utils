@@ -12,27 +12,27 @@ export interface ItemData {
     nextId?: string;
     previousId?: string;
 }
-export interface ActionableItem<TData> extends Item<ActionableItem<TData>> {
+export interface ActionableItem<TData, TItem extends ActionableItem<TData, TItem>> extends Item<TItem> {
     update(data: TData): void;
     remove(): void;
     /**
     * Inserts the item after the last child
     */
-    append(item: ActionableItem<TData>): void;
+    append(item: TItem): void;
     /**
      * Inserts the item just before this item
      */
-    before(item: ActionableItem<TData>): void;
+    before(item: TItem): void;
     /**
      * Inserts the item just after this item
      */
-    after(item: ActionableItem<TData>): void;
+    after(item: TItem): void;
 }
 /** @internal */
 export declare function render(...items: ItemData[]): Item<any>[];
 export declare abstract class ItemElement<TData extends {
     id: string;
-}, TItem extends ItemElement<TData, TItem>> implements ActionableItem<TData> {
+}, TItem extends ItemElement<TData, TItem>> implements ActionableItem<TData, TItem> {
     #private;
     get id(): string;
     get parentItem(): TItem | undefined;

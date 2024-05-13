@@ -17,7 +17,7 @@ const updateMock = vi.fn();
 const removeMock = vi.fn();
 
 
-function createItem(data: ItemData): ActionableItem<any> {
+function createItem(data: ItemData): ActionableItem<any, any> {
     return {
         id: data.id,
         parentItem: data.parentId && { id: data.parentId! } as any,
@@ -33,7 +33,7 @@ function createItem(data: ItemData): ActionableItem<any> {
 }
 
 
-export function renderActionable<T extends ItemData>(...items: ItemData[]): ActionableItem<T>[] {
+export function renderActionable<T extends ItemData>(...items: ItemData[]): ActionableItem<T, any>[] {
     validateList(items);
 
     const itemById = items.reduce((obj, curr) => {
@@ -52,12 +52,12 @@ export function renderActionable<T extends ItemData>(...items: ItemData[]): Acti
         };
 
         return obj
-    }, {} as { [key: string]: ActionableItem<T> })
+    }, {} as { [key: string]: ActionableItem<T, any> })
 
     return items.map(x => itemById[x.id]);
 }
 
-function getData<T extends ActionableItem<any>>(item: T): ItemData {
+function getData<T extends ActionableItem<any, T>>(item: T): ItemData {
     const { append, before, after, update, remove, firstChildItem, parentItem, nextItem, previousItem, ...data } = item;
 
     return {
@@ -69,7 +69,7 @@ function getData<T extends ActionableItem<any>>(item: T): ItemData {
     }
 }
 
-const emptyObject = getData({} as ActionableItem<any>);
+const emptyObject = getData({} as ActionableItem<any, any>);
 
 
 beforeEach(() => {

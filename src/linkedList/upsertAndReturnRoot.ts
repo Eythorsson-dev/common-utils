@@ -6,7 +6,7 @@ type Data<T extends ItemData> = Omit<T, "id" | "previousId" | "parentId" | "firs
 
 export function upsertAndReturnRoot<
     TData extends Omit<ItemData, "nextId">,
-    TItem extends ActionableItem<Data<TData>>
+    TItem extends ActionableItem<Data<TData>, TItem>
 >(
     data: TData,
     root: TItem | undefined,
@@ -16,7 +16,7 @@ export function upsertAndReturnRoot<
         throw new Error("the initial upsert must be the root window");
     }
 
-    type AItem = ActionableItem<Data<TData>>;
+    type AItem = ActionableItem<Data<TData>, AItem>;
     let item = root && getNextOrChildById(<AItem>root, data.id);
 
     if (item == undefined
