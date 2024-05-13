@@ -1,9 +1,9 @@
-export interface Item {
+export interface Item<T> {
     get id(): string;
-    get parentItem(): Item | undefined;
-    get firstChildItem(): Item | undefined;
-    get nextItem(): Item | undefined;
-    get previousItem(): Item | undefined;
+    get parentItem(): T | undefined;
+    get firstChildItem(): T | undefined;
+    get nextItem(): T | undefined;
+    get previousItem(): T | undefined;
 }
 export interface ItemData {
     id: string;
@@ -12,24 +12,24 @@ export interface ItemData {
     nextId?: string;
     previousId?: string;
 }
-export interface ActionableItem<TData> extends Item {
+export interface ActionableItem<TData> extends Item<ActionableItem<TData>> {
     update(data: TData): void;
     remove(): void;
     /**
     * Inserts the item after the last child
     */
-    append(item: Item): void;
+    append(item: ActionableItem<TData>): void;
     /**
      * Inserts the item just before this item
      */
-    before(item: Item): void;
+    before(item: ActionableItem<TData>): void;
     /**
      * Inserts the item just after this item
      */
-    after(item: Item): void;
+    after(item: ActionableItem<TData>): void;
 }
 /** @internal */
-export declare function render(...items: ItemData[]): Item[];
+export declare function render(...items: ItemData[]): Item<any>[];
 export declare abstract class ItemElement<TData extends {
     id: string;
 }> implements ActionableItem<TData> {

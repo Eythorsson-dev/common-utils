@@ -1,6 +1,6 @@
 import { Item } from "./item";
 
-export function getNextSiblings<T extends Item>(item: T): T[] {
+export function getNextSiblings<T extends Item<T>>(item: T): T[] {
     if (item.nextItem) return [item.nextItem as T, ...getNextSiblings(item.nextItem) as T[]];
     else return [];
 }

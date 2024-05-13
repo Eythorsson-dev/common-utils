@@ -1,7 +1,7 @@
 import { Item } from "./item";
 
 /** The next block can either be the first child, the next sibling or the next sibling of a parent */
-export function getNextItem<T extends Item>(item: T): T | undefined {
+export function getNextItem<T extends Item<T>>(item: T): T | undefined {
 
     if (item.firstChildItem) return item.firstChildItem as T;
     if (item.nextItem) return item.nextItem as T;

@@ -16,7 +16,8 @@ export function upsertAndReturnRoot<
         throw new Error("the initial upsert must be the root window");
     }
 
-    let item = root && getNextOrChildById(root, data.id);
+    type AItem = ActionableItem<Data<TData>>;
+    let item = root && getNextOrChildById(<AItem>root, data.id);
 
     if (item == undefined
         || item.parentItem?.id != data.parentId
@@ -26,16 +27,16 @@ export function upsertAndReturnRoot<
         if (item == undefined) item = createItem(data)
 
         if (root == undefined) {
-            root = item;
+            root = <TItem>item;
         }
         else if (data.previousId) {
-            const previous = getNextOrChildById(root, data.previousId);
+            const previous = getNextOrChildById(<AItem>root, data.previousId);
             if (!previous) throw new Error("Failed to render item, previous item is not rendered");
 
             previous.after(item)
         }
         else if (data.parentId) {
-            const parent = getNextOrChildById(root, data.parentId);
+            const parent = getNextOrChildById(<AItem>root, data.parentId);
             if (!parent) throw new Error("Failed to render item, parent item is not rendered");
 
             parent.append(item)

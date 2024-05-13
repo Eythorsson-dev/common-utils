@@ -1,12 +1,12 @@
 import { getNextSiblings } from "./getNextSiblings";
 
 
-export interface Item {
+export interface Item<T> {
     get id(): string,
-    get parentItem(): Item | undefined,
-    get firstChildItem(): Item | undefined
-    get nextItem(): Item | undefined,
-    get previousItem(): Item | undefined
+    get parentItem(): T | undefined,
+    get firstChildItem(): T | undefined
+    get nextItem(): T | undefined,
+    get previousItem(): T | undefined
 }
 
 export interface ItemData {
@@ -17,28 +17,28 @@ export interface ItemData {
     previousId?: string,
 }
 
-export interface ActionableItem<TData> extends Item {
+export interface ActionableItem<TData> extends Item<ActionableItem<TData>> {
     update(data: TData): void;
     remove(): void;
 
     /**
     * Inserts the item after the last child
     */
-    append(item: Item): void;
+    append(item: ActionableItem<TData>): void;
 
     /**
      * Inserts the item just before this item
      */
-    before(item: Item): void;
+    before(item: ActionableItem<TData>): void;
 
     /**
      * Inserts the item just after this item
      */
-    after(item: Item): void;
+    after(item: ActionableItem<TData>): void;
 }
 
 /** @internal */
-export function render(...items: ItemData[]): Item[] {
+export function render(...items: ItemData[]): Item<any>[] {
     const itemById = items.reduce((obj, curr) => {
         obj[curr.id] = {
             ...curr,
@@ -49,7 +49,7 @@ export function render(...items: ItemData[]): Item[] {
         };
 
         return obj
-    }, {} as { [key: string]: Item })
+    }, {} as { [key: string]: Item<any> })
 
     return items.map(x => itemById[x.id]);
 }

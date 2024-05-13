@@ -1,6 +1,6 @@
 import { Item } from "./item";
 
-export function getNextOrChildById<T extends Item>(root: T, id: string): T | undefined {
+export function getNextOrChildById<T extends Item<T>>(root: T, id: string): T | undefined {
 
     function search(item: T): T | undefined {
         if (item.id == id) return item;

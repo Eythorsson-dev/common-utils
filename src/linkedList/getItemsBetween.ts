@@ -1,6 +1,6 @@
 import { Item } from "./item";
 
-function searchItems<T extends Item>(item: T, end: T, ignoreChildren: boolean = false): T[] {
+function searchItems<T extends Item<T>>(item: T, end: T, ignoreChildren: boolean = false): T[] {
     if (item == undefined) return [];
     if (item.id == end.id) return [end];
 
@@ -15,6 +15,6 @@ function searchItems<T extends Item>(item: T, end: T, ignoreChildren: boolean = 
 }
 
 
-export function getItemsBetween<T extends Item>(start: T | undefined, end: T): T[] {
+export function getItemsBetween<T extends Item<T>>(start: T | undefined, end: T): T[] {
     return searchItems(start!, end);
 }
