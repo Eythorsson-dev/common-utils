@@ -11,7 +11,7 @@ export function upsertAndReturnRoot<
     data: TData,
     root: TItem | undefined,
     createItem: (data: TData) => TItem
-) {
+) : TItem {
     if (root == undefined && (data.parentId || data.previousId)) {
         throw new Error("the initial upsert must be the root window");
     }
@@ -47,5 +47,5 @@ export function upsertAndReturnRoot<
     }
     item.update(data)
 
-    return root;
+    return root!;
 }
