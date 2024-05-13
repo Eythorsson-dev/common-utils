@@ -54,28 +54,27 @@ export function render(...items: ItemData[]): Item<any>[] {
     return items.map(x => itemById[x.id]);
 }
 
-
-export abstract class ItemElement<TData extends { id: string }>
+export abstract class ItemElement<TData extends { id: string }, TItem extends ItemElement<TData, TItem>>
     implements ActionableItem<TData> {
 
     #id: string;
     get id(): string { return this.#id; }
 
-    #parent: ItemElement<any> | undefined;
-    get parentItem(): ItemElement<any> | undefined { return this.#parent }
-    set parentItem(item: ItemElement<any> | undefined) { this.#parent = item; }
+    #parent: TItem | undefined;
+    get parentItem(): TItem | undefined { return this.#parent }
+    set parentItem(item: TItem | undefined) { this.#parent = item; }
 
-    #firstChild: ItemElement<any> | undefined;
-    get firstChildItem(): ItemElement<any> | undefined { return this.#firstChild }
-    set firstChildItem(item: ItemElement<any> | undefined) { this.#firstChild = item; }
+    #firstChild: TItem | undefined;
+    get firstChildItem(): TItem | undefined { return this.#firstChild }
+    set firstChildItem(item: TItem | undefined) { this.#firstChild = item; }
 
-    #next: ItemElement<any> | undefined;
-    get nextItem(): ItemElement<any> | undefined { return this.#next }
-    set nextItem(item: ItemElement<any> | undefined) { this.#next = item; }
+    #next: TItem | undefined;
+    get nextItem(): TItem | undefined { return this.#next }
+    set nextItem(item: TItem | undefined) { this.#next = item; }
 
-    #previous: ItemElement<any> | undefined;
-    get previousItem(): ItemElement<any> | undefined { return this.#previous }
-    set previousItem(item: ItemElement<any> | undefined) { this.#previous = item; }
+    #previous: TItem | undefined;
+    get previousItem(): TItem | undefined { return this.#previous }
+    set previousItem(item: TItem | undefined) { this.#previous = item; }
 
     abstract update(data: TData): void;
     abstract render(data: TData): HTMLElement;
@@ -132,7 +131,7 @@ export abstract class ItemElement<TData extends { id: string }>
         this.#target.remove();
     }
 
-    append(item: ItemElement<any>): void {
+    append(item: TItem): void {
         if (item.id == this.id)
             throw new Error("Cannot append item before itself");
 
@@ -146,13 +145,13 @@ export abstract class ItemElement<TData extends { id: string }>
         }
         else {
             this.firstChildItem = item;
-            item.parentItem = this;
+            item.parentItem = this as unknown as TItem;
             this.target.append(item.target);
         }
 
     }
 
-    before(item: ItemElement<any>): void {
+    before(item: TItem): void {
         if (item.id == this.id)
             throw new Error("Cannot append item before itself");
 
@@ -163,13 +162,13 @@ export abstract class ItemElement<TData extends { id: string }>
         else if (this.parentItem) this.parentItem.firstChildItem = item;
 
         item.parentItem = this.parentItem;
-        item.nextItem = this
+        item.nextItem = this as unknown as TItem
         this.previousItem = item;
 
         this.target.before(item.target);
     }
 
-    after(item: ItemElement<any>): void {
+    after(item: TItem): void {
         if (item.id == this.id)
             throw new Error("Cannot append item before itself");
 
@@ -179,7 +178,7 @@ export abstract class ItemElement<TData extends { id: string }>
         if (this.nextItem) this.nextItem.previousItem = item;
 
         item.parentItem = this.parentItem;
-        item.previousItem = this;
+        item.previousItem = this as unknown as TItem;
         this.nextItem = item;
 
         this.target.after(item.target);

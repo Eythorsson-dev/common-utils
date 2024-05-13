@@ -32,23 +32,23 @@ export interface ActionableItem<TData> extends Item<ActionableItem<TData>> {
 export declare function render(...items: ItemData[]): Item<any>[];
 export declare abstract class ItemElement<TData extends {
     id: string;
-}> implements ActionableItem<TData> {
+}, TItem extends ItemElement<TData, TItem>> implements ActionableItem<TData> {
     #private;
     get id(): string;
-    get parentItem(): ItemElement<any> | undefined;
-    set parentItem(item: ItemElement<any> | undefined);
-    get firstChildItem(): ItemElement<any> | undefined;
-    set firstChildItem(item: ItemElement<any> | undefined);
-    get nextItem(): ItemElement<any> | undefined;
-    set nextItem(item: ItemElement<any> | undefined);
-    get previousItem(): ItemElement<any> | undefined;
-    set previousItem(item: ItemElement<any> | undefined);
+    get parentItem(): TItem | undefined;
+    set parentItem(item: TItem | undefined);
+    get firstChildItem(): TItem | undefined;
+    set firstChildItem(item: TItem | undefined);
+    get nextItem(): TItem | undefined;
+    set nextItem(item: TItem | undefined);
+    get previousItem(): TItem | undefined;
+    set previousItem(item: TItem | undefined);
     abstract update(data: TData): void;
     abstract render(data: TData): HTMLElement;
     get target(): HTMLElement;
     remove(): void;
-    append(item: ItemElement<any>): void;
-    before(item: ItemElement<any>): void;
-    after(item: ItemElement<any>): void;
+    append(item: TItem): void;
+    before(item: TItem): void;
+    after(item: TItem): void;
     constructor(data: TData);
 }

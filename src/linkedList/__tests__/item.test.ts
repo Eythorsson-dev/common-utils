@@ -14,7 +14,7 @@ interface Data {
     bar: string
 }
 
-class TestElement extends ItemElement<Data> {
+class TestElement extends ItemElement<Data, TestElement> {
 
     update(): void { throw new Error("Method not implemented."); }
 
