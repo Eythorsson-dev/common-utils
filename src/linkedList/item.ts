@@ -54,7 +54,7 @@ export function render(...items: ItemData[]): Item<any>[] {
     return items.map(x => itemById[x.id]);
 }
 
-export abstract class ItemElement<TData extends { id: string }, TItem extends ItemElement<TData, TItem>>
+export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>>
     implements ActionableItem<TData, TItem> {
 
     #id: string;
@@ -184,10 +184,10 @@ export abstract class ItemElement<TData extends { id: string }, TItem extends It
         this.target.after(item.target);
     }
 
-    constructor(data: TData) {
-        if (data.id.trim().length == 0) throw new Error("id is not valid");
+    constructor(id: string, data: TData) {
+        if (id.trim().length == 0) throw new Error("id is not valid");
 
-        this.#id = data.id
+        this.#id = id
 
         this.#target = this.render(data);
     }

@@ -9,7 +9,6 @@ import { generateUId } from "./utils";
 
 
 interface Data {
-    id: string
     foo: string,
     bar: string
 }
@@ -18,9 +17,9 @@ class TestElement extends ItemElement<Data, TestElement> {
 
     update(): void { throw new Error("Method not implemented."); }
 
-    render(data: Data): HTMLElement {
+    render(): HTMLElement {
         const wrapper = document.createElement("div");
-        wrapper.append(data.id)
+        wrapper.append(this.id)
         return wrapper;
     }
 
@@ -38,18 +37,20 @@ function getIds(item: TestElement) {
 }
 
 test("Can initialize", () => {
-    new TestElement({
-        id: generateUId(),
-        foo: generateUId(),
-        bar: generateUId()
-    })
+    new TestElement(
+        generateUId(),
+        {
+            foo: generateUId(),
+            bar: generateUId()
+        }
+    )
 })
 
 describe("Initialize -> Throws on invalid", () => {
     test.each([null, "", " ", "  "])(
         "data.id -> %j",
         (id) => {
-            expect(() => new TestElement({ id: id!, foo: generateUId(), bar: generateUId() })).toThrow();
+            expect(() => new TestElement(id!, { foo: generateUId(), bar: generateUId() })).toThrow();
         }
     )
 })
@@ -57,8 +58,8 @@ describe("Initialize -> Throws on invalid", () => {
 describe("Insert After", () => {
 
     test("Can move", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item1.target);
@@ -74,9 +75,9 @@ describe("Insert After", () => {
     })
 
     test("Can move -> To child", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -94,9 +95,9 @@ describe("Insert After", () => {
     })
 
     test("Can move -> Between siblings", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -114,8 +115,8 @@ describe("Insert After", () => {
     })
 
     test("Cant move itself -> Throws", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -132,8 +133,8 @@ describe("Insert After", () => {
 describe("Insert Before", () => {
 
     test("Can move", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -149,9 +150,9 @@ describe("Insert Before", () => {
     })
 
     test("Can move -> To child", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -169,9 +170,9 @@ describe("Insert Before", () => {
     })
 
     test("Can move -> Between siblings", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item2.target);
@@ -189,8 +190,8 @@ describe("Insert Before", () => {
     })
 
     test("Cant move itself -> Throws", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item1.target);
@@ -206,9 +207,9 @@ describe("Insert Before", () => {
 
 describe("Insert Append", () => {
     test("Can move", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -227,9 +228,9 @@ describe("Insert Append", () => {
     })
 
     test("Can move -> To child", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item2.target);
@@ -247,8 +248,8 @@ describe("Insert Append", () => {
     })
 
     test("Cant move itself -> Throws", () => {
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -267,8 +268,8 @@ describe("Can remove", () => {
 
     test("After Sibling", () => {
 
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -285,8 +286,8 @@ describe("Can remove", () => {
 
     test("Before Sibling", () => {
 
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item1.target);
@@ -303,9 +304,9 @@ describe("Can remove", () => {
 
     test("Between Siblings", () => {
 
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -328,9 +329,9 @@ describe("Can remove", () => {
 
     test("Child", () => {
 
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);
@@ -351,9 +352,9 @@ describe("Can remove", () => {
 
     test("Parent", () => {
 
-        const item0 = new TestElement({ id: "Item0", foo: generateUId(), bar: generateUId() })
-        const item1 = new TestElement({ id: "Item1", foo: generateUId(), bar: generateUId() })
-        const item2 = new TestElement({ id: "Item2", foo: generateUId(), bar: generateUId() })
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
 
         const wrapper = document.createElement("div")
         wrapper.append(item0.target);

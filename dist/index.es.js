@@ -81,16 +81,16 @@ function _(e, t, r) {
 }
 var m, a, v, c, f, u;
 class k {
-  constructor(t) {
+  constructor(t, r) {
     I(this, m, void 0);
     I(this, a, void 0);
     I(this, v, void 0);
     I(this, c, void 0);
     I(this, f, void 0);
     I(this, u, void 0);
-    if (t.id.trim().length == 0)
+    if (t.trim().length == 0)
       throw new Error("id is not valid");
-    d(this, m, t.id), d(this, u, this.render(t));
+    d(this, m, t), d(this, u, this.render(r));
   }
   get id() {
     return o(this, m);

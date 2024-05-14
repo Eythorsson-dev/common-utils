@@ -30,9 +30,7 @@ export interface ActionableItem<TData, TItem extends ActionableItem<TData, TItem
 }
 /** @internal */
 export declare function render(...items: ItemData[]): Item<any>[];
-export declare abstract class ItemElement<TData extends {
-    id: string;
-}, TItem extends ItemElement<TData, TItem>> implements ActionableItem<TData, TItem> {
+export declare abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>> implements ActionableItem<TData, TItem> {
     #private;
     get id(): string;
     get parentItem(): TItem | undefined;
@@ -50,5 +48,5 @@ export declare abstract class ItemElement<TData extends {
     append(item: TItem): void;
     before(item: TItem): void;
     after(item: TItem): void;
-    constructor(data: TData);
+    constructor(id: string, data: TData);
 }
