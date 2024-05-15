@@ -76,8 +76,8 @@ function _(e, t, r) {
         throw new Error("Failed to render item, parent item is not rendered");
       n.append(i);
     } else
-      throw new Error("Failed to render item");
-  return i.update(e), t;
+      throw new Error(`Failed to render item (${i == null ? void 0 : i.id})`);
+  return i.update(e.data), t;
 }
 var m, a, v, c, f, u;
 class k {

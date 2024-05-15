@@ -5,13 +5,13 @@ type Data<T extends ItemData> = Omit<T, "id" | "previousId" | "parentId" | "firs
 
 
 export function upsertAndReturnRoot<
-    TData extends Omit<ItemData, "nextId">,
+    TData extends { id: string, previousId?: string, parentId?: string, data?: any },
     TItem extends ActionableItem<Data<TData>, TItem>
 >(
     data: TData,
     root: TItem | undefined,
     createItem: (data: TData) => TItem
-) : TItem {
+): TItem {
     if (root == undefined && (data.parentId || data.previousId)) {
         throw new Error("the initial upsert must be the root window");
     }
@@ -42,10 +42,10 @@ export function upsertAndReturnRoot<
             parent.append(item)
         }
         else {
-            throw new Error("Failed to render item")
+            throw new Error(`Failed to render item (${item?.id})`)
         }
     }
-    item.update(data)
+    item.update(data.data)
 
     return root!;
 }
