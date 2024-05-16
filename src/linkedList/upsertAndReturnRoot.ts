@@ -23,8 +23,17 @@ export function upsertAndReturnRoot<
         || item.parentItem?.id != data.parentId
         || item.previousItem?.id != data.previousId
     ) {
-        item?.remove();
+        if (root && item && root.id == item.id) {
+            if (item!.firstChildItem) {
+                root = <TItem>item!.firstChildItem;
+            }
+            else if (item!.nextItem) root = <TItem>item!.nextItem;
+            else throw new Error("Failed to render block, a new rootBlock could not be determined");
+        }
+
         if (item == undefined) item = createItem(data)
+        item?.remove();
+
 
         if (root == undefined) {
             root = <TItem>item;
@@ -45,7 +54,7 @@ export function upsertAndReturnRoot<
             throw new Error(`Failed to render item (${item?.id})`)
         }
     }
-    item.update(data.data)
+    item.update(data)
 
     return root!;
 }

@@ -1,8 +1,9 @@
-import { test, expect, vi, beforeEach, Mock } from "vitest";
+import { test, expect, describe, vi, beforeEach, Mock } from "vitest";
 import { upsertAndReturnRoot } from "../upsertAndReturnRoot"
-import { ActionableItem, ItemData } from "../item";
+import { ActionableItem, ItemData, ItemElement } from "../item";
 import { generateUId } from "./utils";
 import { validateList } from "../validateList"
+import { getNextOrChildById } from "../getNextOrChildById";
 
 interface TestItemData extends ItemData {
     foo?: string,
@@ -23,7 +24,7 @@ function createItem(data: ItemData): ActionableItem<any, any> {
         parentItem: data.parentId && { id: data.parentId! } as any,
         nextItem: data.nextId && { id: data.nextId! } as any,
         previousItem: data.previousId && { id: data.previousId! } as any,
-        firstChildItem: data.firstChildId && { id: data.firstChildId! }as any,
+        firstChildItem: data.firstChildId && { id: data.firstChildId! } as any,
         append: appendMock,
         before: beforeMock,
         after: afterMock,
@@ -186,7 +187,7 @@ test("can insert child (3)", () => {
     expect(items[2].before).not.toHaveBeenCalledOnce();
     expect(items[2].after).toHaveBeenCalledOnce();
     const [afterItem] = (items[2].after as Mock).mock.calls[0]
-    expect(getData(afterItem)).toMatchObject({...emptyObject, ...data3});
+    expect(getData(afterItem)).toMatchObject({ ...emptyObject, ...data3 });
 })
 
 test("can update child (3)", () => {
@@ -219,3 +220,53 @@ test("can update child (3)", () => {
     expect(afterMock).not.toHaveBeenCalledOnce();
 })
 
+
+
+class TestItemElement extends ItemElement<any, any> {
+    update(): void { }
+    render(): HTMLElement {
+        const div = document.createElement("div");
+        div.append(this.id);
+        return div;
+    }
+
+}
+
+describe("IntegrationTest", () => {
+
+    // @vitest-environment jsdom
+    test.each([
+        { description: "Root after sibling", itemId: "item0", previousId: "item1" },
+        { description: "Root to nested child of sibling", itemId: "item0", previousId: "item3" },
+        { description: "Parent to sibling of nested child", itemId: "item1", previousId: "item3" },
+        { description: "Child to new Parent", itemId: "item2", previousId: "item5" },
+    ])("Can Move: $description", ({ itemId, previousId }) => {
+        const data0: TestItemData = { id: "item0", parentId: undefined, }
+        const data1: TestItemData = { id: "item1", parentId: undefined, previousId: data0.id }
+        const data2: TestItemData = { id: "item2", parentId: undefined, previousId: data1.id }
+        const data3: TestItemData = { id: "item3", parentId: data2.id }
+        const data4: TestItemData = { id: "item4", parentId: data2.id, previousId: data3.id }
+        const data5: TestItemData = { id: "item5", parentId: undefined, previousId: data2.id }
+
+        let root: TestItemElement | undefined = undefined;
+        const data = [data0, data1, data2, data3, data4, data5];
+        data.forEach(data => root = upsertAndReturnRoot(data, root, x => new TestItemElement(x.id, undefined)))
+
+        const itemDataToMove = data.find(x => x.id == itemId)!;
+        const prevBlockData = data.find(x => x.id == previousId)!;
+
+        const response = upsertAndReturnRoot({
+            ...itemDataToMove,
+            previousId: prevBlockData.id,
+            parentId: prevBlockData.id
+        }, root, x => new TestItemElement(x.id, undefined));
+
+        const currBlock = getNextOrChildById(response, itemDataToMove.id);
+        const prevBlock = getNextOrChildById(response, prevBlockData.id);
+
+        console.log(itemId, previousId)
+        expect(currBlock?.id).toBe(itemId)
+        expect(prevBlock!.id).toBe(previousId)
+        expect(currBlock?.id).toBe(prevBlock!.nextItem!.id)
+    });
+})
