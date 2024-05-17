@@ -294,6 +294,39 @@ describe("IntegrationTest", () => {
     });
 
     // @vitest-environment jsdom
+    test("Can Move -> Previous is root block, current has children", () => {
+        // children should be moved to the root block, and the current should become the new root
+
+        const data0: ItemData<TestItemData> = { data: { }, id: "item0", parentId: undefined, }
+        const data1: ItemData<TestItemData> = { data: { }, id: "item1", parentId: undefined, previousId: data0.id }
+        const data2: ItemData<TestItemData> = { data: { }, id: "item2", parentId: data1.id }
+        const data3: ItemData<TestItemData> = { data: { }, id: "item3", parentId: data1.id, previousId: data2.id }
+
+        let root: TestItemElement | undefined = undefined;
+        const data = [data0, data1, data2, data3];
+        data.forEach(data => root = upsertAndReturnRoot(data, root, x => new TestItemElement(x.id, undefined)))
+
+        const response = upsertAndReturnRoot({
+            ...data1,
+            previousId: undefined,
+            parentId: undefined
+        }, root, x => new TestItemElement(x.id, undefined));
+
+
+        const movedBlock = getNextOrChildById(response, data1.id)!;
+        const nextBlock = getNextOrChildById(response, data0.id)!;
+
+        expect(movedBlock.nextItem!.target).toBe(nextBlock.target);
+
+        expect(getData(response)).toMatchObject([
+            { ...data1, parentId: undefined, previousId: undefined },
+            { ...data0, parentId: undefined, previousId: data1.id },
+            { ...data2, parentId: data0.id },
+            { ...data3, parentId: data0.id },
+        ])
+    })
+    
+    // @vitest-environment jsdom
     test("Can Move -> Current has children, moved after next", () => {
         const data0: ItemData<TestItemData> = { data: {}, id: "item0", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: {}, id: "item1", parentId: undefined, previousId: data0.id }

@@ -50,7 +50,8 @@ export function upsertAndReturnRoot<
             parent.append(item)
         }
         else {
-            throw new Error(`Failed to render item (${item?.id})`)
+            root.before(<TItem>item);
+            root = <TItem>item;
         }
     }
 
