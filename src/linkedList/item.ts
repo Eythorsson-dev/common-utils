@@ -99,13 +99,17 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
             if (this.previousItem) {
                 children.forEach(child => child.parentItem = this.previousItem);
 
-                const lastChildOfPrevious = this.previousItem.firstChildItem
-                    && getNextSiblings(this.previousItem.firstChildItem)
-                        .slice(-1)[0];
 
-                if (lastChildOfPrevious) {
+                if (this.previousItem.firstChildItem) {
+                    const lastChildOfPrevious = this.previousItem.firstChildItem
+                        && getNextSiblings(this.previousItem.firstChildItem)
+                            .slice(-1)[0];
+
                     lastChildOfPrevious.nextItem = this.firstChildItem;
                     this.firstChildItem.previousItem = lastChildOfPrevious;
+                }
+                else {
+                    this.previousItem.firstChildItem = children[0];
                 }
 
                 this.previousItem.target.append(...childElements)
