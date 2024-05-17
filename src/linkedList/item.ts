@@ -97,25 +97,11 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
             const lastChild = children.slice(-1)[0]
 
             if (this.previousItem) {
-                children.forEach(child => child.parentItem = this.previousItem);
-
-
-                if (this.previousItem.firstChildItem) {
-                    const lastChildOfPrevious = this.previousItem.firstChildItem
-                        && getNextSiblings(this.previousItem.firstChildItem)
-                            .slice(-1)[0];
-
-                    lastChildOfPrevious.nextItem = this.firstChildItem;
-                    this.firstChildItem.previousItem = lastChildOfPrevious;
-                }
-                else {
-                    this.previousItem.firstChildItem = children[0];
-                }
-
-                this.previousItem.target.append(...childElements)
+                children.forEach(
+                    child => this.previousItem!.append(child)
+                );
             }
             else {
-
                 children.forEach(child => child.parentItem = this.parentItem);
                 this.target.replaceWith(...childElements);
 
@@ -149,15 +135,15 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
         const children = this.firstChildItem && [this.firstChildItem, ...getNextSiblings(this.firstChildItem)];
         const lastChild = children?.slice(-1)[0];
 
+        item.parentItem = this as unknown as TItem;
+        
         if (lastChild) {
             lastChild.after(item);
         }
         else {
             this.firstChildItem = item;
-            item.parentItem = this as unknown as TItem;
             this.target.append(item.target);
         }
-
     }
 
     before(item: TItem): void {

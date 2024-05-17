@@ -381,6 +381,12 @@ describe("Can remove", () => {
     
     test("Parent -> Children is appended to previous", () => {
 
+        // 0
+        // 1
+        //  2
+        //  3
+
+
         const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
         const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
         const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
@@ -401,5 +407,35 @@ describe("Can remove", () => {
 
         expect([...wrapper.children]).toStrictEqual([item0.target]);
         expect([...item0.target.children]).toStrictEqual([item2.target, item3.target]);
+    })
+
+    test("Parent -> Children is appended to previous after its last child", () => {
+
+        // 0         0
+        //  1   ->     1
+        // 2    ->     3
+        //  3        
+
+
+        const item0 = new TestElement("Item0", { foo: generateUId(), bar: generateUId() })
+        const item1 = new TestElement("Item1", { foo: generateUId(), bar: generateUId() })
+        const item2 = new TestElement("Item2", { foo: generateUId(), bar: generateUId() })
+        const item3 = new TestElement("Item3", { foo: generateUId(), bar: generateUId() })
+
+        const wrapper = document.createElement("div")
+        wrapper.append(item0.target);
+
+        item0.append(item1);
+        item0.after(item2);
+        item2.append(item3);
+
+        item2.remove();
+
+        expect(getIds(item0)).toMatchObject({ ...emptyObject, id: item0.id, firstChildId: item1.id });
+        expect(getIds(item1)).toMatchObject({ ...emptyObject, id: item1.id, parentId: item0.id, nextId: item3.id});
+        expect(getIds(item3)).toMatchObject({ ...emptyObject, id: item3.id, parentId: item0.id, previousId: item1.id });
+
+        expect([...wrapper.children]).toStrictEqual([item0.target]);
+        expect([...item0.target.children]).toStrictEqual([item1.target, item3.target]);
     })
 })

@@ -295,7 +295,6 @@ describe("IntegrationTest", () => {
 
     // @vitest-environment jsdom
     test("Can Move -> Previous is root block, current has children", () => {
-        // children should be moved to the root block, and the current should become the new root
 
         const data0: ItemData<TestItemData> = { data: { }, id: "item0", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: { }, id: "item1", parentId: undefined, previousId: data0.id }
@@ -323,6 +322,45 @@ describe("IntegrationTest", () => {
             { ...data0, parentId: undefined, previousId: data1.id },
             { ...data2, parentId: data0.id },
             { ...data3, parentId: data0.id },
+        ])
+    })
+    
+    // @vitest-environment jsdom
+    test("Can Move -> Previous block (with children)", () => {
+        // 0       0
+        //  1       1
+        // 2   ->   3
+        //  3      4
+        // 4       2
+
+        const data0: ItemData<TestItemData> = { data: { }, id: "block0", parentId: undefined, }
+        const data1: ItemData<TestItemData> = { data: { }, id: "block1", parentId: data0.id }
+        const data2: ItemData<TestItemData> = { data: { }, id: "block2", parentId: undefined, previousId: data0.id }
+        const data3: ItemData<TestItemData> = { data: { }, id: "block3", parentId: data2.id }
+        const data4: ItemData<TestItemData> = { data: { }, id: "block4", parentId: undefined, previousId: data2.id }
+
+        let root: TestItemElement | undefined = undefined;
+        const data = [data0, data1, data2, data3, data4];
+        data.forEach(data => root = upsertAndReturnRoot(data, root, x => new TestItemElement(x.id, undefined)))
+
+        const response = upsertAndReturnRoot({
+            ...data2,
+            previousId: data4.id,
+            parentId: undefined
+        }, root, x => new TestItemElement(x.id, undefined));
+
+
+        const movedBlock = getNextOrChildById(response, data2.id)!;
+        const prevBlock = getNextOrChildById(response, data4.id)!;
+
+        expect(movedBlock.previousItem!.target).toBe(prevBlock.target);
+
+        expect(getData(response)).toMatchObject([
+            { ...data0, parentId: undefined, previousId: undefined },
+            { ...data1, parentId: data0.id, previousId: undefined },
+            { ...data3, parentId: data0.id, previousId: data1.id },
+            { ...data4, parentId: undefined, previousId: data0.id },
+            { ...data2, parentId: undefined, previousId: data4.id },
         ])
     })
     
