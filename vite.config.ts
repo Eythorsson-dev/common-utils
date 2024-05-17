@@ -11,6 +11,7 @@ export default defineConfig({
     build: {
         manifest: true,
         minify: true,
+        sourcemap: true,
         reportCompressedSize: true,
         lib: {
             entry: "./src/index.ts",

@@ -202,3 +202,4 @@ const N = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
 export {
   N as linkedList
 };
+//# sourceMappingURL=index.es.js.map
