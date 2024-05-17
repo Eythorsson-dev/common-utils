@@ -190,7 +190,7 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     }
 
     constructor(id: string, data: TData) {
-        if (id.trim().length == 0) throw new Error("id is not valid");
+        if ((id?.trim() ?? "").length == 0) throw new Error("id is not valid");
 
         this.#id = id
 

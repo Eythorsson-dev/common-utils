@@ -6,7 +6,7 @@ var o = (e, t, r) => (k(e, t, "read from private field"), r ? r.call(e) : t.get(
   if (t.has(e))
     throw TypeError("Cannot add the same private member more than once");
   t instanceof WeakSet ? t.add(e) : t.set(e, r);
-}, h = (e, t, r, i) => (k(e, t, "write to private field"), i ? i.call(e, r) : t.set(e, r), r);
+}, d = (e, t, r, i) => (k(e, t, "write to private field"), i ? i.call(e, r) : t.set(e, r), r);
 function p(e) {
   return e.nextItem ? [e.nextItem, ...p(e.nextItem)] : [];
 }
@@ -29,7 +29,7 @@ function x(e, t, r = !1) {
   if (e.nextItem)
     return [e, ...i, ...x(e.nextItem, t)];
   if (e.parentItem)
-    return [e, ...i, ...x(e.parentItem, t, !0)].filter((d) => d.id != e.parentItem.id);
+    return [e, ...i, ...x(e.parentItem, t, !0)].filter((h) => h.id != e.parentItem.id);
   throw Error("Something went wrong. Please make sure that the start, and the end has a common parent");
 }
 function O(e, t) {
@@ -58,11 +58,11 @@ function C(e, t) {
   return r(e);
 }
 function L(e, t, r) {
-  var s, d;
+  var s, h;
   if (t == null && (e.parentId || e.previousId))
     throw new Error("the initial upsert must be the root window");
   let i = t && C(t, e.id);
-  if (i == null || ((s = i.parentItem) == null ? void 0 : s.id) != e.parentId || ((d = i.previousItem) == null ? void 0 : d.id) != e.previousId) {
+  if (i == null || ((s = i.parentItem) == null ? void 0 : s.id) != e.parentId || ((h = i.previousItem) == null ? void 0 : h.id) != e.previousId) {
     if (t && i && t.id == i.id)
       if (i.firstChildItem)
         t = i.firstChildItem;
@@ -96,9 +96,9 @@ class S {
     I(this, c, void 0);
     I(this, f, void 0);
     I(this, l, void 0);
-    if (t.trim().length == 0)
+    if (((t == null ? void 0 : t.trim()) ?? "").length == 0)
       throw new Error("id is not valid");
-    h(this, m, t), h(this, l, this.render(r));
+    d(this, m, t), d(this, l, this.render(r));
   }
   get id() {
     return o(this, m);
@@ -107,25 +107,25 @@ class S {
     return o(this, a);
   }
   set parentItem(t) {
-    h(this, a, t);
+    d(this, a, t);
   }
   get firstChildItem() {
     return o(this, v);
   }
   set firstChildItem(t) {
-    h(this, v, t);
+    d(this, v, t);
   }
   get nextItem() {
     return o(this, c);
   }
   set nextItem(t) {
-    h(this, c, t);
+    d(this, c, t);
   }
   get previousItem() {
     return o(this, f);
   }
   set previousItem(t) {
-    h(this, f, t);
+    d(this, f, t);
   }
   get target() {
     return o(this, l);
@@ -133,15 +133,15 @@ class S {
   remove() {
     var t, r;
     if (((r = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : r.id) == this.id && (this.parentItem.firstChildItem = this.nextItem), this.firstChildItem) {
-      const i = [this.firstChildItem, ...p(this.firstChildItem)], s = i.map((n) => n.target), d = i.slice(-1)[0];
+      const i = [this.firstChildItem, ...p(this.firstChildItem)], s = i.map((n) => n.target), h = i.slice(-1)[0];
       if (this.previousItem) {
         i.forEach((u) => u.parentItem = this.previousItem);
         const n = this.previousItem.firstChildItem && p(this.previousItem.firstChildItem).slice(-1)[0];
         n && (n.nextItem = this.firstChildItem, this.firstChildItem.previousItem = n), this.previousItem.target.append(...s);
       } else
-        i.forEach((n) => n.parentItem = this.parentItem), this.target.replaceWith(...s), i[0] && (i[0].previousItem = this.previousItem), d && (d.nextItem = this.nextItem), this.nextItem && (this.nextItem.previousItem = i[0]);
+        i.forEach((n) => n.parentItem = this.parentItem), this.target.replaceWith(...s), i[0] && (i[0].previousItem = this.previousItem), h && (h.nextItem = this.nextItem), this.nextItem && (this.nextItem.previousItem = i[0]);
     }
-    this.previousItem && (this.previousItem.nextItem = this.nextItem), this.nextItem && h(this.nextItem, f, o(this, f)), this.parentItem = void 0, this.firstChildItem = void 0, this.nextItem = void 0, this.previousItem = void 0, o(this, l).remove();
+    this.previousItem && (this.previousItem.nextItem = this.nextItem), this.nextItem && d(this.nextItem, f, o(this, f)), this.parentItem = void 0, this.firstChildItem = void 0, this.nextItem = void 0, this.previousItem = void 0, o(this, l).remove();
   }
   append(t) {
     if (t.id == this.id)
