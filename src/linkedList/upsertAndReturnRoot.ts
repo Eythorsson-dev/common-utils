@@ -1,22 +1,21 @@
 import { getNextOrChildById } from "./getNextOrChildById";
 import { ActionableItem, ItemData } from "./item";
 
-type Data<T extends ItemData> = Omit<T, "id" | "previousId" | "parentId" | "firstChildId" | "nextId">;
-
 
 export function upsertAndReturnRoot<
-    TData extends { id: string, previousId?: string, parentId?: string, data?: any },
-    TItem extends ActionableItem<Data<TData>, TItem>
+    TData,
+    TItemData extends ItemData<TData>,
+    TItem extends ActionableItem<TData, TItem>,
 >(
-    data: TData,
+    data: TItemData,
     root: TItem | undefined,
-    createItem: (data: TData) => TItem
+    createItem: (data: TItemData) => TItem
 ): TItem {
     if (root == undefined && (data.parentId || data.previousId)) {
         throw new Error("the initial upsert must be the root window");
     }
 
-    type AItem = ActionableItem<Data<TData>, AItem>;
+    type AItem = ActionableItem<TData, AItem>;
     let item = root && getNextOrChildById(<AItem>root, data.id);
 
     if (item == undefined
@@ -54,7 +53,8 @@ export function upsertAndReturnRoot<
             throw new Error(`Failed to render item (${item?.id})`)
         }
     }
-    item.update(data)
+
+    item.update(data.data);
 
     return root!;
 }

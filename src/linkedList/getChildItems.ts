@@ -2,7 +2,7 @@ import { getNextSiblings } from "./getNextSiblings";
 import { Item } from "./item";
 
 
-export function getChildItems<T extends Item<T>>(item: T): T[] {
+export function getChildItems<T extends Item<T, any>>(item: T): T[] {
     if (!item.firstChildItem) return [];
     return [
         item.firstChildItem as T,

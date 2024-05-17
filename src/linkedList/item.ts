@@ -1,23 +1,25 @@
 import { getNextSiblings } from "./getNextSiblings";
 
 
-export interface Item<T> {
+export interface Item<TItem, TData> {
     get id(): string,
-    get parentItem(): T | undefined,
-    get firstChildItem(): T | undefined
-    get nextItem(): T | undefined,
-    get previousItem(): T | undefined
+    get parentItem(): TItem | undefined,
+    get firstChildItem(): TItem | undefined
+    get nextItem(): TItem | undefined,
+    get previousItem(): TItem | undefined
+    get data(): TData | undefined
 }
 
-export interface ItemData {
+export interface ItemData<TData> {
     id: string,
     parentId?: string,
     firstChildId?: string,
     nextId?: string,
     previousId?: string,
+    data: TData
 }
 
-export interface ActionableItem<TData, TItem extends ActionableItem<TData, TItem>> extends Item<TItem> {
+export interface ActionableItem<TData, TItem extends ActionableItem<TData, TItem>> extends Item<TItem, TData> {
     update(data: TData): void;
     remove(): void;
 
@@ -38,7 +40,7 @@ export interface ActionableItem<TData, TItem extends ActionableItem<TData, TItem
 }
 
 /** @internal */
-export function render(...items: ItemData[]): Item<any>[] {
+export function render(...items: ItemData<any>[]): Item<any, any>[] {
     const itemById = items.reduce((obj, curr) => {
         obj[curr.id] = {
             ...curr,
@@ -46,10 +48,11 @@ export function render(...items: ItemData[]): Item<any>[] {
             get nextItem() { return obj[curr.nextId ?? items.find(x => x.previousId == curr.id)?.id!] },
             get previousItem() { return obj[curr.previousId ?? items.find(x => x.nextId == curr.id)?.id!] },
             get firstChildItem() { return obj[curr.firstChildId ?? items.find(x => x.parentId == curr.id && x.previousId == undefined)?.id!] },
+            get data() { return curr.data },
         };
 
         return obj
-    }, {} as { [key: string]: Item<any> })
+    }, {} as { [key: string]: Item<any, any> })
 
     return items.map(x => itemById[x.id]);
 }
@@ -75,6 +78,8 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     #previous: TItem | undefined;
     get previousItem(): TItem | undefined { return this.#previous }
     set previousItem(item: TItem | undefined) { this.#previous = item; }
+
+    abstract get data(): TData
 
     abstract update(data: TData): void;
     abstract render(data: TData): HTMLElement;

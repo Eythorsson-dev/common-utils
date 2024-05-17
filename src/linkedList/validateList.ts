@@ -1,6 +1,6 @@
 import { ItemData } from "./item";
 
-function getLength(data: ItemData[], parentId?: string, previousId?: string): number {
+function getLength(data: ItemData<any>[], parentId?: string, previousId?: string): number {
     const block = data.find(x => x.parentId == parentId && x.previousId == previousId);
     if (!block) return 0;
 
@@ -12,7 +12,7 @@ function getLength(data: ItemData[], parentId?: string, previousId?: string): nu
 }
 
 
-export function validateList<T extends ItemData>(items: T[]): void {
+export function validateList<T extends ItemData<any>>(items: T[]): void {
     const rootBlocks = items.filter(x => x.parentId == undefined && x.previousId == undefined);
 
     if (rootBlocks.length != 1 && items.length > 0)

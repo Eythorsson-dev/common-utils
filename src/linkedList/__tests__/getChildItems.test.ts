@@ -1,6 +1,7 @@
 import { expect, test } from "vitest"
 import { getChildItems } from "../getChildItems"
 import { ItemData, render } from "../item"
+import { generateUId } from "./utils"
 
 
 test("Has no children (1)", () => {
@@ -8,9 +9,9 @@ test("Has no children (1)", () => {
     // 1
     // 2
 
-    const data0: ItemData = { id: "Item0", parentId: undefined }
-    const data1: ItemData = { id: "Item1", parentId: undefined, previousId: data0.id }
-    const data2: ItemData = { id: "Item2", parentId: undefined, previousId: data1.id }
+    const data0: ItemData<string> = { id: "Item0", parentId: undefined, data: generateUId() }
+    const data1: ItemData<string> = { id: "Item1", parentId: undefined, previousId: data0.id, data: generateUId() }
+    const data2: ItemData<string> = { id: "Item2", parentId: undefined, previousId: data1.id, data: generateUId() }
 
     const blocks = render(
         data0,
@@ -29,10 +30,10 @@ test("First has flat children (0)", () => {
     //  2
     // 3
 
-    const data0: ItemData = { id: "Item0", parentId: undefined }
-    const data1: ItemData = { id: "Item1", parentId: data0.id }
-    const data2: ItemData = { id: "Item2", parentId: data0.id, previousId: data1.id }
-    const data3: ItemData = { id: "Item3", parentId: undefined, previousId: data0.id }
+    const data0: ItemData<string> = { id: "Item0", parentId: undefined, data: generateUId() }
+    const data1: ItemData<string> = { id: "Item1", parentId: data0.id, data: generateUId() }
+    const data2: ItemData<string> = { id: "Item2", parentId: data0.id, previousId: data1.id, data: generateUId() }
+    const data3: ItemData<string> = { id: "Item3", parentId: undefined, previousId: data0.id, data: generateUId() }
 
     const blocks = render(
         data0,
@@ -55,10 +56,10 @@ test("First has nested children (0)", () => {
     //   2
     // 3
 
-    const data0: ItemData = { id: "Item0", parentId: undefined }
-    const data1: ItemData = { id: "Item1", parentId: data0.id }
-    const data2: ItemData = { id: "Item2", parentId: data1.id }
-    const data3: ItemData = { id: "Item3", parentId: undefined, previousId: data0.id }
+    const data0: ItemData<string> = { id: "Item0", parentId: undefined, data: generateUId() }
+    const data1: ItemData<string> = { id: "Item1", parentId: data0.id, data: generateUId() }
+    const data2: ItemData<string> = { id: "Item2", parentId: data1.id, data: generateUId() }
+    const data3: ItemData<string> = { id: "Item3", parentId: undefined, previousId: data0.id, data: generateUId() }
 
     const blocks = render(
         data0,

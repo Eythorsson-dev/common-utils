@@ -14,10 +14,19 @@ interface Data {
 }
 
 class TestElement extends ItemElement<Data, TestElement> {
+    private _data: Data| undefined;
+    
+    get data(): Data {
+        return this._data!;
+    }
 
-    update(): void { throw new Error("Method not implemented."); }
+    update(data:Data): void {
+        this._data = data;
+     }
 
-    render(): HTMLElement {
+    render(data: Data): HTMLElement {
+        this._data = data;
+
         const wrapper = document.createElement("div");
         wrapper.append(this.id)
         return wrapper;

@@ -5,7 +5,7 @@ import { generateUId } from "./utils";
 import { validateList } from "../validateList"
 import { getNextOrChildById } from "../getNextOrChildById";
 
-interface TestItemData extends ItemData {
+interface TestItemData {
     foo?: string,
     bar?: string,
     baz?: string
@@ -18,13 +18,14 @@ const updateMock = vi.fn();
 const removeMock = vi.fn();
 
 
-function createItem(data: ItemData): ActionableItem<any, any> {
+function createItem(item: ItemData<TestItemData>): ActionableItem<TestItemData, any> {
     return {
-        id: data.id,
-        parentItem: data.parentId && { id: data.parentId! } as any,
-        nextItem: data.nextId && { id: data.nextId! } as any,
-        previousItem: data.previousId && { id: data.previousId! } as any,
-        firstChildItem: data.firstChildId && { id: data.firstChildId! } as any,
+        id: item.id,
+        parentItem: item.parentId && { id: item.parentId! } as any,
+        nextItem: item.nextId && { id: item.nextId! } as any,
+        previousItem: item.previousId && { id: item.previousId! } as any,
+        firstChildItem: item.firstChildId && { id: item.firstChildId! } as any,
+        data: item.data,
         append: appendMock,
         before: beforeMock,
         after: afterMock,
@@ -34,7 +35,7 @@ function createItem(data: ItemData): ActionableItem<any, any> {
 }
 
 
-export function renderActionable<T extends ItemData>(...items: ItemData[]): ActionableItem<T, any>[] {
+export function renderActionable<TItem extends ItemData<TestItemData>>(...items: TItem[]): ActionableItem<TestItemData, any>[] {
     validateList(items);
 
     const itemById = items.reduce((obj, curr) => {
@@ -46,6 +47,7 @@ export function renderActionable<T extends ItemData>(...items: ItemData[]): Acti
             update: vi.fn(),
             remove: vi.fn(),
 
+            get data(): TestItemData { return curr.data },
             get parentItem() { return obj[curr.parentId!] },
             get nextItem() { return obj[curr.nextId ?? items.find(x => x.previousId == curr.id)?.id!] },
             get previousItem() { return obj[curr.previousId ?? items.find(x => x.nextId == curr.id)?.id!] },
@@ -53,13 +55,13 @@ export function renderActionable<T extends ItemData>(...items: ItemData[]): Acti
         };
 
         return obj
-    }, {} as { [key: string]: ActionableItem<T, any> })
+    }, {} as { [key: string]: ActionableItem<TestItemData, any> })
 
     return items.map(x => itemById[x.id]);
 }
 
-function getData<T extends ActionableItem<any, T>>(item: T): ItemData {
-    const { append, before, after, update, remove, firstChildItem, parentItem, nextItem, previousItem, ...data } = item;
+function getData<T extends ActionableItem<any, T>>(item: T): ItemData<any> {
+    const { append, before, after, update: update, remove, firstChildItem, parentItem, nextItem, previousItem, ...data } = item;
 
     return {
         ...data,
@@ -82,31 +84,31 @@ beforeEach(() => {
 })
 
 test("no root + data(parent) throws", () => {
-    const data0: ItemData = { id: "Item0", parentId: "Item1" };
+    const data0: ItemData<TestItemData> = { id: "Item0", parentId: "Item1", data: {} };
 
     expect(() => upsertAndReturnRoot(data0, undefined, createItem)).toThrow()
 })
 
 test("no root + data(prev) throws", () => {
-    const data0: ItemData = { id: "Item0", previousId: "Item1" };
+    const data0: ItemData<TestItemData> = { id: "Item0", previousId: "Item1", data: {} };
 
     expect(() => upsertAndReturnRoot(data0, undefined, createItem)).toThrow()
 })
 
 test("can create root", () => {
-    const data0: ItemData = { id: "Item0" };
+    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
 
     expect(upsertAndReturnRoot(data0, undefined, createItem)?.id).toBe(data0.id);
 })
 
 test("can update root", () => {
-    const data0: TestItemData = { id: "Item0" };
+    const data0: ItemData<TestItemData> = { id: "Item0", data: { foo: generateUId() } };
 
     const items = renderActionable(data0);
 
-    data0.foo = generateUId();
-    data0.bar = generateUId();
-    data0.baz = generateUId();
+    data0.data.foo = generateUId();
+    data0.data.bar = generateUId();
+    data0.data.baz = generateUId();
 
     const response = upsertAndReturnRoot(data0, items[0], createItem);
 
@@ -115,13 +117,13 @@ test("can update root", () => {
     expect(response?.before).not.toHaveBeenCalledOnce();
     expect(response?.after).not.toHaveBeenCalledOnce();
     expect(response?.update).toHaveBeenCalledOnce();
-    expect(response?.update).toHaveBeenCalledWith(data0);
+    expect(response?.update).toHaveBeenCalledWith(data0.data);
 })
 
 test("can insert sibling", () => {
-    const data0: TestItemData = { id: "Item0" };
-    const data1: TestItemData = { id: "Item1", previousId: data0.id };
-    const data2: TestItemData = { id: "Item2", previousId: data0.id };
+    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", previousId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", previousId: data0.id, data: {} };
 
     const items = renderActionable(data0, data2);
 
@@ -130,7 +132,7 @@ test("can insert sibling", () => {
     expect(response!.id).toBe(data0.id);
 
     expect(updateMock).toHaveBeenCalledOnce();
-    expect(updateMock).toHaveBeenCalledWith(data1);
+    expect(updateMock).toHaveBeenCalledWith(data1.data);
     expect(items[0].append).not.toHaveBeenCalledOnce();
     expect(items[0].before).not.toHaveBeenCalledOnce();
     expect(items[0].after).toHaveBeenCalledOnce();
@@ -139,22 +141,22 @@ test("can insert sibling", () => {
 })
 
 test("can update sibling", () => {
-    const data0: TestItemData = { id: "Item0" };
-    const data1: TestItemData = { id: "Item1", previousId: data0.id };
-    const data2: TestItemData = { id: "Item2", previousId: data1.id };
+    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", previousId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", previousId: data1.id, data: {} };
 
     const items = renderActionable(data0, data1, data2);
 
-    data1.foo = generateUId();
-    data1.bar = generateUId();
-    data1.baz = generateUId();
+    data1.data.foo = generateUId();
+    data1.data.bar = generateUId();
+    data1.data.baz = generateUId();
 
     const response = upsertAndReturnRoot(data1, items[0], createItem);
 
     expect(response!.id).toBe(data0.id);
 
     expect(items[1].update).toHaveBeenCalledOnce();
-    expect(items[1].update).toHaveBeenCalledWith(data1);
+    expect(items[1].update).toHaveBeenCalledWith(data1.data);
     expect(items[0].append).not.toHaveBeenCalledOnce();
     expect(items[0].before).not.toHaveBeenCalledOnce();
     expect(items[0].after).not.toHaveBeenCalledOnce();
@@ -168,11 +170,11 @@ test("can insert child (3)", () => {
     //   4 |   3
     //     |   4
 
-    const data0: TestItemData = { id: "Item0" };
-    const data1: TestItemData = { id: "Item1", parentId: data0.id };
-    const data2: TestItemData = { id: "Item2", parentId: data1.id };
-    const data3: TestItemData = { id: "Item3", parentId: data1.id, previousId: data2.id };
-    const data4: TestItemData = { id: "Item4", parentId: data1.id, previousId: data2.id };
+    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", parentId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", parentId: data1.id, data: {} };
+    const data3: ItemData<TestItemData> = { id: "Item3", parentId: data1.id, previousId: data2.id, data: {} };
+    const data4: ItemData<TestItemData> = { id: "Item4", parentId: data1.id, previousId: data2.id, data: {} };
 
     const items = renderActionable(data0, data1, data2, data4);
 
@@ -181,7 +183,7 @@ test("can insert child (3)", () => {
     expect(response!.id).toBe(data0.id);
 
     expect(updateMock).toHaveBeenCalledOnce();
-    expect(updateMock).toHaveBeenCalledWith(data3);
+    expect(updateMock).toHaveBeenCalledWith(data3.data);
 
     expect(items[2].append).not.toHaveBeenCalledOnce();
     expect(items[2].before).not.toHaveBeenCalledOnce();
@@ -197,24 +199,24 @@ test("can update child (3)", () => {
     //   3
     //   4
 
-    const data0: TestItemData = { id: "Item0" };
-    const data1: TestItemData = { id: "Item1", parentId: data0.id };
-    const data2: TestItemData = { id: "Item2", parentId: data1.id };
-    const data3: TestItemData = { id: "Item3", parentId: data1.id, previousId: data2.id };
-    const data4: TestItemData = { id: "Item4", parentId: data1.id, previousId: data3.id };
+    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", parentId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", parentId: data1.id, data: {} };
+    const data3: ItemData<TestItemData> = { id: "Item3", parentId: data1.id, previousId: data2.id, data: {} };
+    const data4: ItemData<TestItemData> = { id: "Item4", parentId: data1.id, previousId: data3.id, data: {} };
 
     const items = renderActionable(data0, data1, data2, data3, data4);
 
-    data3.foo = generateUId();
-    data3.bar = generateUId();
-    data3.baz = generateUId();
+    data3.data.foo = generateUId();
+    data3.data.bar = generateUId();
+    data3.data.baz = generateUId();
 
     const response = upsertAndReturnRoot(data3, items[0], createItem);
 
     expect(response!.id).toBe(data0.id);
 
     expect(items[3].update).toHaveBeenCalledOnce();
-    expect(items[3].update).toHaveBeenCalledWith(data3);
+    expect(items[3].update).toHaveBeenCalledWith(data3.data);
     expect(appendMock).not.toHaveBeenCalledOnce();
     expect(beforeMock).not.toHaveBeenCalledOnce();
     expect(afterMock).not.toHaveBeenCalledOnce();
@@ -223,6 +225,7 @@ test("can update child (3)", () => {
 
 
 class TestItemElement extends ItemElement<any, any> {
+    get data(): any { return undefined }
     update(): void { }
     render(): HTMLElement {
         const div = document.createElement("div");
@@ -241,12 +244,12 @@ describe("IntegrationTest", () => {
         { description: "Parent to sibling of nested child", itemId: "item1", previousId: "item3" },
         { description: "Child to new Parent", itemId: "item2", previousId: "item5" },
     ])("Can Move: $description", ({ itemId, previousId }) => {
-        const data0: TestItemData = { id: "item0", parentId: undefined, }
-        const data1: TestItemData = { id: "item1", parentId: undefined, previousId: data0.id }
-        const data2: TestItemData = { id: "item2", parentId: undefined, previousId: data1.id }
-        const data3: TestItemData = { id: "item3", parentId: data2.id }
-        const data4: TestItemData = { id: "item4", parentId: data2.id, previousId: data3.id }
-        const data5: TestItemData = { id: "item5", parentId: undefined, previousId: data2.id }
+        const data0: ItemData<TestItemData> = { id: "item0", parentId: undefined, data: {} }
+        const data1: ItemData<TestItemData> = { id: "item1", parentId: undefined, previousId: data0.id, data: {} }
+        const data2: ItemData<TestItemData> = { id: "item2", parentId: undefined, previousId: data1.id, data: {} }
+        const data3: ItemData<TestItemData> = { id: "item3", parentId: data2.id, data: {} }
+        const data4: ItemData<TestItemData> = { id: "item4", parentId: data2.id, previousId: data3.id, data: {} }
+        const data5: ItemData<TestItemData> = { id: "item5", parentId: undefined, previousId: data2.id, data: {} }
 
         let root: TestItemElement | undefined = undefined;
         const data = [data0, data1, data2, data3, data4, data5];
