@@ -296,6 +296,13 @@ describe("IntegrationTest", () => {
     // @vitest-environment jsdom
     test("Can Move -> Previous is root block, current has children", () => {
 
+        // 0   ->  1
+        // 1   ->   2
+        //  2  ->   3
+        //  3  ->  0
+
+
+
         const data0: ItemData<TestItemData> = { data: { }, id: "item0", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: { }, id: "item1", parentId: undefined, previousId: data0.id }
         const data2: ItemData<TestItemData> = { data: { }, id: "item2", parentId: data1.id }
@@ -319,9 +326,9 @@ describe("IntegrationTest", () => {
 
         expect(getData(response)).toMatchObject([
             { ...data1, parentId: undefined, previousId: undefined },
+            { ...data2 },
+            { ...data3 },
             { ...data0, parentId: undefined, previousId: data1.id },
-            { ...data2, parentId: data0.id },
-            { ...data3, parentId: data0.id },
         ])
     })
     
@@ -329,9 +336,9 @@ describe("IntegrationTest", () => {
     test("Can Move -> Previous block (with children)", () => {
         // 0       0
         //  1       1
-        // 2   ->   3
-        //  3      4
-        // 4       2
+        // 2   ->  4
+        //  3      2
+        // 4        3
 
         const data0: ItemData<TestItemData> = { data: { }, id: "block0", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: { }, id: "block1", parentId: data0.id }
@@ -340,7 +347,7 @@ describe("IntegrationTest", () => {
         const data4: ItemData<TestItemData> = { data: { }, id: "block4", parentId: undefined, previousId: data2.id }
 
         let root: TestItemElement | undefined = undefined;
-        const data = [data0, data1, data2, data3, data4];
+        const data = [data0, data1, data2, data3, data4 ];
         data.forEach(data => root = upsertAndReturnRoot(data, root, x => new TestItemElement(x.id, undefined)))
 
         const response = upsertAndReturnRoot({
@@ -358,14 +365,20 @@ describe("IntegrationTest", () => {
         expect(getData(response)).toMatchObject([
             { ...data0, parentId: undefined, previousId: undefined },
             { ...data1, parentId: data0.id, previousId: undefined },
-            { ...data3, parentId: data0.id, previousId: data1.id },
             { ...data4, parentId: undefined, previousId: data0.id },
             { ...data2, parentId: undefined, previousId: data4.id },
+            { ...data3 },
         ])
     })
     
     // @vitest-environment jsdom
     test("Can Move -> Current has children, moved after next", () => {
+        // 0       0  
+        // 1       4  
+        //  2  ->  1  
+        //  3       2 
+        // 4        3 
+ 
         const data0: ItemData<TestItemData> = { data: {}, id: "item0", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: {}, id: "item1", parentId: undefined, previousId: data0.id }
         const data2: ItemData<TestItemData> = { data: {}, id: "item2", parentId: data1.id }
@@ -391,10 +404,10 @@ describe("IntegrationTest", () => {
         
         expect(getData(response)).toMatchObject([
             { ...data0, parentId: undefined, previousId: undefined },
-            { ...data2, parentId: data0.id },
-            { ...data3, parentId: data0.id },
             { ...data4, parentId: undefined, previousId: data0.id },
             { ...data1, parentId: undefined, previousId: data4.id },
+            { ...data2 },
+            { ...data3 },
         ])
     })
 })

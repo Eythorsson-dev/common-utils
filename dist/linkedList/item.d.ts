@@ -16,6 +16,9 @@ export interface ItemData<TData> {
 }
 export interface ActionableItem<TData, TItem extends ActionableItem<TData, TItem>> extends Item<TItem, TData> {
     update(data: TData): void;
+    /**
+     * Removes the item and all its children from both the linked list, and the doom render
+     */
     remove(): void;
     /**
     * Inserts the item after the last child
@@ -36,13 +39,9 @@ export declare abstract class ItemElement<TData, TItem extends ItemElement<TData
     #private;
     get id(): string;
     get parentItem(): TItem | undefined;
-    set parentItem(item: TItem | undefined);
     get firstChildItem(): TItem | undefined;
-    set firstChildItem(item: TItem | undefined);
     get nextItem(): TItem | undefined;
-    set nextItem(item: TItem | undefined);
     get previousItem(): TItem | undefined;
-    set previousItem(item: TItem | undefined);
     abstract get data(): TData;
     abstract update(data: TData): void;
     abstract render(data: TData): HTMLElement;
