@@ -22,5 +22,5 @@ function getChevronRight(): IconElement {
 }
 
 export const ArrowIcons = {
-    "arrow-chevronRight": getChevronRight,
+    "arrow-chevron-right": getChevronRight,
 }

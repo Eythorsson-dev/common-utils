@@ -186,7 +186,7 @@ function E(t, e, i) {
 function z(t) {
   return N(t), E(t, void 0, void 0);
 }
-const R = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const j = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   ItemElement: M,
   getChildAndNextSiblingData: C,
@@ -206,7 +206,7 @@ function D() {
   return e.setAttribute("d", "M9 18L15 12L9 6"), e.setAttribute("stroke", "currentColor"), e.setAttribute("stroke-width", "2"), e.setAttribute("stroke-linecap", "round"), e.setAttribute("stroke-linejoin", "round"), t.appendChild(e), t;
 }
 const y = {
-  "arrow-chevronRight": D
+  "arrow-chevron-right": D
 };
 function F() {
   const t = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -234,11 +234,11 @@ const V = {
   ...V,
   ...y
 };
-function j(t) {
+function P(t) {
   return _[t]();
 }
 export {
-  j as Icon,
-  R as linkedList
+  P as getIcon,
+  j as linkedList
 };
 //# sourceMappingURL=index.es.js.map
