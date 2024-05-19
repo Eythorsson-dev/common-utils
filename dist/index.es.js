@@ -2,7 +2,7 @@ var S = (t, e, i) => {
   if (!e.has(t))
     throw TypeError("Cannot " + i);
 };
-var h = (t, e, i) => (S(t, e, "read from private field"), i ? i.call(t) : e.get(t)), p = (t, e, i) => {
+var h = (t, e, i) => (S(t, e, "read from private field"), i ? i.call(t) : e.get(t)), f = (t, e, i) => {
   if (e.has(t))
     throw TypeError("Cannot add the same private member more than once");
   e instanceof WeakSet ? e.add(t) : e.set(t, i);
@@ -35,18 +35,18 @@ function I(t, e, i = !1) {
 function k(t, e) {
   return I(t, e);
 }
-function B(t) {
-  if (t.firstChildItem)
+function B(t, e) {
+  if (t.firstChildItem && (e == null ? void 0 : e.ignoreChildren) != !0)
     return t.firstChildItem;
   if (t.nextItem)
     return t.nextItem;
-  function e(i) {
-    if (i.nextItem)
-      return i.nextItem;
-    if (i.parentItem)
-      return e(i.parentItem);
+  function i(r) {
+    if (r.nextItem)
+      return r.nextItem;
+    if (r.parentItem)
+      return i(r.parentItem);
   }
-  return e(t);
+  return i(t);
 }
 function v(t, e) {
   function i(r) {
@@ -95,21 +95,21 @@ function L(t, e, i) {
   }
   return r.update(t.data), e;
 }
-var w, l, f, d, u, c;
+var w, l, c, d, u, p;
 class M {
   constructor(e, i) {
-    p(this, w, void 0);
-    p(this, l, void 0);
+    f(this, w, void 0);
+    f(this, l, void 0);
     // set parentItem(item: TItem | undefined) { this.#parent = item; }
-    p(this, f, void 0);
+    f(this, c, void 0);
     // set firstChildItem(item: TItem | undefined) { this.#firstChild = item; }
-    p(this, d, void 0);
+    f(this, d, void 0);
     // set nextItem(item: TItem | undefined) { this.#next = item; }
-    p(this, u, void 0);
-    p(this, c, void 0);
+    f(this, u, void 0);
+    f(this, p, void 0);
     if (((e == null ? void 0 : e.trim()) ?? "").length == 0)
       throw new Error("id is not valid");
-    n(this, w, e), n(this, c, this.render(i));
+    n(this, w, e), n(this, p, this.render(i));
   }
   get id() {
     return h(this, w);
@@ -118,7 +118,7 @@ class M {
     return h(this, l);
   }
   get firstChildItem() {
-    return h(this, f);
+    return h(this, c);
   }
   get nextItem() {
     return h(this, d);
@@ -127,7 +127,7 @@ class M {
     return h(this, u);
   }
   get target() {
-    return h(this, c);
+    return h(this, p);
   }
   getDetails() {
     var e, i;
@@ -140,19 +140,19 @@ class M {
   }
   remove() {
     var e, i;
-    ((i = (e = this.parentItem) == null ? void 0 : e.firstChildItem) == null ? void 0 : i.id) == this.id && n(this.parentItem, f, h(this, d)), this.previousItem && n(this.previousItem, d, h(this, d)), this.nextItem && n(this.nextItem, u, h(this, u)), n(this, l, void 0), n(this, d, void 0), n(this, u, void 0), h(this, c).remove();
+    ((i = (e = this.parentItem) == null ? void 0 : e.firstChildItem) == null ? void 0 : i.id) == this.id && n(this.parentItem, c, h(this, d)), this.previousItem && n(this.previousItem, d, h(this, d)), this.nextItem && n(this.nextItem, u, h(this, u)), n(this, l, void 0), n(this, d, void 0), n(this, u, void 0), h(this, p).remove();
   }
   append(e) {
     if (e.id == this.id)
       throw new Error("Cannot append item before itself");
     e.remove();
     const i = this.firstChildItem && [this.firstChildItem, ...g(this.firstChildItem)], r = i == null ? void 0 : i.slice(-1)[0];
-    n(e, l, this), r ? r.after(e) : (n(this, f, e), this.target.append(e.target));
+    n(e, l, this), r ? r.after(e) : (n(this, c, e), this.target.append(e.target));
   }
   before(e) {
     if (e.id == this.id)
       throw new Error("Cannot append item before itself");
-    e.remove(), n(e, u, this.previousItem), this.previousItem ? n(this.previousItem, d, e) : this.parentItem && n(this.parentItem, f, e), n(e, l, this.parentItem), n(e, d, this), n(this, u, e), this.target.before(e.target);
+    e.remove(), n(e, u, this.previousItem), this.previousItem ? n(this.previousItem, d, e) : this.parentItem && n(this.parentItem, c, e), n(e, l, this.parentItem), n(e, d, this), n(this, u, e), this.target.before(e.target);
   }
   after(e) {
     if (e.id == this.id)
@@ -160,7 +160,7 @@ class M {
     e.remove(), n(e, d, this.nextItem), this.nextItem && n(this.nextItem, u, e), n(e, l, this.parentItem), n(e, u, this), n(this, d, e), this.target.after(e.target);
   }
 }
-w = new WeakMap(), l = new WeakMap(), f = new WeakMap(), d = new WeakMap(), u = new WeakMap(), c = new WeakMap();
+w = new WeakMap(), l = new WeakMap(), c = new WeakMap(), d = new WeakMap(), u = new WeakMap(), p = new WeakMap();
 function C(t, e, i) {
   const r = t.find((s) => s.parentId == e && s.previousId == i);
   return r ? (t = t.filter((s) => s.id != r.id), 1 + C(t, r.id, void 0) + C(t, e, r.id)) : 0;

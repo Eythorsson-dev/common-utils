@@ -52,3 +52,26 @@ describe("getNextBlock", () => {
         expect(next).toBe(undefined)
     })
 })
+
+describe("getNextBlock - Ignore children", () => {
+
+    test("Current has child (0 -> 4)", () => {
+        const next = getNextItem(block0, { ignoreChildren: true });
+        expect(next!.id).toBe(block4.id)
+    })
+
+    test("Current has not children (1 -> 2)", () => {
+        const next = getNextItem(block1, { ignoreChildren: true });
+        expect(next!.id).toBe(block2.id)
+    })
+
+    test("Parent Sibling (3 -> 4)", () => {
+        const next = getNextItem(block3, { ignoreChildren: true });
+        expect(next!.id).toBe(block4.id)
+    })
+
+    test("Last Child (4 -> Undefined)", () => {
+        const next = getNextItem(block4, { ignoreChildren: true });
+        expect(next).toBe(undefined)
+    })
+})
