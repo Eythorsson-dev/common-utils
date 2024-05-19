@@ -9,8 +9,6 @@ export interface Item<TItem, TData> {
 export interface ItemData<TData> {
     id: string;
     parentId?: string;
-    firstChildId?: string;
-    nextId?: string;
     previousId?: string;
     data: TData;
 }
@@ -46,6 +44,7 @@ export declare abstract class ItemElement<TData, TItem extends ItemElement<TData
     abstract update(data: TData): void;
     abstract render(data: TData): HTMLElement;
     get target(): HTMLElement;
+    getDetails(): ItemData<TData>;
     remove(): void;
     append(item: TItem): void;
     before(item: TItem): void;

@@ -13,8 +13,6 @@ export interface Item<TItem, TData> {
 export interface ItemData<TData> {
     id: string,
     parentId?: string,
-    firstChildId?: string,
-    nextId?: string,
     previousId?: string,
     data: TData
 }
@@ -49,9 +47,9 @@ export function render(...items: ItemData<any>[]): Item<any, any>[] {
         obj[curr.id] = {
             ...curr,
             get parentItem() { return obj[curr.parentId!] },
-            get nextItem() { return obj[curr.nextId ?? items.find(x => x.previousId == curr.id)?.id!] },
-            get previousItem() { return obj[curr.previousId ?? items.find(x => x.nextId == curr.id)?.id!] },
-            get firstChildItem() { return obj[curr.firstChildId ?? items.find(x => x.parentId == curr.id && x.previousId == undefined)?.id!] },
+            get nextItem() { return obj[items.find(x => x.previousId == curr.id)?.id!] },
+            get previousItem() { return obj[curr.previousId!] },
+            get firstChildItem() { return obj[items.find(x => x.parentId == curr.id && x.previousId == undefined)?.id!] },
             get data() { return curr.data },
         };
 
@@ -91,22 +89,31 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     #target: HTMLElement
     get target(): HTMLElement { return this.#target }
 
+    getDetails(): ItemData<TData> {
+        return {
+            id: this.id,
+            parentId: this.parentItem?.id,
+            previousId: this.previousItem?.id,
+            data: this.data
+        }
+    }
+
     remove(): void {
         if (this.parentItem?.firstChildItem?.id == this.id) {
             this.parentItem.#firstChild = this.#next
         }
-        
+
         if (this.previousItem) {
             this.previousItem.#next = this.#next;
         }
         if (this.nextItem) {
             this.nextItem.#previous = this.#previous;
         }
-        
+
         this.#parent = undefined;
         this.#next = undefined;
         this.#previous = undefined;
-        
+
         this.#target.remove();
     }
 

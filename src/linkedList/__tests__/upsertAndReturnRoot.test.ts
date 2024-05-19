@@ -18,7 +18,7 @@ const updateMock = vi.fn();
 const removeMock = vi.fn();
 
 
-function createItem(item: ItemData<TestItemData>): ActionableItem<TestItemData, any> {
+function createItem(item: ItemData<TestItemData> & { nextId?: string, firstChildId?: string }): ActionableItem<TestItemData, any> {
     return {
         id: item.id,
         parentItem: item.parentId && { id: item.parentId! } as any,
@@ -49,9 +49,9 @@ export function renderActionable<TItem extends ItemData<TestItemData>>(...items:
 
             get data(): TestItemData { return curr.data },
             get parentItem() { return obj[curr.parentId!] },
-            get nextItem() { return obj[curr.nextId ?? items.find(x => x.previousId == curr.id)?.id!] },
-            get previousItem() { return obj[curr.previousId ?? items.find(x => x.nextId == curr.id)?.id!] },
-            get firstChildItem() { return obj[curr.firstChildId ?? items.find(x => x.parentId == curr.id && x.previousId == undefined)?.id!] },
+            get nextItem() { return obj[items.find(x => x.previousId == curr.id)?.id!] },
+            get previousItem() { return obj[curr.previousId!] },
+            get firstChildItem() { return obj[items.find(x => x.parentId == curr.id && x.previousId == undefined)?.id!] },
         };
 
         return obj
@@ -287,7 +287,6 @@ describe("IntegrationTest", () => {
         const currBlock = getNextOrChildById(response, itemDataToMove.id);
         const prevBlock = getNextOrChildById(response, prevBlockData.id);
 
-        console.log(itemId, previousId)
         expect(currBlock?.id).toBe(itemId)
         expect(prevBlock!.id).toBe(previousId)
         expect(currBlock?.id).toBe(prevBlock!.nextItem!.id)
@@ -303,10 +302,10 @@ describe("IntegrationTest", () => {
 
 
 
-        const data0: ItemData<TestItemData> = { data: { }, id: "item0", parentId: undefined, }
-        const data1: ItemData<TestItemData> = { data: { }, id: "item1", parentId: undefined, previousId: data0.id }
-        const data2: ItemData<TestItemData> = { data: { }, id: "item2", parentId: data1.id }
-        const data3: ItemData<TestItemData> = { data: { }, id: "item3", parentId: data1.id, previousId: data2.id }
+        const data0: ItemData<TestItemData> = { data: {}, id: "item0", parentId: undefined, }
+        const data1: ItemData<TestItemData> = { data: {}, id: "item1", parentId: undefined, previousId: data0.id }
+        const data2: ItemData<TestItemData> = { data: {}, id: "item2", parentId: data1.id }
+        const data3: ItemData<TestItemData> = { data: {}, id: "item3", parentId: data1.id, previousId: data2.id }
 
         let root: TestItemElement | undefined = undefined;
         const data = [data0, data1, data2, data3];
@@ -331,7 +330,7 @@ describe("IntegrationTest", () => {
             { ...data0, parentId: undefined, previousId: data1.id },
         ])
     })
-    
+
     // @vitest-environment jsdom
     test("Can Move -> Previous block (with children)", () => {
         // 0       0
@@ -340,14 +339,14 @@ describe("IntegrationTest", () => {
         //  3      2
         // 4        3
 
-        const data0: ItemData<TestItemData> = { data: { }, id: "block0", parentId: undefined, }
-        const data1: ItemData<TestItemData> = { data: { }, id: "block1", parentId: data0.id }
-        const data2: ItemData<TestItemData> = { data: { }, id: "block2", parentId: undefined, previousId: data0.id }
-        const data3: ItemData<TestItemData> = { data: { }, id: "block3", parentId: data2.id }
-        const data4: ItemData<TestItemData> = { data: { }, id: "block4", parentId: undefined, previousId: data2.id }
+        const data0: ItemData<TestItemData> = { data: {}, id: "block0", parentId: undefined, }
+        const data1: ItemData<TestItemData> = { data: {}, id: "block1", parentId: data0.id }
+        const data2: ItemData<TestItemData> = { data: {}, id: "block2", parentId: undefined, previousId: data0.id }
+        const data3: ItemData<TestItemData> = { data: {}, id: "block3", parentId: data2.id }
+        const data4: ItemData<TestItemData> = { data: {}, id: "block4", parentId: undefined, previousId: data2.id }
 
         let root: TestItemElement | undefined = undefined;
-        const data = [data0, data1, data2, data3, data4 ];
+        const data = [data0, data1, data2, data3, data4];
         data.forEach(data => root = upsertAndReturnRoot(data, root, x => new TestItemElement(x.id, undefined)))
 
         const response = upsertAndReturnRoot({
@@ -370,7 +369,7 @@ describe("IntegrationTest", () => {
             { ...data3 },
         ])
     })
-    
+
     // @vitest-environment jsdom
     test("Can Move -> Current has children, moved after next", () => {
         // 0       0  
@@ -378,7 +377,7 @@ describe("IntegrationTest", () => {
         //  2  ->  1  
         //  3       2 
         // 4        3 
- 
+
         const data0: ItemData<TestItemData> = { data: {}, id: "item0", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: {}, id: "item1", parentId: undefined, previousId: data0.id }
         const data2: ItemData<TestItemData> = { data: {}, id: "item2", parentId: data1.id }
@@ -401,7 +400,7 @@ describe("IntegrationTest", () => {
         const prevBlock = getNextOrChildById(response, data4.id)!;
 
         expect(movedBlock.previousItem!.target).toBe(prevBlock.target);
-        
+
         expect(getData(response)).toMatchObject([
             { ...data0, parentId: undefined, previousId: undefined },
             { ...data4, parentId: undefined, previousId: data0.id },
