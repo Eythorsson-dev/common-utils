@@ -4,7 +4,7 @@ export * from "./getNextItem"
 export * from "./getNextSiblings"
 export * from "./getNextOrChildById"
 export * from "./getChildAndNextSiblingData"
-export * from "./getPreviousWithoutChild"
+export * from "./getLastChild"
 export * from "./upsertAndReturnRoot"
 export {
     type Item,
