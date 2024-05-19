@@ -65,7 +65,7 @@ function C(t) {
   ];
   return t.firstChildItem && e.push(...C(t.firstChildItem)), t.nextItem && e.push(...C(t.nextItem)), e;
 }
-function M(t, e, i) {
+function L(t, e, i) {
   var s, a;
   if (e == null && (t.parentId || t.previousId))
     throw new Error("the initial upsert must be the root window");
@@ -96,7 +96,7 @@ function M(t, e, i) {
   return r.update(t.data), e;
 }
 var I, l, p, d, u, c;
-class _ {
+class M {
   constructor(e, i) {
     f(this, I, void 0);
     f(this, l, void 0);
@@ -183,32 +183,32 @@ function E(t, e, i) {
     ...E(t, e, r.id)
   ]) : [];
 }
-function y(t) {
+function z(t) {
   return N(t), E(t, void 0, void 0);
 }
-const P = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const R = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  ItemElement: _,
+  ItemElement: M,
   getChildAndNextSiblingData: C,
   getChildItems: x,
   getItemsBetween: k,
   getNextItem: B,
   getNextOrChildById: v,
   getNextSiblings: g,
-  sortList: y,
-  upsertAndReturnRoot: M,
+  sortList: z,
+  upsertAndReturnRoot: L,
   validateList: N
 }, Symbol.toStringTag, { value: "Module" }));
-function z() {
+function D() {
   const t = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   t.setAttribute("width", "100%"), t.setAttribute("height", "100%"), t.setAttribute("viewBox", "0 0 24 24"), t.setAttribute("fill", "none");
   const e = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return e.setAttribute("d", "M9 18L15 12L9 6"), e.setAttribute("stroke", "currentColor"), e.setAttribute("stroke-width", "2"), e.setAttribute("stroke-linecap", "round"), e.setAttribute("stroke-linejoin", "round"), t.appendChild(e), t;
 }
-const L = {
-  "arrow-chevronRight": z
+const y = {
+  "arrow-chevronRight": D
 };
-function D() {
+function F() {
   const t = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   t.setAttribute("xmlns", "http://www.w3.org/2000/svg"), t.setAttribute("width", "16"), t.setAttribute("height", "16"), t.setAttribute("fill", "currentColor"), t.setAttribute("class", "bi bi-type-bold"), t.setAttribute("viewBox", "0 0 16 16");
   const e = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -226,23 +226,19 @@ function T() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return e.setAttribute("d", "M5.313 3.136h-1.23V9.54c0 2.105 1.47 3.623 3.917 3.623s3.917-1.518 3.917-3.623V3.136h-1.23v6.323c0 1.49-.978 2.57-2.687 2.57s-2.687-1.08-2.687-2.57zM12.5 15h-9v-1h9z"), t.appendChild(e), t;
 }
-const j = {
-  "text-bold": D,
+const V = {
+  "text-bold": F,
   "text-italic": O,
   "text-underline": T
-}, F = {
-  ...j,
-  ...L
+}, _ = {
+  ...V,
+  ...y
 };
-function V(t) {
-  return F[t]();
+function j(t) {
+  return _[t]();
 }
-const R = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  Icon: V
-}, Symbol.toStringTag, { value: "Module" }));
 export {
-  R as icon,
-  P as linkedList
+  j as Icon,
+  R as linkedList
 };
 //# sourceMappingURL=index.es.js.map

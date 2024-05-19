@@ -1,2 +1,2 @@
 export * as linkedList from './linkedList/index';
-export * as icon from './icon';
+export * from './icon';
