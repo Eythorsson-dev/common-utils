@@ -1,4 +1,4 @@
-import { IconElement } from './icon';
+import { IconElement } from '.';
 
 declare function getTextBold(): IconElement;
 declare function getTextItalic(): IconElement;

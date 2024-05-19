@@ -1,4 +1,4 @@
-import { IconElement } from "./icon";
+import { IconElement } from ".";
 
 function getTextBold(): IconElement {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");

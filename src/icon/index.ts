@@ -1,14 +1,17 @@
 import { ArrowIcons } from "./arrow";
-import { IconElement, type Icon } from "./icon";
 import { TextIcons } from "./text";
 
-export * from "./icon";
+
+export interface Icon { }
+
+export interface IconElement
+    extends SVGElement, Icon {
+}
 
 const Icons = {
     ...TextIcons,
     ...ArrowIcons,
 } as { [key: string]: () => IconElement }
-
 
 export type IconTypes = keyof typeof Icons
 

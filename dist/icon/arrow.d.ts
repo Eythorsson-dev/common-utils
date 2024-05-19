@@ -1,4 +1,4 @@
-import { IconElement } from './icon';
+import { IconElement } from '.';
 
 declare function getChevronRight(): IconElement;
 export declare const ArrowIcons: {

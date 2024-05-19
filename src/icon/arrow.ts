@@ -1,4 +1,4 @@
-import { IconElement } from "./icon";
+import { IconElement } from ".";
 
 function getChevronRight(): IconElement {
     // https://www.untitledui.com/free-icons/arrows
