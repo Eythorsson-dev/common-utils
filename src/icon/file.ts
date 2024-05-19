@@ -17,7 +17,9 @@ function getFileDocument(): IconElement {
     path.setAttribute("stroke-linecap", "round");
     path.setAttribute("stroke-linejoin", "round");
 
-    return svg.appendChild(path);
+    svg.appendChild(path);
+
+    return svg
 }
 
 
