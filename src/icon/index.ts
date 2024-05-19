@@ -11,7 +11,7 @@ export interface IconElement
 const Icons = {
     ...TextIcons,
     ...ArrowIcons,
-} as { [key: string]: () => IconElement }
+} 
 
 export type IconTypes = keyof typeof Icons
 
