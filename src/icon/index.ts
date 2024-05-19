@@ -7,6 +7,8 @@ const Icons = {
     ...ArrowIcons,
 } as { [key: string]: () => IconElement }
 
+export type { IconElement }
+
 export type IconTypes = keyof typeof Icons
 
 export function Icon(type: IconTypes): Icon {
