@@ -3,6 +3,7 @@ export * from "./getItemsBetween"
 export * from "./getNextItem"
 export * from "./getNextSiblings"
 export * from "./getNextOrChildById"
+export * from "./getChildAndNextSiblingData"
 export * from "./upsertAndReturnRoot"
 export {
     type Item,
