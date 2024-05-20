@@ -1,8 +1,9 @@
 import { beforeEach, expect, test, vi } from "vitest";
 import { EventManager, BaseEvent } from "../eventHandler";
+import { generateUId } from "../../utils";
 
 
-interface FooEvent extends BaseEvent { }
+interface FooEvent extends BaseEvent { sender: string }
 interface BarEvent extends BaseEvent { }
 
 interface TestEventMap {
@@ -70,6 +71,7 @@ test("Invokes correct callback", () => {
     expect(fooCallback.mock.calls.length).toBe(1);
     expect(barCallback.mock.calls.length).toBe(1);
 })
+
 test("Can subscribe to one and to all events", () => {
     var onceCallback = vi.fn();
     var onCallback = vi.fn();
@@ -93,4 +95,36 @@ test("Can subscribe to one and to all events", () => {
 
     expect(onceCallback.mock.calls.length).toBe(1);
     expect(onCallback.mock.calls.length).toBe(2);
+})
+
+test("Can subscribe to one with condition", () => {
+    var onceCallback = vi.fn();
+    var onCallback = vi.fn();
+
+    const sender = generateUId(); 
+    
+    eventHandler.Once("foo", onceCallback, event => event.sender == sender);
+    var onListenerId = eventHandler.On("foo", onCallback);
+
+    eventHandler.Emit("foo", { sender: "TEST" });
+
+    expect(onceCallback.mock.calls.length).toBe(0);
+    expect(onCallback.mock.calls.length).toBe(1);
+
+    eventHandler.Emit("foo", { sender: sender });
+
+    expect(onceCallback.mock.calls.length).toBe(1);
+    expect(onCallback.mock.calls.length).toBe(2);
+
+    eventHandler.Emit("foo", { sender: "TEST" });
+
+    expect(onceCallback.mock.calls.length).toBe(1);
+    expect(onCallback.mock.calls.length).toBe(3);
+
+    eventHandler.Off("foo", onListenerId);
+
+    eventHandler.Emit("foo", { sender: "TEST" });
+
+    expect(onceCallback.mock.calls.length).toBe(1);
+    expect(onCallback.mock.calls.length).toBe(3);
 })

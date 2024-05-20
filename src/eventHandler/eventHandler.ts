@@ -48,12 +48,14 @@ export class EventManager<
         return id;
     }
 
-    Once<Key extends keyof EventMap>(type: Key, handler: (event: Event<EventMap, Key, TBaseEvent>) => void): EventListenerId {
+    Once<Key extends keyof EventMap>(type: Key, handler: (event: Event<EventMap, Key, TBaseEvent>) => void, condition?: (event: Event<EventMap, Key, TBaseEvent>) => boolean): EventListenerId {
         var id = generateUId();
         this.#listeners[type] = (this.#listeners[type] ?? [])
             .concat({
                 Id: id,
                 Execute: (data: Event<EventMap, Key, TBaseEvent>) => {
+                    if (condition && condition(data) != true) return;
+
                     this.Off(type, id);
                     handler(data);
                 }
