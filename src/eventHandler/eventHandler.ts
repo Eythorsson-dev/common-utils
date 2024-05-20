@@ -20,7 +20,7 @@ export interface EventHandlerAPI<
 > {
 
     On<Key extends keyof EventMap>(type: Key, handler: (event: Event<EventMap, Key, TBaseEvent>) => void): EventListenerId;
-    Once<Key extends keyof EventMap>(type: Key, handler: (event: Event<EventMap, Key, TBaseEvent>) => void, condition: (event: Event<EventMap, Key, TBaseEvent>) => boolean): EventListenerId;
+    Once<Key extends keyof EventMap>(type: Key, handler: (event: Event<EventMap, Key, TBaseEvent>) => void, condition?: (event: Event<EventMap, Key, TBaseEvent>) => boolean): EventListenerId;
     Off<Key extends keyof EventMap>(type: Key, listener: EventListenerId): void;
 
     Emit<Key extends keyof EventMap>(type: Key, event: Omit<Event<EventMap, Key, TBaseEvent>, "preventDefault">): { preventDefault: boolean };
