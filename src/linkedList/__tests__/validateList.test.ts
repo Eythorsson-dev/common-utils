@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 
 import { validateList } from "../validateList";
 import { ItemData } from "../item";
-import { generateUId } from "./utils";
+import { generateUId } from "../../utils";
 
 test("Validates Valid List", () => {
     // 0

@@ -1,7 +1,7 @@
 import { expect, test } from "vitest"
 import { getChildItems } from "../getChildItems"
 import { ItemData, render } from "../item"
-import { generateUId } from "./utils"
+import { generateUId } from "../../utils"
 
 
 test("Has no children (1)", () => {

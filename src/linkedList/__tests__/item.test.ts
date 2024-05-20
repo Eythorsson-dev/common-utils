@@ -5,7 +5,7 @@
 
 import { describe, test, expect } from "vitest"
 import { ItemElement } from "../item";
-import { generateUId } from "./utils";
+import { generateUId } from "../../utils";
 
 
 interface Data {

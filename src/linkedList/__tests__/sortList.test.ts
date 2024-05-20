@@ -3,7 +3,7 @@ import { test, expect, vi, beforeEach, type Mock} from "vitest";
 import { sortList } from "../sortList";
 import { ItemData } from "../item";
 import { validateList } from "../validateList";
-import { generateUId } from "./utils";
+import { generateUId } from "../../utils";
 
 vi.mock("../validateList");
 

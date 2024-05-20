@@ -10,7 +10,7 @@
 import { describe, expect, test } from "vitest"
 import { getPreviousWithoutChild } from "../getPreviousWithoutChild"
 import { ItemData, render } from "../item"
-import { generateUId } from "./utils"
+import { generateUId } from "../../utils"
 
 const data0: ItemData<string> = { id: "Block0", parentId: undefined, data: generateUId() }
 const data1: ItemData<string> = { id: "Block1", parentId: data0.id, data: generateUId() }

@@ -1,6 +1,6 @@
 import { expect, test } from "vitest"
 import { getItemsBetween } from "../getItemsBetween"
-import { generateUId } from "./utils"
+import { generateUId } from "../../utils"
 import { ItemData, render } from "../item"
 
 

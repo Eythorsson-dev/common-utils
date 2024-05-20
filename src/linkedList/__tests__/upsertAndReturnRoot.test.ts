@@ -1,7 +1,7 @@
 import { test, expect, describe, vi, beforeEach, Mock } from "vitest";
 import { upsertAndReturnRoot } from "../upsertAndReturnRoot"
 import { ActionableItem, Item, ItemData, ItemElement } from "../item";
-import { generateUId } from "./utils";
+import { generateUId } from "../../utils";
 import { validateList } from "../validateList"
 import { getNextOrChildById } from "../getNextOrChildById";
 
