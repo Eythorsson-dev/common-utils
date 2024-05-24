@@ -3,4 +3,4 @@ export * from './eventHandler';
 export * from './saveManager';
 export * from './icon';
 export * from './utils';
-export * from './utils';
+export * from './dom/onceClickOutside';
