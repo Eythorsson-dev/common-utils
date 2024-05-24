@@ -86,8 +86,20 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     abstract update(data: TData): void;
     abstract render(data: TData): HTMLElement;
 
-    #target: HTMLElement
-    get target(): HTMLElement { return this.#target }
+    #target: HTMLElement | undefined
+    get target(): HTMLElement {
+        if (!this.#target)
+            throw new Error("Failed to get target. Please call the .initialized(data) method before fetching the target");
+
+        return this.#target;
+    }
+
+    init(data: TData): void {
+        if (this.#target)
+            throw new Error("The target has already been initialized");
+
+        this.#target = this.render(data);
+    }
 
     getDetails(): ItemData<TData> {
         return {
@@ -114,7 +126,7 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
         this.#next = undefined;
         this.#previous = undefined;
 
-        this.#target.remove();
+        this.#target?.remove();
     }
 
     append(item: TItem): void {
@@ -170,11 +182,9 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
         this.target.after(item.target);
     }
 
-    constructor(id: string, data: TData) {
+    constructor(id: string) {
         if ((id?.trim() ?? "").length == 0) throw new Error("id is not valid");
 
         this.#id = id
-
-        this.#target = this.render(data);
     }
 }

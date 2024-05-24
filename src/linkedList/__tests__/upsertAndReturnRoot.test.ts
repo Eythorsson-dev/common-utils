@@ -225,13 +225,19 @@ test("can update child (3)", () => {
 
 
 class TestItemElement extends ItemElement<any, any> {
-    private _data: any
-    get data(): any { return this._data }
-    update(data: any): void {
-        this._data = data;
+    constructor(id: string, data: any) {
+        super(id);
+        this.init(data);
     }
+
+    #data: any
+    get data(): any { return this.#data }
+    update(data: any): void {
+        this.#data = data;
+    }
+    
     render(data: any): HTMLElement {
-        this._data = data;
+        this.#data = data;
         const div = document.createElement("div");
         div.append(this.id);
         return div;

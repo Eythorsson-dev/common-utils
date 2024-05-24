@@ -12,6 +12,11 @@ interface Data {
 class TestElement extends ItemElement<Data, TestElement> {
     private _data: Data | undefined;
 
+    constructor(id: string, data: Data) {
+        super(id);
+        this.init(data);
+    }
+
     get data(): Data {
         return this._data!;
     }

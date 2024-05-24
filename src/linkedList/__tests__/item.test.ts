@@ -2,7 +2,6 @@
  * @vitest-environment jsdom
  */
 
-
 import { describe, test, expect } from "vitest"
 import { ItemElement } from "../item";
 import { generateUId } from "../../utils";
@@ -14,23 +13,29 @@ interface Data {
 }
 
 class TestElement extends ItemElement<Data, TestElement> {
-    private _data: Data | undefined;
+    #data: Data | undefined;
+
+    constructor(id: string, data: Data){
+        super(id)
+        this.init(data);
+    }
 
     get data(): Data {
-        return this._data!;
+        return this.#data!;
     }
 
     update(data: Data): void {
-        this._data = data;
+        this.#data = data;
     }
 
     render(data: Data): HTMLElement {
-        this._data = data;
+        this.#data = data;
 
         const wrapper = document.createElement("div");
         wrapper.append(this.id)
         return wrapper;
     }
+  
 
 }
 
@@ -427,3 +432,4 @@ describe("Can remove", () => {
         expect([...item0.target.children]).toStrictEqual([item1.target]);
     })
 })
+
