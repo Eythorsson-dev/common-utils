@@ -5,7 +5,7 @@ import { sortList } from "./sortList";
 import { upsertAndReturnRoot } from "./upsertAndReturnRoot";
 import { validateList } from "./validateList";
 
-export abstract class LinkedListContainer<
+export abstract class ItemContainerElement<
     TItem extends ItemElement<any, TItem>
 > {
     #target: HTMLElement;
