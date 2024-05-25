@@ -9,5 +9,5 @@ export declare abstract class ItemContainerElement<TItem extends ItemElement<any
     upsert<T extends ItemData<any>>(data: T): void;
     getItemById(id: string): TItem | undefined;
     deleteItemById(id: string): void;
-    abstract createItem<T>(id: string, data?: T): TItem;
+    abstract createItem<T>(type: string, id: string, data?: T): TItem;
 }

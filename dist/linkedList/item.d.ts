@@ -1,5 +1,6 @@
 export interface Item<TItem, TData> {
     get id(): string;
+    get type(): string;
     get parentItem(): TItem | undefined;
     get firstChildItem(): TItem | undefined;
     get nextItem(): TItem | undefined;
@@ -8,6 +9,7 @@ export interface Item<TItem, TData> {
 }
 export interface ItemData<TData> {
     id: string;
+    type: string;
     parentId?: string;
     previousId?: string;
     data: TData;
@@ -36,6 +38,7 @@ export declare function render(...items: ItemData<any>[]): Item<any, any>[];
 export declare abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>> implements ActionableItem<TData, TItem> {
     #private;
     get id(): string;
+    get type(): string;
     get parentItem(): TItem | undefined;
     get firstChildItem(): TItem | undefined;
     get nextItem(): TItem | undefined;
@@ -50,5 +53,5 @@ export declare abstract class ItemElement<TData, TItem extends ItemElement<TData
     append(item: TItem): void;
     before(item: TItem): void;
     after(item: TItem): void;
-    constructor(id: string);
+    constructor(id: string, type: string);
 }

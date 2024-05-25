@@ -1,4 +1,4 @@
-import { test, expect, vi, beforeEach, type Mock} from "vitest";
+import { test, expect, vi, beforeEach, type Mock } from "vitest";
 
 import { sortList } from "../sortList";
 import { ItemData } from "../item";
@@ -7,7 +7,7 @@ import { generateUId } from "../../utils";
 
 vi.mock("../validateList");
 
-beforeEach(()=>{
+beforeEach(() => {
     (validateList as Mock<any>).mockClear();
 })
 
@@ -20,13 +20,13 @@ test("Can sort list", () => {
     //  5
     // 6
 
-    const data0: ItemData<string> = { id: "Item0", data: generateUId() }
-    const data1: ItemData<string> = { id: "Item1", previousId: data0.id, data: generateUId() }
-    const data2: ItemData<string> = { id: "Item2", parentId: data1.id, data: generateUId() }
-    const data3: ItemData<string> = { id: "Item3", parentId: data2.id, data: generateUId() }
-    const data4: ItemData<string> = { id: "Item4", parentId: data1.id, previousId: data2.id, data: generateUId() }
-    const data5: ItemData<string> = { id: "Item5", parentId: data1.id, previousId: data4.id, data: generateUId() }
-    const data6: ItemData<string> = { id: "Item6", previousId: data1.id, data: generateUId() }
+    const data0: ItemData<string> = { id: "Item0", type: "test", data: generateUId() }
+    const data1: ItemData<string> = { id: "Item1", type: "test", previousId: data0.id, data: generateUId() }
+    const data2: ItemData<string> = { id: "Item2", type: "test", parentId: data1.id, data: generateUId() }
+    const data3: ItemData<string> = { id: "Item3", type: "test", parentId: data2.id, data: generateUId() }
+    const data4: ItemData<string> = { id: "Item4", type: "test", parentId: data1.id, previousId: data2.id, data: generateUId() }
+    const data5: ItemData<string> = { id: "Item5", type: "test", parentId: data1.id, previousId: data4.id, data: generateUId() }
+    const data6: ItemData<string> = { id: "Item6", type: "test", previousId: data1.id, data: generateUId() }
 
     expect(
         sortList(
@@ -52,8 +52,8 @@ test("Can sort list", () => {
 })
 
 test("Validates List", () => {
-    const data0: ItemData<string> = { id: "Item0", data: generateUId() }
-    const data1: ItemData<string> = { id: "Item1", previousId: data0.id, data: generateUId() }
+    const data0: ItemData<string> = { id: "Item0", type: "test", data: generateUId() }
+    const data1: ItemData<string> = { id: "Item1", type: "test", previousId: data0.id, data: generateUId() }
 
     const items = [data1, data0];
     sortList(items);

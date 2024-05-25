@@ -39,7 +39,7 @@ export abstract class ItemContainerElement<
     }
 
     upsert<T extends ItemData<any>>(data: T): void {
-        this.#rootItem = upsertAndReturnRoot(data, this.#rootItem, () => this.createItem(data.id, data.data))
+        this.#rootItem = upsertAndReturnRoot(data, this.#rootItem, () => this.createItem(data.type, data.id, data.data))
     }
 
     getItemById(id: string): TItem | undefined {
@@ -51,5 +51,5 @@ export abstract class ItemContainerElement<
             ?.remove();
     }
 
-    abstract createItem<T>(id: string, data?: T): TItem;
+    abstract createItem<T>(type: string, id: string, data?: T): TItem;
 }

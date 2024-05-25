@@ -12,11 +12,11 @@ test("First has children (0-3)", () => {
     // 3
     // 4
 
-    const data0: ItemData<string> = { id: "Item0", parentId: undefined, data: generateUId() }
-    const data1: ItemData<string> = { id: "Item1", parentId: data0.id, data: generateUId() }
-    const data2: ItemData<string> = { id: "Item2", parentId: data0.id, previousId: data1.id, data: generateUId() }
-    const data3: ItemData<string> = { id: "Item3", parentId: undefined, previousId: data0.id, data: generateUId() }
-    const data4: ItemData<string> = { id: "Item4", parentId: undefined, previousId: data3.id, data: generateUId() }
+    const data0: ItemData<string> = { id: "Item0", type: "test", parentId: undefined, data: generateUId() }
+    const data1: ItemData<string> = { id: "Item1", type: "test", parentId: data0.id, data: generateUId() }
+    const data2: ItemData<string> = { id: "Item2", type: "test", parentId: data0.id, previousId: data1.id, data: generateUId() }
+    const data3: ItemData<string> = { id: "Item3", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() }
+    const data4: ItemData<string> = { id: "Item4", type: "test", parentId: undefined, previousId: data3.id, data: generateUId() }
 
     const items = render(
         data0,
@@ -44,11 +44,11 @@ test("First has nested children (0-3)", () => {
     // 3
     // 4
 
-    const data0: ItemData<any> = { id: "Item0", parentId: undefined, data: generateUId() };
-    const data1: ItemData<any> = { id: "Item1", parentId: data0.id, data: generateUId() };
-    const data2: ItemData<any> = { id: "Item2", parentId: data1.id, data: generateUId() };
-    const data3: ItemData<any> = { id: "Item3", parentId: undefined, previousId: data0.id, data: generateUId() };
-    const data4: ItemData<any> = { id: "Item4", parentId: undefined, previousId: data3.id, data: generateUId() };
+    const data0: ItemData<any> = { id: "Item0", type: "test", parentId: undefined, data: generateUId() };
+    const data1: ItemData<any> = { id: "Item1", type: "test", parentId: data0.id, data: generateUId() };
+    const data2: ItemData<any> = { id: "Item2", type: "test", parentId: data1.id, data: generateUId() };
+    const data3: ItemData<any> = { id: "Item3", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() };
+    const data4: ItemData<any> = { id: "Item4", type: "test", parentId: undefined, previousId: data3.id, data: generateUId() };
 
     const blocks = render(
         data0,
@@ -75,11 +75,11 @@ test("Start is child (1-3)", () => {
     // 3
     // 4
 
-    const data0: ItemData<any> = { id: "Item0", parentId: undefined, data: generateUId() };
-    const data1: ItemData<any> = { id: "Item1", parentId: data0.id, data: generateUId() };
-    const data2: ItemData<any> = { id: "Item2", parentId: data1.id, data: generateUId() };
-    const data3: ItemData<any> = { id: "Item3", parentId: undefined, previousId: data0.id, data: generateUId() };
-    const data4: ItemData<any> = { id: "Item4", parentId: undefined, previousId: data3.id, data: generateUId() };
+    const data0: ItemData<any> = { id: "Item0", type: "test", parentId: undefined, data: generateUId() };
+    const data1: ItemData<any> = { id: "Item1", type: "test", parentId: data0.id, data: generateUId() };
+    const data2: ItemData<any> = { id: "Item2", type: "test", parentId: data1.id, data: generateUId() };
+    const data3: ItemData<any> = { id: "Item3", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() };
+    const data4: ItemData<any> = { id: "Item4", type: "test", parentId: undefined, previousId: data3.id, data: generateUId() };
 
     const blocks = render(
         data0,
@@ -105,11 +105,11 @@ test("Start is child (2-3)", () => {
     // 3
     // 4
 
-    const data0: ItemData<any> = { id: "Item0", parentId: undefined, data: generateUId() };
-    const data1: ItemData<any> = { id: "Item1", parentId: data0.id, data: generateUId() };
-    const data2: ItemData<any> = { id: "Item2", parentId: data1.id, data: generateUId() };
-    const data3: ItemData<any> = { id: "Item3", parentId: undefined, previousId: data0.id, data: generateUId() };
-    const data4: ItemData<any> = { id: "Item4", parentId: undefined, previousId: data3.id, data: generateUId() };
+    const data0: ItemData<any> = { id: "Item0", type: "test", parentId: undefined, data: generateUId() };
+    const data1: ItemData<any> = { id: "Item1", type: "test", parentId: data0.id, data: generateUId() };
+    const data2: ItemData<any> = { id: "Item2", type: "test", parentId: data1.id, data: generateUId() };
+    const data3: ItemData<any> = { id: "Item3", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() };
+    const data4: ItemData<any> = { id: "Item4", type: "test", parentId: undefined, previousId: data3.id, data: generateUId() };
 
     const blocks = render(
         data0,
@@ -134,11 +134,11 @@ test("End is child (0-2)", () => {
     //   3
     // 4
 
-    const data0: ItemData<any> = { id: "Item0", parentId: undefined, data: generateUId() };
-    const data1: ItemData<any> = { id: "Item1", parentId: undefined, previousId: data0.id, data: generateUId() };
-    const data2: ItemData<any> = { id: "Item2", parentId: data1.id, data: generateUId() };
-    const data3: ItemData<any> = { id: "Item3", parentId: data2.id, data: generateUId() };
-    const data4: ItemData<any> = { id: "Item4", parentId: undefined, previousId: data1.id, data: generateUId() };
+    const data0: ItemData<any> = { id: "Item0", type: "test", parentId: undefined, data: generateUId() };
+    const data1: ItemData<any> = { id: "Item1", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() };
+    const data2: ItemData<any> = { id: "Item2", type: "test", parentId: data1.id, data: generateUId() };
+    const data3: ItemData<any> = { id: "Item3", type: "test", parentId: data2.id, data: generateUId() };
+    const data4: ItemData<any> = { id: "Item4", type: "test", parentId: undefined, previousId: data1.id, data: generateUId() };
 
     const blocks = render(
         data0,
@@ -164,11 +164,11 @@ test("End is child (0-2)", () => {
     //   3
     // 4
 
-    const data0: ItemData<any> = { id: "Item0", parentId: undefined, data: generateUId() };
-    const data1: ItemData<any> = { id: "Item1", parentId: undefined, previousId: data0.id, data: generateUId() };
-    const data2: ItemData<any> = { id: "Item2", parentId: data1.id, data: generateUId() };
-    const data3: ItemData<any> = { id: "Item3", parentId: data2.id, data: generateUId() };
-    const data4: ItemData<any> = { id: "Item4", parentId: undefined, previousId: data1.id, data: generateUId() };
+    const data0: ItemData<any> = { id: "Item0", type: "test", parentId: undefined, data: generateUId() };
+    const data1: ItemData<any> = { id: "Item1", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() };
+    const data2: ItemData<any> = { id: "Item2", type: "test", parentId: data1.id, data: generateUId() };
+    const data3: ItemData<any> = { id: "Item3", type: "test", parentId: data2.id, data: generateUId() };
+    const data4: ItemData<any> = { id: "Item4", type: "test", parentId: undefined, previousId: data1.id, data: generateUId() };
 
     const blocks = render(
         data0,
@@ -194,11 +194,11 @@ test("Start and end is child (1-3)", () => {
     //  3
     // 4
 
-    const data0: ItemData<any> = { id: "Item0", parentId: undefined, data: generateUId() };
-    const data1: ItemData<any> = { id: "Item1", parentId: undefined, previousId: data0.id, data: generateUId() };
-    const data2: ItemData<any> = { id: "Item2", parentId: data1.id, data: generateUId() };
-    const data3: ItemData<any> = { id: "Item3", parentId: data2.id, data: generateUId() };
-    const data4: ItemData<any> = { id: "Item4", parentId: undefined, previousId: data1.id, data: generateUId() };
+    const data0: ItemData<any> = { id: "Item0", type: "test", parentId: undefined, data: generateUId() };
+    const data1: ItemData<any> = { id: "Item1", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() };
+    const data2: ItemData<any> = { id: "Item2", type: "test", parentId: data1.id, data: generateUId() };
+    const data3: ItemData<any> = { id: "Item3", type: "test", parentId: data2.id, data: generateUId() };
+    const data4: ItemData<any> = { id: "Item4", type: "test", parentId: undefined, previousId: data1.id, data: generateUId() };
 
     const blocks = render(
         data0,

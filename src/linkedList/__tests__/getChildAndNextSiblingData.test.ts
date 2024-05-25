@@ -13,7 +13,7 @@ class TestElement extends ItemElement<Data, TestElement> {
     private _data: Data | undefined;
 
     constructor(id: string, data: Data) {
-        super(id);
+        super(id, "test");
         this.init(data);
     }
 

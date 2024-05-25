@@ -9,11 +9,11 @@ import { getNextItem } from "../getNextItem"
 import { ItemData, render } from "../item"
 import { generateUId } from "../../utils"
 
-const data0: ItemData<string> = { id: "Block0", parentId: undefined, data: generateUId() }
-const data1: ItemData<string> = { id: "Block1", parentId: data0.id, data: generateUId() }
-const data2: ItemData<string> = { id: "Block2", parentId: data0.id, previousId: data1.id, data: generateUId() }
-const data3: ItemData<string> = { id: "Block3", parentId: data2.id, data: generateUId() }
-const data4: ItemData<string> = { id: "Block4", parentId: undefined, previousId: data0.id, data: generateUId() }
+const data0: ItemData<string> = { id: "Block0", type: "test", parentId: undefined, data: generateUId() }
+const data1: ItemData<string> = { id: "Block1", type: "test", parentId: data0.id, data: generateUId() }
+const data2: ItemData<string> = { id: "Block2", type: "test", parentId: data0.id, previousId: data1.id, data: generateUId() }
+const data3: ItemData<string> = { id: "Block3", type: "test", parentId: data2.id, data: generateUId() }
+const data4: ItemData<string> = { id: "Block4", type: "test", parentId: undefined, previousId: data0.id, data: generateUId() }
 
 const [
     block0,

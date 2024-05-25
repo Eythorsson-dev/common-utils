@@ -3,6 +3,7 @@ import { getNextSiblings } from "./getNextSiblings";
 
 export interface Item<TItem, TData> {
     get id(): string,
+    get type(): string,
     get parentItem(): TItem | undefined,
     get firstChildItem(): TItem | undefined
     get nextItem(): TItem | undefined,
@@ -12,6 +13,7 @@ export interface Item<TItem, TData> {
 
 export interface ItemData<TData> {
     id: string,
+    type: string,
     parentId?: string,
     previousId?: string,
     data: TData
@@ -65,6 +67,9 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     #id: string;
     get id(): string { return this.#id; }
 
+    #type: string;
+    get type(): string { return this.#type; }
+
     #parent: TItem | undefined;
     get parentItem(): TItem | undefined { return this.#parent }
     // set parentItem(item: TItem | undefined) { this.#parent = item; }
@@ -104,6 +109,7 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     getDetails(): ItemData<TData> {
         return {
             id: this.id,
+            type: this.type,
             parentId: this.parentItem?.id,
             previousId: this.previousItem?.id,
             data: this.data
@@ -182,9 +188,11 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
         this.target.after(item.target);
     }
 
-    constructor(id: string) {
+    constructor(id: string, type: string) {
         if ((id?.trim() ?? "").length == 0) throw new Error("id is required");
+        if ((type?.trim() ?? "").length == 0) throw new Error("type is required");
 
         this.#id = id
+        this.#type = type
     }
 }

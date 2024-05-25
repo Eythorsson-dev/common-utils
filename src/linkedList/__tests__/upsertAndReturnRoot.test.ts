@@ -26,6 +26,7 @@ function createItem(item: ItemData<TestItemData> & { nextId?: string, firstChild
         previousItem: item.previousId && { id: item.previousId! } as any,
         firstChildItem: item.firstChildId && { id: item.firstChildId! } as any,
         data: item.data,
+        type: item.type,
         append: appendMock,
         before: beforeMock,
         after: afterMock,
@@ -68,7 +69,8 @@ function getData<T extends ActionableItem<any, T>>(item: T): ItemData<any> {
         parentId: item.parentItem?.id,
         firstChildId: item.firstChildItem?.id,
         nextId: item.nextItem?.id,
-        previousId: item.previousItem?.id
+        previousId: item.previousItem?.id,
+        type: item.type
     }
 }
 
@@ -84,25 +86,25 @@ beforeEach(() => {
 })
 
 test("no root + data(parent) throws", () => {
-    const data0: ItemData<TestItemData> = { id: "Item0", parentId: "Item1", data: {} };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", parentId: "Item1", data: {} };
 
     expect(() => upsertAndReturnRoot(data0, undefined, createItem)).toThrow()
 })
 
 test("no root + data(prev) throws", () => {
-    const data0: ItemData<TestItemData> = { id: "Item0", previousId: "Item1", data: {} };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", previousId: "Item1", data: {} };
 
     expect(() => upsertAndReturnRoot(data0, undefined, createItem)).toThrow()
 })
 
 test("can create root", () => {
-    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", data: {} };
 
     expect(upsertAndReturnRoot(data0, undefined, createItem)?.id).toBe(data0.id);
 })
 
 test("can update root", () => {
-    const data0: ItemData<TestItemData> = { id: "Item0", data: { foo: generateUId() } };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", data: { foo: generateUId() } };
 
     const items = renderActionable(data0);
 
@@ -121,9 +123,9 @@ test("can update root", () => {
 })
 
 test("can insert sibling", () => {
-    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
-    const data1: ItemData<TestItemData> = { id: "Item1", previousId: data0.id, data: {} };
-    const data2: ItemData<TestItemData> = { id: "Item2", previousId: data0.id, data: {} };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", type: "test", previousId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", type: "test", previousId: data0.id, data: {} };
 
     const items = renderActionable(data0, data2);
 
@@ -141,9 +143,9 @@ test("can insert sibling", () => {
 })
 
 test("can update sibling", () => {
-    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
-    const data1: ItemData<TestItemData> = { id: "Item1", previousId: data0.id, data: {} };
-    const data2: ItemData<TestItemData> = { id: "Item2", previousId: data1.id, data: {} };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", type: "test", previousId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", type: "test", previousId: data1.id, data: {} };
 
     const items = renderActionable(data0, data1, data2);
 
@@ -170,11 +172,11 @@ test("can insert child (3)", () => {
     //   4 |   3
     //     |   4
 
-    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
-    const data1: ItemData<TestItemData> = { id: "Item1", parentId: data0.id, data: {} };
-    const data2: ItemData<TestItemData> = { id: "Item2", parentId: data1.id, data: {} };
-    const data3: ItemData<TestItemData> = { id: "Item3", parentId: data1.id, previousId: data2.id, data: {} };
-    const data4: ItemData<TestItemData> = { id: "Item4", parentId: data1.id, previousId: data2.id, data: {} };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", type: "test", parentId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", type: "test", parentId: data1.id, data: {} };
+    const data3: ItemData<TestItemData> = { id: "Item3", type: "test", parentId: data1.id, previousId: data2.id, data: {} };
+    const data4: ItemData<TestItemData> = { id: "Item4", type: "test", parentId: data1.id, previousId: data2.id, data: {} };
 
     const items = renderActionable(data0, data1, data2, data4);
 
@@ -199,11 +201,11 @@ test("can update child (3)", () => {
     //   3
     //   4
 
-    const data0: ItemData<TestItemData> = { id: "Item0", data: {} };
-    const data1: ItemData<TestItemData> = { id: "Item1", parentId: data0.id, data: {} };
-    const data2: ItemData<TestItemData> = { id: "Item2", parentId: data1.id, data: {} };
-    const data3: ItemData<TestItemData> = { id: "Item3", parentId: data1.id, previousId: data2.id, data: {} };
-    const data4: ItemData<TestItemData> = { id: "Item4", parentId: data1.id, previousId: data3.id, data: {} };
+    const data0: ItemData<TestItemData> = { id: "Item0", type: "test", data: {} };
+    const data1: ItemData<TestItemData> = { id: "Item1", type: "test", parentId: data0.id, data: {} };
+    const data2: ItemData<TestItemData> = { id: "Item2", type: "test", parentId: data1.id, data: {} };
+    const data3: ItemData<TestItemData> = { id: "Item3", type: "test", parentId: data1.id, previousId: data2.id, data: {} };
+    const data4: ItemData<TestItemData> = { id: "Item4", type: "test", parentId: data1.id, previousId: data3.id, data: {} };
 
     const items = renderActionable(data0, data1, data2, data3, data4);
 
@@ -226,7 +228,7 @@ test("can update child (3)", () => {
 
 class TestItemElement extends ItemElement<any, any> {
     constructor(id: string, data: any) {
-        super(id);
+        super(id, "test");
         this.init(data);
     }
 
@@ -235,7 +237,7 @@ class TestItemElement extends ItemElement<any, any> {
     update(data: any): void {
         this.#data = data;
     }
-    
+
     render(data: any): HTMLElement {
         this.#data = data;
         const div = document.createElement("div");
@@ -247,18 +249,19 @@ class TestItemElement extends ItemElement<any, any> {
 
 describe("IntegrationTest", () => {
 
-    function getData<T extends Item<T, any>>(block: T): ItemData<any>[] {
-        if (!block) return [];
+    function getData<T extends Item<T, any>>(item: T): ItemData<any>[] {
+        if (!item) return [];
 
         const response: ItemData<any>[] = [{
-            id: block.id,
-            parentId: block.parentItem?.id,
-            previousId: block.previousItem?.id,
-            data: block.data
+            id: item.id,
+            parentId: item.parentItem?.id,
+            previousId: item.previousItem?.id,
+            data: item.data,
+            type: item.type,
         }];
 
-        if (block.firstChildItem) response.push(...getData(block.firstChildItem));
-        if (block.nextItem) response.push(...getData(block.nextItem));
+        if (item.firstChildItem) response.push(...getData(item.firstChildItem));
+        if (item.nextItem) response.push(...getData(item.nextItem));
 
         return response;
     }
@@ -270,12 +273,12 @@ describe("IntegrationTest", () => {
         { description: "Parent to sibling of nested child", itemId: "item1", previousId: "item3" },
         { description: "Child to new Parent", itemId: "item2", previousId: "item5" },
     ])("Can Move: $description", ({ itemId, previousId }) => {
-        const data0: ItemData<TestItemData> = { id: "item0", parentId: undefined, data: {} }
-        const data1: ItemData<TestItemData> = { id: "item1", parentId: undefined, previousId: data0.id, data: {} }
-        const data2: ItemData<TestItemData> = { id: "item2", parentId: undefined, previousId: data1.id, data: {} }
-        const data3: ItemData<TestItemData> = { id: "item3", parentId: data2.id, data: {} }
-        const data4: ItemData<TestItemData> = { id: "item4", parentId: data2.id, previousId: data3.id, data: {} }
-        const data5: ItemData<TestItemData> = { id: "item5", parentId: undefined, previousId: data2.id, data: {} }
+        const data0: ItemData<TestItemData> = { id: "item0", type: "test", parentId: undefined, data: {} }
+        const data1: ItemData<TestItemData> = { id: "item1", type: "test", parentId: undefined, previousId: data0.id, data: {} }
+        const data2: ItemData<TestItemData> = { id: "item2", type: "test", parentId: undefined, previousId: data1.id, data: {} }
+        const data3: ItemData<TestItemData> = { id: "item3", type: "test", parentId: data2.id, data: {} }
+        const data4: ItemData<TestItemData> = { id: "item4", type: "test", parentId: data2.id, previousId: data3.id, data: {} }
+        const data5: ItemData<TestItemData> = { id: "item5", type: "test", parentId: undefined, previousId: data2.id, data: {} }
 
         let root: TestItemElement | undefined = undefined;
         const data = [data0, data1, data2, data3, data4, data5];
@@ -308,10 +311,10 @@ describe("IntegrationTest", () => {
 
 
 
-        const data0: ItemData<TestItemData> = { data: {}, id: "item0", parentId: undefined, }
-        const data1: ItemData<TestItemData> = { data: {}, id: "item1", parentId: undefined, previousId: data0.id }
-        const data2: ItemData<TestItemData> = { data: {}, id: "item2", parentId: data1.id }
-        const data3: ItemData<TestItemData> = { data: {}, id: "item3", parentId: data1.id, previousId: data2.id }
+        const data0: ItemData<TestItemData> = { data: {}, id: "item0", type: "test",  parentId: undefined, }
+        const data1: ItemData<TestItemData> = { data: {}, id: "item1", type: "test", parentId: undefined, previousId: data0.id }
+        const data2: ItemData<TestItemData> = { data: {}, id: "item2", type: "test", parentId: data1.id }
+        const data3: ItemData<TestItemData> = { data: {}, id: "item3", type: "test", parentId: data1.id, previousId: data2.id }
 
         let root: TestItemElement | undefined = undefined;
         const data = [data0, data1, data2, data3];
@@ -345,11 +348,11 @@ describe("IntegrationTest", () => {
         //  3      2
         // 4        3
 
-        const data0: ItemData<TestItemData> = { data: {}, id: "block0", parentId: undefined, }
-        const data1: ItemData<TestItemData> = { data: {}, id: "block1", parentId: data0.id }
-        const data2: ItemData<TestItemData> = { data: {}, id: "block2", parentId: undefined, previousId: data0.id }
-        const data3: ItemData<TestItemData> = { data: {}, id: "block3", parentId: data2.id }
-        const data4: ItemData<TestItemData> = { data: {}, id: "block4", parentId: undefined, previousId: data2.id }
+        const data0: ItemData<TestItemData> = { data: {}, id: "block0", type: "test", parentId: undefined, }
+        const data1: ItemData<TestItemData> = { data: {}, id: "block1", type: "test", parentId: data0.id }
+        const data2: ItemData<TestItemData> = { data: {}, id: "block2", type: "test", parentId: undefined, previousId: data0.id }
+        const data3: ItemData<TestItemData> = { data: {}, id: "block3", type: "test", parentId: data2.id }
+        const data4: ItemData<TestItemData> = { data: {}, id: "block4", type: "test", parentId: undefined, previousId: data2.id }
 
         let root: TestItemElement | undefined = undefined;
         const data = [data0, data1, data2, data3, data4];
@@ -384,11 +387,11 @@ describe("IntegrationTest", () => {
         //  3       2 
         // 4        3 
 
-        const data0: ItemData<TestItemData> = { data: {}, id: "item0", parentId: undefined, }
-        const data1: ItemData<TestItemData> = { data: {}, id: "item1", parentId: undefined, previousId: data0.id }
-        const data2: ItemData<TestItemData> = { data: {}, id: "item2", parentId: data1.id }
-        const data3: ItemData<TestItemData> = { data: {}, id: "item3", parentId: data1.id, previousId: data2.id }
-        const data4: ItemData<TestItemData> = { data: {}, id: "item4", parentId: undefined, previousId: data1.id }
+        const data0: ItemData<TestItemData> = { data: {}, id: "item0", type: "test",  parentId: undefined, }
+        const data1: ItemData<TestItemData> = { data: {}, id: "item1", type: "test", parentId: undefined, previousId: data0.id }
+        const data2: ItemData<TestItemData> = { data: {}, id: "item2", type: "test", parentId: data1.id }
+        const data3: ItemData<TestItemData> = { data: {}, id: "item3", type: "test", parentId: data1.id, previousId: data2.id }
+        const data4: ItemData<TestItemData> = { data: {}, id: "item4", type: "test", parentId: undefined, previousId: data1.id }
 
         let root: TestItemElement | undefined = undefined;
         const data = [data0, data1, data2, data3, data4];
