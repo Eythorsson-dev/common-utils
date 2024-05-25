@@ -12,5 +12,6 @@ export {
     type ActionableItem,
     ItemElement
 } from "./item"
+export * from "./itemContainer"
 export * from "./sortList"
 export * from "./validateList"

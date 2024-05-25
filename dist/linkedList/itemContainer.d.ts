@@ -1,6 +1,6 @@
 import { ItemData, ItemElement } from './item';
 
-export declare abstract class LinkedListContainer<TItem extends ItemElement<any, TItem>> {
+export declare abstract class ItemContainerElement<TItem extends ItemElement<any, TItem>> {
     #private;
     get rootItem(): TItem;
     constructor(target: HTMLElement);
