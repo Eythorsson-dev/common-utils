@@ -1,5 +1,7 @@
-export interface Command {
+export declare abstract class Command {
+    #private;
     get id(): string;
-    get active(): boolean;
-    execute(): void;
+    abstract get active(): boolean;
+    constructor(id: string);
+    abstract execute(): void;
 }
