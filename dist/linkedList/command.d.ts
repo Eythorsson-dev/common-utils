@@ -1,8 +1,8 @@
 export declare abstract class Command<TContext> {
     #private;
-    get id(): string;
+    abstract get id(): string;
     get context(): TContext;
     abstract get active(): boolean;
-    constructor(id: string, context: TContext);
+    constructor(context: TContext);
     abstract execute(): void;
 }

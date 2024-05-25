@@ -1,16 +1,14 @@
 
 
 export abstract class Command<TContext> {
-    #id: string
-    get id(): string { return this.#id }
+    abstract get id(): string
 
     #context: TContext
     get context(): TContext { return this.#context }
 
     abstract get active(): boolean
 
-    constructor(id: string, context: TContext) {
-        this.#id = id;
+    constructor(context: TContext) {
         this.#context = context;
     }
 
