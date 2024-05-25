@@ -116,7 +116,7 @@ class j {
     w(this, p, void 0);
     w(this, C, void 0);
     if (((t == null ? void 0 : t.trim()) ?? "").length == 0)
-      throw new Error("id is not valid");
+      throw new Error("id is required");
     s(this, x, t);
   }
   get id() {
@@ -216,11 +216,11 @@ const dt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   validateList: L
 }, Symbol.toStringTag, { value: "Module" }));
 let U;
-const Z = new Uint8Array(16);
-function q() {
+const q = new Uint8Array(16);
+function Z() {
   if (!U && (U = typeof crypto < "u" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto), !U))
     throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
-  return U(Z);
+  return U(q);
 }
 const h = [];
 for (let e = 0; e < 256; ++e)
@@ -235,7 +235,7 @@ function K(e, t, r) {
   if (M.randomUUID && !t && !e)
     return M.randomUUID();
   e = e || {};
-  const n = e.random || (e.rng || q)();
+  const n = e.random || (e.rng || Z)();
   return n[6] = n[6] & 15 | 64, n[8] = n[8] & 63 | 128, G(n);
 }
 function N() {
