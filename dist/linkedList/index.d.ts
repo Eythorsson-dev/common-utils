@@ -8,5 +8,6 @@ export * from './getLastChild';
 export * from './upsertAndReturnRoot';
 export { type Item, type ItemData, type ActionableItem, ItemElement } from './item';
 export * from './itemContainer';
+export * from './command';
 export * from './sortList';
 export * from './validateList';

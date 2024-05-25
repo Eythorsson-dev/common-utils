@@ -13,5 +13,6 @@ export {
     ItemElement
 } from "./item"
 export * from "./itemContainer"
+export * from "./command"
 export * from "./sortList"
 export * from "./validateList"

@@ -1,3 +1,4 @@
+import { Command } from "./command";
 import { getChildAndNextSiblingData } from "./getChildAndNextSiblingData";
 import { getNextOrChildById } from "./getNextOrChildById";
 import { ItemData, ItemElement } from "./item";
@@ -11,6 +12,8 @@ export abstract class ItemContainerElement<
     #target: HTMLElement;
     #rootItem: TItem | undefined;
     get rootItem(): TItem { return this.#rootItem! }
+
+    abstract get commands(): Command[]
 
     constructor(target: HTMLElement) {
         this.#target = target;
