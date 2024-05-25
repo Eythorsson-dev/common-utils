@@ -13,7 +13,7 @@ export abstract class ItemContainerElement<
     #rootItem: TItem | undefined;
     get rootItem(): TItem { return this.#rootItem! }
 
-    abstract get commands(): Command[]
+    abstract get commands(): Command<ItemContainerElement<TItem>>[]
 
     constructor(target: HTMLElement) {
         this.#target = target;

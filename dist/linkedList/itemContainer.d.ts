@@ -4,7 +4,7 @@ import { ItemData, ItemElement } from './item';
 export declare abstract class ItemContainerElement<TItem extends ItemElement<any, TItem>> {
     #private;
     get rootItem(): TItem;
-    abstract get commands(): Command[];
+    abstract get commands(): Command<ItemContainerElement<TItem>>[];
     constructor(target: HTMLElement);
     get value(): ItemData<any>[];
     set value(items: ItemData<any>[]);
