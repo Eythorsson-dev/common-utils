@@ -1,6 +1,7 @@
 import { Command } from "./command";
 import { getChildAndNextSiblingData } from "./getChildAndNextSiblingData";
 import { getNextOrChildById } from "./getNextOrChildById";
+import { getNextOrChildByTarget } from "./getNextOrChildByTarget";
 import { ItemData, ItemElement } from "./item";
 import { sortList } from "./sortList";
 import { upsertAndReturnRoot } from "./upsertAndReturnRoot";
@@ -12,6 +13,11 @@ export abstract class ItemContainerElement<
     #target: HTMLElement;
     #rootItem: TItem | undefined;
     get rootItem(): TItem { return this.#rootItem! }
+
+    get activeItem(): TItem | undefined {
+        if (document.activeElement == undefined) return undefined;
+        return getNextOrChildByTarget(this.#rootItem!, document.activeElement)
+    }
 
     abstract get commands(): Command<ItemContainerElement<TItem>>[]
 
