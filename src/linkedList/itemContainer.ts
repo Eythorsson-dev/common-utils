@@ -14,7 +14,8 @@ export abstract class ItemContainerElement<
     #target: HTMLElement;
     #rootItem: TItem | undefined;
     get rootItem(): TItem { return this.#rootItem! }
-
+    protected set rootItem(item: TItem) { this.#rootItem = item }
+    
     get activeItem(): TItem | undefined {
         if (document.activeElement == undefined) return undefined;
         return getNextOrChildByTarget(this.#rootItem!, document.activeElement)
