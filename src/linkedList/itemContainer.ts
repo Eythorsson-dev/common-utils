@@ -1,5 +1,6 @@
 import { Command } from "./command";
 import { getChildAndNextSiblingData } from "./getChildAndNextSiblingData";
+import { getNextItem } from "./getNextItem";
 import { getNextOrChildById } from "./getNextOrChildById";
 import { getNextOrChildByTarget } from "./getNextOrChildByTarget";
 import { ItemData, ItemElement } from "./item";
@@ -56,8 +57,18 @@ export abstract class ItemContainerElement<
     }
 
     deleteItemById(id: string): void {
-        this.getItemById(id)
-            ?.remove();
+        if (id == this.#rootItem!.id) {
+            const newRootItem = getNextItem(this.rootItem);
+
+            this.getItemById(id)
+                ?.remove();
+
+            this.#rootItem = newRootItem;
+        }
+        else {
+            this.getItemById(id)
+                ?.remove();
+        }
     }
 
     abstract createItem<T>(type: string, id: string, data?: T): TItem;
