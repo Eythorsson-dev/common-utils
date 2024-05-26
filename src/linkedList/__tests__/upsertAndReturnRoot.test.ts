@@ -311,7 +311,7 @@ describe("IntegrationTest", () => {
 
 
 
-        const data0: ItemData<TestItemData> = { data: {}, id: "item0", type: "test",  parentId: undefined, }
+        const data0: ItemData<TestItemData> = { data: {}, id: "item0", type: "test", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: {}, id: "item1", type: "test", parentId: undefined, previousId: data0.id }
         const data2: ItemData<TestItemData> = { data: {}, id: "item2", type: "test", parentId: data1.id }
         const data3: ItemData<TestItemData> = { data: {}, id: "item3", type: "test", parentId: data1.id, previousId: data2.id }
@@ -387,7 +387,7 @@ describe("IntegrationTest", () => {
         //  3       2 
         // 4        3 
 
-        const data0: ItemData<TestItemData> = { data: {}, id: "item0", type: "test",  parentId: undefined, }
+        const data0: ItemData<TestItemData> = { data: {}, id: "item0", type: "test", parentId: undefined, }
         const data1: ItemData<TestItemData> = { data: {}, id: "item1", type: "test", parentId: undefined, previousId: data0.id }
         const data2: ItemData<TestItemData> = { data: {}, id: "item2", type: "test", parentId: data1.id }
         const data3: ItemData<TestItemData> = { data: {}, id: "item3", type: "test", parentId: data1.id, previousId: data2.id }
@@ -416,6 +416,35 @@ describe("IntegrationTest", () => {
             { ...data1, parentId: undefined, previousId: data4.id },
             { ...data2 },
             { ...data3 },
+        ])
+    })
+
+    // @vitest-environment jsdom
+    test("Can't Move -> parent into itself", () => {
+        // 1       2
+        //  2  ->  3
+        //  3      1
+
+        const data0: ItemData<string> = { type: "test", id: "block0", parentId: undefined, data: generateUId() }
+        const data1: ItemData<string> = { type: "test", id: "block1", parentId: data0.id, data: generateUId() }
+        const data2: ItemData<string> = { type: "test", id: "block2", parentId: data0.id, previousId: data1.id, data: generateUId() }
+
+        let root: TestItemElement | undefined = undefined;
+        const data = [data0, data1, data2];
+        data.forEach(data => root = upsertAndReturnRoot(data, root, x => new TestItemElement(x.id, undefined)))
+
+        expect(
+            () => upsertAndReturnRoot({
+                ...data0,
+                previousId: data2.id,
+                parentId: undefined
+            }, root, x => new TestItemElement(x.id, undefined))
+        ).toThrow()
+
+        expect(getData(root!)).toMatchObject([
+            { ...data0 },
+            { ...data1 },
+            { ...data2 },
         ])
     })
 })

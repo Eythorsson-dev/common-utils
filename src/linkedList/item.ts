@@ -136,8 +136,8 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     }
 
     append(item: TItem): void {
-        if (item.id == this.id)
-            throw new Error("Cannot append item before itself");
+        if (item.id == this.id) throw new Error("Cannot append item before itself");
+        if (item.target.contains(this.target)) throw new Error("Cannot append a parent into one of its children");
 
         item.remove();
 
@@ -156,8 +156,9 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     }
 
     before(item: TItem): void {
-        if (item.id == this.id)
-            throw new Error("Cannot append item before itself");
+        if (item.id == this.id) throw new Error("Cannot append item before itself");
+        if (item.target.contains(this.target)) throw new Error("Cannot append a parent into one of its children");
+
 
         item.remove();
 
@@ -173,8 +174,8 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     }
 
     after(item: TItem): void {
-        if (item.id == this.id)
-            throw new Error("Cannot append item before itself");
+        if (item.id == this.id) throw new Error("Cannot append item before itself");
+        if (item.target.contains(this.target)) throw new Error("Cannot append a parent into one of its children");
 
         item.remove();
 

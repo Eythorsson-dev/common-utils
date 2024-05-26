@@ -309,6 +309,12 @@ describe("Update Block", () => {
             previousId: block3.id,
             parentId: undefined
         })).toThrow()
+
+        expect(editor.value).toMatchObject([
+            block1,
+            block2,
+            block3,
+        ])
     })
 
     test("Can Move -> Previous block (with children)", () => {
