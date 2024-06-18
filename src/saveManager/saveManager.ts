@@ -1,6 +1,6 @@
 import { UndoManager, type UndoAPI } from "../undoManager";
 
-export type SaveAction = "insert" | "update" | "delete";
+export type SaveAction = "Insert" | "Update" | "Delete";
 
 export type SaveData<Data extends object> = {
     Action: SaveAction;
@@ -77,6 +77,6 @@ export class SaveManager<
 
     private Execute(data: SaveOptionsData<Data>): void {
 
-        data.items.forEach(x => ({ "insert": this.Insert, "update": this.Update, "delete": this.Delete, })[x.Action](x.Data))
+        data.items.forEach(x => ({ "Insert": this.Insert, "Update": this.Update, "Delete": this.Delete, })[x.Action](x.Data))
     }
 }

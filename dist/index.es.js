@@ -51,7 +51,7 @@ function Z(e, t) {
   }
   return r(e);
 }
-function S(e, t) {
+function D(e, t) {
   function r(n) {
     if (n.id == t)
       return n;
@@ -87,7 +87,7 @@ function J(e, t, r) {
   var i, d;
   if (t == null && (e.parentId || e.previousId))
     throw new Error("the initial upsert must be the root window");
-  let n = t && S(t, e.id);
+  let n = t && D(t, e.id);
   if (n == null || ((i = n.parentItem) == null ? void 0 : i.id) != e.parentId || ((d = n.previousItem) == null ? void 0 : d.id) != e.previousId) {
     if (t && n && t.id == n.id)
       if (n.firstChildItem)
@@ -99,12 +99,12 @@ function J(e, t, r) {
     if (n == null && (n = r(e)), n == null || n.remove(), t == null)
       t = n;
     else if (e.previousId) {
-      const u = S(t, e.previousId);
+      const u = D(t, e.previousId);
       if (!u)
         throw new Error("Failed to render item, previous item is not rendered");
       u.after(n);
     } else if (e.parentId) {
-      const u = S(t, e.parentId);
+      const u = D(t, e.parentId);
       if (!u)
         throw new Error("Failed to render item, parent item is not rendered");
       u.append(n);
@@ -113,10 +113,10 @@ function J(e, t, r) {
   }
   return n.update(e.data), t;
 }
-var D, B, m, A, f, p, C;
+var S, B, m, A, f, p, C;
 class nt {
   constructor(t, r) {
-    c(this, D, void 0);
+    c(this, S, void 0);
     c(this, B, void 0);
     c(this, m, void 0);
     // set parentItem(item: TItem | undefined) { this.#parent = item; }
@@ -130,10 +130,10 @@ class nt {
       throw new Error("id is required");
     if (((r == null ? void 0 : r.trim()) ?? "").length == 0)
       throw new Error("type is required");
-    h(this, D, t), h(this, B, r);
+    h(this, S, t), h(this, B, r);
   }
   get id() {
-    return s(this, D);
+    return s(this, S);
   }
   get type() {
     return s(this, B);
@@ -198,7 +198,7 @@ class nt {
     t.remove(), h(t, f, this.nextItem), this.nextItem && h(this.nextItem, p, t), h(t, m, this.parentItem), h(t, p, this), h(this, f, t), this.target.after(t.target);
   }
 }
-D = new WeakMap(), B = new WeakMap(), m = new WeakMap(), A = new WeakMap(), f = new WeakMap(), p = new WeakMap(), C = new WeakMap();
+S = new WeakMap(), B = new WeakMap(), m = new WeakMap(), A = new WeakMap(), f = new WeakMap(), p = new WeakMap(), C = new WeakMap();
 function F(e, t, r) {
   const n = e.find((i) => i.parentId == t && i.previousId == r);
   return n ? (e = e.filter((i) => i.id != n.id), 1 + F(e, n.id, void 0) + F(e, t, n.id)) : 0;
@@ -256,7 +256,7 @@ class rt {
     h(this, a, J(t, s(this, a), () => this.createItem(t.type, t.id, t.data)));
   }
   getItemById(t) {
-    return S(s(this, a), t);
+    return D(s(this, a), t);
   }
   deleteItemById(t) {
     var r, n;
@@ -289,7 +289,7 @@ const Et = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   getItemsBetween: tt,
   getLastChild: et,
   getNextItem: Z,
-  getNextOrChildById: S,
+  getNextOrChildById: D,
   getNextOrChildByTarget: G,
   getNextSiblings: V,
   sortList: Q,
@@ -467,7 +467,7 @@ class yt {
     });
   }
   Execute(t) {
-    t.items.forEach((r) => ({ insert: this.Insert, update: this.Update, delete: this.Delete })[r.Action](r.Data));
+    t.items.forEach((r) => ({ Insert: this.Insert, Update: this.Update, Delete: this.Delete })[r.Action](r.Data));
   }
 }
 function X(e, t, r, n) {
@@ -505,7 +505,7 @@ function at(e) {
   ).flat();
 }
 var R, L, E, T, U, y;
-class St {
+class Dt {
   constructor(t = 1e3) {
     c(this, E);
     c(this, R, []);
@@ -596,7 +596,7 @@ const bt = {
   ...pt,
   ...wt
 };
-function Dt(e) {
+function St(e) {
   return At[e]();
 }
 function Bt(e, t) {
@@ -607,10 +607,10 @@ function Bt(e, t) {
 }
 export {
   Ut as EventManager,
-  St as KeyboardShortcut,
+  Dt as KeyboardShortcut,
   yt as SaveManager,
   W as generateUId,
-  Dt as getIcon,
+  St as getIcon,
   X as getShortcutString,
   Et as linkedList,
   Bt as onceClickOutside

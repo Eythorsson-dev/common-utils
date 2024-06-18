@@ -45,8 +45,8 @@ test('Initial State Valid', () => {
 
 test('Can Insert', () => {
     saveManager.Save({
-        Data: { items: [{ Action: "insert", Data: { Id: 1 } }] },
-        UndoData: { items: [{ Action: "delete", Data: { Id: 2 } }] }
+        Data: { items: [{ Action: "Insert", Data: { Id: 1 } }] },
+        UndoData: { items: [{ Action: "Delete", Data: { Id: 2 } }] }
     });
 
     expect(saveManager.HistoryIndex).toBe(0);
@@ -62,8 +62,8 @@ test('Can Insert', () => {
 
 test('Can Undo Insert', () => {
     saveManager.Save({
-        Data: { items: [{ Action: "insert", Data: { Id: 1 } }] },
-        UndoData: { items: [{ Action: "delete", Data: { Id: 2 } }] }
+        Data: { items: [{ Action: "Insert", Data: { Id: 1 } }] },
+        UndoData: { items: [{ Action: "Delete", Data: { Id: 2 } }] }
     });
 
     expect(saveManager.HistoryIndex).toBe(0);
@@ -86,8 +86,8 @@ test('Can Undo Insert', () => {
 
 test('Can Update', () => {
     saveManager.Save({
-        Data: { items: [{ Action: "update", Data: { Id: 1 } }] },
-        UndoData: { items: [{ Action: "delete", Data: { Id: 2 } }] }
+        Data: { items: [{ Action: "Update", Data: { Id: 1 } }] },
+        UndoData: { items: [{ Action: "Delete", Data: { Id: 2 } }] }
     });
 
     expect(saveManager.HistoryIndex).toBe(0);
@@ -103,8 +103,8 @@ test('Can Update', () => {
 
 test('Can Undo Update', () => {
     saveManager.Save({
-        Data: { items: [{ Action: "update", Data: { Id: 1 } }] },
-        UndoData: { items: [{ Action: "delete", Data: { Id: 2 } }] }
+        Data: { items: [{ Action: "Update", Data: { Id: 1 } }] },
+        UndoData: { items: [{ Action: "Delete", Data: { Id: 2 } }] }
     });
 
     expect(saveManager.HistoryIndex).toBe(0);

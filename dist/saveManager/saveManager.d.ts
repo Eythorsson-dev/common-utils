@@ -1,6 +1,6 @@
 import { UndoAPI } from '../undoManager';
 
-export type SaveAction = "insert" | "update" | "delete";
+export type SaveAction = "Insert" | "Update" | "Delete";
 export type SaveData<Data extends object> = {
     Action: SaveAction;
     Data: Data;
