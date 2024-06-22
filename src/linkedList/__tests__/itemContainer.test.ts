@@ -28,8 +28,8 @@ class TestElement extends ItemElement<string, TestElement> {
 
 }
 
-class TestContainer extends ItemContainerElement<TestElement> {
-    get commands(): Command<ItemContainerElement<any>>[] {
+class TestContainer extends ItemContainerElement<TestElement, string> {
+    get commands(): Command<ItemContainerElement<any, string>, string>[] {
         throw new Error("Method not implemented.");
     }
     createItem<T>(type: string, id: string, data?: T | undefined) {

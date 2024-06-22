@@ -9,19 +9,20 @@ import { upsertAndReturnRoot } from "./upsertAndReturnRoot";
 import { validateList } from "./validateList";
 
 export abstract class ItemContainerElement<
-    TItem extends ItemElement<any, TItem>
+    TItem extends ItemElement<any, TItem>,
+    TCommandId
 > {
     #target: HTMLElement;
     #rootItem: TItem | undefined;
     get rootItem(): TItem { return this.#rootItem! }
-    protected set rootItem(item: TItem) { this.#rootItem = item }
-    
+    protected set rootItem(item: TItem) { this.#rootItem = item }
+
     get activeItem(): TItem | undefined {
         if (document.activeElement == undefined) return undefined;
         return getNextOrChildByTarget(this.#rootItem!, document.activeElement)
     }
 
-    abstract get commands(): Command<ItemContainerElement<TItem>>[]
+    abstract get commands(): Command<ItemContainerElement<TItem, TCommandId>, TCommandId>[]
 
     constructor(target: HTMLElement) {
         this.#target = target;

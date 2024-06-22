@@ -1,7 +1,7 @@
 
 
-export abstract class Command<TContext> {
-    abstract get id(): string
+export abstract class Command<TContext, TId> {
+    abstract get id(): TId
 
     #context: TContext
     get context(): TContext { return this.#context }
