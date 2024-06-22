@@ -3,7 +3,7 @@
  */
 
 import { expect, test, vi } from "vitest";
-import { KeyboardShortcut, Shortcut, ShortcutOption } from "../keyboardShortcut";
+import { KeyboardShortcut, ShortcutCombination, ShortcutOption } from "../keyboardShortcut";
 
 test("Can Handle Nested", () => {
     // 0
@@ -23,7 +23,7 @@ test("Can Handle Nested", () => {
 
 
 
-    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+    const shortcuts: (ShortcutOption & { combo: ShortcutCombination[] })[] = [
         { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
         { target: target1, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
         { target: target3, shortcut: "ctrl+c", combo: [{ ctrl: true, key: "c" }], action: vi.fn(), disabled: false },
@@ -63,7 +63,7 @@ test("Can Handle Nested disabled", () => {
 
 
 
-    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+    const shortcuts: (ShortcutOption & { combo: ShortcutCombination[] })[] = [
         { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
         { target: target1, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: true },
     ]
@@ -99,7 +99,7 @@ test("Can Handle partial match", async () => {
 
 
 
-    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+    const shortcuts: (ShortcutOption & { combo: ShortcutCombination[] })[] = [
         { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
         { target: target1, shortcut: "ctrl+a,ctrl+b", combo: [{ ctrl: true, key: "a" }, { ctrl: true, key: "b" }], action: vi.fn(), disabled: false },
     ]
@@ -140,7 +140,7 @@ test("Can Handle combination", () => {
 
 
 
-    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+    const shortcuts: (ShortcutOption & { combo: ShortcutCombination[] })[] = [
         { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
         { target: target1, shortcut: "ctrl+a,ctrl+b", combo: [{ ctrl: true, key: "a" }, { ctrl: true, key: "b" }], action: vi.fn(), disabled: false },
     ]
@@ -177,7 +177,7 @@ test("Can Handle invalid, then valid", () => {
 
 
 
-    const shortcuts: (ShortcutOption & { combo: Shortcut })[] = [
+    const shortcuts: (ShortcutOption & { combo: ShortcutCombination })[] = [
         { target: target0, shortcut: "ctrl+a", combo: { ctrl: true, key: "a" }, action: vi.fn(), disabled: false },
     ]
 

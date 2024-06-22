@@ -1,2 +1,2 @@
-export { KeyboardShortcut as KeyboardShortcut } from './keyboardShortcut';
+export { KeyboardShortcut, type ShortcutCombination } from './keyboardShortcut';
 export { getShortcutString } from './getShortcutString';

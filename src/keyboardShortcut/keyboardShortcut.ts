@@ -8,7 +8,7 @@ export interface ShortcutOption {
     action: () => void
 }
 
-export type Shortcut = {
+export type ShortcutCombination = {
     key: string,
     ctrl?: boolean,
     shift?: boolean,
@@ -24,7 +24,7 @@ export class KeyboardShortcut {
         this.#timeoutMs = timeoutMs;
     }
 
-    registerShortcut(target: HTMLElement, shortcut: Shortcut | Shortcut[], action: () => void, disabled?: () => boolean) {
+    registerShortcut(target: HTMLElement, shortcut: ShortcutCombination | ShortcutCombination[], action: () => void, disabled?: () => boolean) {
         this.#shortcuts.push({
             target,
             shortcut: getShortcutString(shortcut),
@@ -42,7 +42,7 @@ export class KeyboardShortcut {
 
     #currentKeyStrokes: string[] = [];
     #currentTimeout: NodeJS.Timeout | undefined;
-    handleKeystroke(target: HTMLElement, shortcut: Shortcut): void {
+    handleKeystroke(target: HTMLElement, shortcut: ShortcutCombination): void {
         this.#currentKeyStrokes.push(getShortcutString(shortcut));
         const currentKeyStrokes = this.#currentKeyStrokes.join(",");
 

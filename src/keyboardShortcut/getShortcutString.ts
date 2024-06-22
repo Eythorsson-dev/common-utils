@@ -1,7 +1,7 @@
-import { Shortcut } from "./keyboardShortcut";
+import { ShortcutCombination } from "./keyboardShortcut";
 
 
-export function getShortcutString(combo: Shortcut | Shortcut[]): string {
+export function getShortcutString(combo: ShortcutCombination | ShortcutCombination[]): string {
     return [combo].flat().map(
         x => [
             x.ctrl && "ctrl",
