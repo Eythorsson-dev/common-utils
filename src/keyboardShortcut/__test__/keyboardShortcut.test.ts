@@ -3,7 +3,7 @@
  */
 
 import { expect, test, vi } from "vitest";
-import { KeyboardShortcut, ShortcutOption } from "../keyboardShortcut";
+import { KeyboardShortcut, Shortcut, ShortcutOption } from "../keyboardShortcut";
 
 test("Can Handle Nested", () => {
     // 0
@@ -23,17 +23,17 @@ test("Can Handle Nested", () => {
 
 
 
-    const shortcuts: ShortcutOption[] = [
-        { target: target0, shortcut: "ctrl+a", action: vi.fn(), disabled: false },
-        { target: target1, shortcut: "ctrl+a", action: vi.fn(), disabled: false },
-        { target: target3, shortcut: "ctrl+c", action: vi.fn(), disabled: false },
-        { target: target1, shortcut: "ctrl+c", action: vi.fn(), disabled: false },
+    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+        { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
+        { target: target1, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
+        { target: target3, shortcut: "ctrl+c", combo: [{ ctrl: true, key: "c" }], action: vi.fn(), disabled: false },
+        { target: target1, shortcut: "ctrl+c", combo: [{ ctrl: true, key: "c" }], action: vi.fn(), disabled: false },
     ]
 
     const manager = new KeyboardShortcut();
 
     shortcuts.forEach(shortcut =>
-        manager.registerShortcut(shortcut.target, shortcut.shortcut, shortcut.action, () => shortcut.disabled)
+        manager.registerShortcut(shortcut.target, shortcut.combo, shortcut.action, () => shortcut.disabled)
     );
 
 
@@ -63,15 +63,15 @@ test("Can Handle Nested disabled", () => {
 
 
 
-    const shortcuts: ShortcutOption[] = [
-        { target: target0, shortcut: "ctrl+a", action: vi.fn(), disabled: false },
-        { target: target1, shortcut: "ctrl+a", action: vi.fn(), disabled: true },
+    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+        { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
+        { target: target1, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: true },
     ]
 
     const manager = new KeyboardShortcut();
 
     shortcuts.forEach(shortcut =>
-        manager.registerShortcut(shortcut.target, shortcut.shortcut, shortcut.action, () => shortcut.disabled)
+        manager.registerShortcut(shortcut.target, shortcut.combo, shortcut.action, () => shortcut.disabled)
     );
 
 
@@ -99,16 +99,16 @@ test("Can Handle partial match", async () => {
 
 
 
-    const shortcuts: ShortcutOption[] = [
-        { target: target0, shortcut: "ctrl+a", action: vi.fn(), disabled: false },
-        { target: target1, shortcut: "ctrl+a,ctrl+b", action: vi.fn(), disabled: false },
+    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+        { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
+        { target: target1, shortcut: "ctrl+a,ctrl+b", combo: [{ ctrl: true, key: "a" }, { ctrl: true, key: "b" }], action: vi.fn(), disabled: false },
     ]
 
     const timeout = 50
     const manager = new KeyboardShortcut(timeout);
 
     shortcuts.forEach(shortcut =>
-        manager.registerShortcut(shortcut.target, shortcut.shortcut, shortcut.action, () => shortcut.disabled)
+        manager.registerShortcut(shortcut.target, shortcut.combo, shortcut.action, () => shortcut.disabled)
     );
 
     manager.handleKeystroke(target2, { ctrl: true, shift: false, alt: false, key: "a" });
@@ -140,16 +140,16 @@ test("Can Handle combination", () => {
 
 
 
-    const shortcuts: ShortcutOption[] = [
-        { target: target0, shortcut: "ctrl+a", action: vi.fn(), disabled: false },
-        { target: target1, shortcut: "ctrl+a,ctrl+b", action: vi.fn(), disabled: false },
+    const shortcuts: (ShortcutOption & { combo: Shortcut[] })[] = [
+        { target: target0, shortcut: "ctrl+a", combo: [{ ctrl: true, key: "a" }], action: vi.fn(), disabled: false },
+        { target: target1, shortcut: "ctrl+a,ctrl+b", combo: [{ ctrl: true, key: "a" }, { ctrl: true, key: "b" }], action: vi.fn(), disabled: false },
     ]
 
     const timeout = 50;
     const manager = new KeyboardShortcut(timeout);
 
     shortcuts.forEach(shortcut =>
-        manager.registerShortcut(shortcut.target, shortcut.shortcut, shortcut.action, () => shortcut.disabled)
+        manager.registerShortcut(shortcut.target, shortcut.combo, shortcut.action, () => shortcut.disabled)
     );
 
     manager.handleKeystroke(target2, { ctrl: true, shift: false, alt: false, key: "a" });
@@ -177,15 +177,15 @@ test("Can Handle invalid, then valid", () => {
 
 
 
-    const shortcuts: ShortcutOption[] = [
-        { target: target0, shortcut: "ctrl+a", action: vi.fn(), disabled: false },
+    const shortcuts: (ShortcutOption & { combo: Shortcut })[] = [
+        { target: target0, shortcut: "ctrl+a", combo: { ctrl: true, key: "a" }, action: vi.fn(), disabled: false },
     ]
 
     const timeout = 50;
     const manager = new KeyboardShortcut(timeout);
 
     shortcuts.forEach(shortcut =>
-        manager.registerShortcut(shortcut.target, shortcut.shortcut, shortcut.action, () => shortcut.disabled)
+        manager.registerShortcut(shortcut.target, shortcut.combo, shortcut.action, () => shortcut.disabled)
     );
 
     manager.handleKeystroke(target2, { ctrl: true, shift: false, alt: false, key: "c" });

@@ -1,2 +1,2 @@
-export { KeyboardShortcut } from "./keyboardShortcut"
+export { KeyboardShortcut as KeyboardShortcut } from "./keyboardShortcut"
 export { getShortcutString } from "./getShortcutString"

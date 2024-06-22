@@ -17,7 +17,7 @@ test.each([
     { ctrl: true, shift: true, alt: true, key: "g", expected: "ctrl+shift+alt+g" },
 ])("Can Get -> $expected", ({ ctrl, shift, alt, key, expected }) => {
 
-    const response = getShortcutString(ctrl, shift, alt, key);
+    const response = getShortcutString({ ctrl, shift, alt, key });
 
     expect(response).toBe(expected)
 });

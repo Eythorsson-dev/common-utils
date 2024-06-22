@@ -4,15 +4,15 @@ export interface ShortcutOption {
     get shortcut(): string;
     action: () => void;
 }
-export type Shortcut = {
-    ctrl: boolean;
-    shift: boolean;
-    alt: boolean;
+export type ShortcutCombination = {
     key: string;
+    ctrl?: boolean;
+    shift?: boolean;
+    alt?: boolean;
 };
 export declare class KeyboardShortcut {
     #private;
     constructor(timeoutMs?: number);
-    registerShortcut(target: HTMLElement, shortcut: string, action: () => void, disabled?: () => boolean): void;
-    handleKeystroke(target: HTMLElement, shortcut: Shortcut): void;
+    registerShortcut(target: HTMLElement, shortcut: ShortcutCombination | ShortcutCombination[], action: () => void, disabled?: () => boolean): void;
+    handleKeystroke(target: HTMLElement, shortcut: ShortcutCombination): void;
 }

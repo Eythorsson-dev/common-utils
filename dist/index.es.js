@@ -1,15 +1,15 @@
 var Y = Object.defineProperty;
-var $ = (e, t, r) => t in e ? Y(e, t, { enumerable: !0, configurable: !0, writable: !0, value: r }) : e[t] = r;
-var b = (e, t, r) => ($(e, typeof t != "symbol" ? t + "" : t, r), r), j = (e, t, r) => {
+var $ = (e, t, n) => t in e ? Y(e, t, { enumerable: !0, configurable: !0, writable: !0, value: n }) : e[t] = n;
+var b = (e, t, n) => ($(e, typeof t != "symbol" ? t + "" : t, n), n), j = (e, t, n) => {
   if (!t.has(e))
-    throw TypeError("Cannot " + r);
+    throw TypeError("Cannot " + n);
 };
-var s = (e, t, r) => (j(e, t, "read from private field"), r ? r.call(e) : t.get(e)), c = (e, t, r) => {
+var s = (e, t, n) => (j(e, t, "read from private field"), n ? n.call(e) : t.get(e)), c = (e, t, n) => {
   if (t.has(e))
     throw TypeError("Cannot add the same private member more than once");
-  t instanceof WeakSet ? t.add(e) : t.set(e, r);
-}, h = (e, t, r, n) => (j(e, t, "write to private field"), n ? n.call(e, r) : t.set(e, r), r);
-var M = (e, t, r) => (j(e, t, "access private method"), r);
+  t instanceof WeakSet ? t.add(e) : t.set(e, n);
+}, h = (e, t, n, r) => (j(e, t, "write to private field"), r ? r.call(e, n) : t.set(e, n), n);
+var N = (e, t, n) => (j(e, t, "access private method"), n);
 function V(e) {
   return e.nextItem ? [e.nextItem, ...V(e.nextItem)] : [];
 }
@@ -20,102 +20,102 @@ function z(e) {
     ...V(e.firstChildItem).flatMap((t) => [t, ...z(t)])
   ] : [];
 }
-function H(e, t, r = !1) {
+function H(e, t, n = !1) {
   var i;
   if (e == null)
     return [];
   if (e.id == t.id)
     return [t];
-  const n = r ? [] : H(e.firstChildItem, t);
-  if (((i = n.slice(-1)[0]) == null ? void 0 : i.id) == t.id)
-    return [e, ...n];
+  const r = n ? [] : H(e.firstChildItem, t);
+  if (((i = r.slice(-1)[0]) == null ? void 0 : i.id) == t.id)
+    return [e, ...r];
   if (e.nextItem)
-    return [e, ...n, ...H(e.nextItem, t)];
+    return [e, ...r, ...H(e.nextItem, t)];
   if (e.parentItem)
-    return [e, ...n, ...H(e.parentItem, t, !0)].filter((d) => d.id != e.parentItem.id);
+    return [e, ...r, ...H(e.parentItem, t, !0)].filter((d) => d.id != e.parentItem.id);
   throw Error("Something went wrong. Please make sure that the start, and the end has a common parent");
 }
 function tt(e, t) {
   return H(e, t);
 }
-function Z(e, t) {
+function G(e, t) {
   if (e.firstChildItem && (t == null ? void 0 : t.ignoreChildren) != !0)
     return e.firstChildItem;
   if (e.nextItem)
     return e.nextItem;
-  function r(n) {
-    if (n.nextItem)
-      return n.nextItem;
-    if (n.parentItem)
-      return r(n.parentItem);
+  function n(r) {
+    if (r.nextItem)
+      return r.nextItem;
+    if (r.parentItem)
+      return n(r.parentItem);
   }
-  return r(e);
+  return n(e);
 }
 function D(e, t) {
-  function r(n) {
-    if (n.id == t)
-      return n;
+  function n(r) {
+    if (r.id == t)
+      return r;
     let i;
-    return n.firstChildItem && (i || (i = r(n.firstChildItem))), n.nextItem && (i || (i = r(n.nextItem))), i;
+    return r.firstChildItem && (i || (i = n(r.firstChildItem))), r.nextItem && (i || (i = n(r.nextItem))), i;
   }
-  return r(e);
+  return n(e);
 }
-function G(e, t) {
+function J(e, t) {
   if (t.contains(e.target))
     return;
-  function r(n) {
+  function n(r) {
     let i;
-    return n.firstChildItem && (i || (i = r(n.firstChildItem))), n.nextItem && (i || (i = r(n.nextItem))), n.target.contains(t) && (i || (i = n)), i;
+    return r.firstChildItem && (i || (i = n(r.firstChildItem))), r.nextItem && (i || (i = n(r.nextItem))), r.target.contains(t) && (i || (i = r)), i;
   }
-  return r(e);
+  return n(e);
 }
-function P(e) {
+function T(e) {
   if (!e)
     return [];
   const t = [
     e.getDetails()
   ];
-  return e.firstChildItem && t.push(...P(e.firstChildItem)), e.nextItem && t.push(...P(e.nextItem)), t;
+  return e.firstChildItem && t.push(...T(e.firstChildItem)), e.nextItem && t.push(...T(e.nextItem)), t;
 }
 function et(e) {
-  function t(r) {
-    return r != null && r.nextItem ? t(r.nextItem) : r != null && r.firstChildItem ? t(r.firstChildItem) : r;
+  function t(n) {
+    return n != null && n.nextItem ? t(n.nextItem) : n != null && n.firstChildItem ? t(n.firstChildItem) : n;
   }
   return t(e == null ? void 0 : e.firstChildItem);
 }
-function J(e, t, r) {
+function Q(e, t, n) {
   var i, d;
   if (t == null && (e.parentId || e.previousId))
     throw new Error("the initial upsert must be the root window");
-  let n = t && D(t, e.id);
-  if (n == null || ((i = n.parentItem) == null ? void 0 : i.id) != e.parentId || ((d = n.previousItem) == null ? void 0 : d.id) != e.previousId) {
-    if (t && n && t.id == n.id)
-      if (n.firstChildItem)
-        t = n.firstChildItem;
-      else if (n.nextItem)
-        t = n.nextItem;
+  let r = t && D(t, e.id);
+  if (r == null || ((i = r.parentItem) == null ? void 0 : i.id) != e.parentId || ((d = r.previousItem) == null ? void 0 : d.id) != e.previousId) {
+    if (t && r && t.id == r.id)
+      if (r.firstChildItem)
+        t = r.firstChildItem;
+      else if (r.nextItem)
+        t = r.nextItem;
       else
         throw new Error("Failed to render block, a new rootBlock could not be determined");
-    if (n == null && (n = r(e)), n == null || n.remove(), t == null)
-      t = n;
+    if (r == null && (r = n(e)), r == null || r.remove(), t == null)
+      t = r;
     else if (e.previousId) {
       const u = D(t, e.previousId);
       if (!u)
         throw new Error("Failed to render item, previous item is not rendered");
-      u.after(n);
+      u.after(r);
     } else if (e.parentId) {
       const u = D(t, e.parentId);
       if (!u)
         throw new Error("Failed to render item, parent item is not rendered");
-      u.append(n);
+      u.append(r);
     } else
-      t.before(n), t = n;
+      t.before(r), t = r;
   }
-  return n.update(e.data), t;
+  return r.update(e.data), t;
 }
 var S, B, m, A, f, p, C;
 class nt {
-  constructor(t, r) {
+  constructor(t, n) {
     c(this, S, void 0);
     c(this, B, void 0);
     c(this, m, void 0);
@@ -128,9 +128,9 @@ class nt {
     c(this, C, void 0);
     if (((t == null ? void 0 : t.trim()) ?? "").length == 0)
       throw new Error("id is required");
-    if (((r == null ? void 0 : r.trim()) ?? "").length == 0)
+    if (((n == null ? void 0 : n.trim()) ?? "").length == 0)
       throw new Error("type is required");
-    h(this, S, t), h(this, B, r);
+    h(this, S, t), h(this, B, n);
   }
   get id() {
     return s(this, S);
@@ -161,18 +161,18 @@ class nt {
     h(this, C, this.render(t));
   }
   getDetails() {
-    var t, r;
+    var t, n;
     return {
       id: this.id,
       type: this.type,
       parentId: (t = this.parentItem) == null ? void 0 : t.id,
-      previousId: (r = this.previousItem) == null ? void 0 : r.id,
+      previousId: (n = this.previousItem) == null ? void 0 : n.id,
       data: this.data
     };
   }
   remove() {
-    var t, r, n;
-    ((r = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : r.id) == this.id && h(this.parentItem, A, s(this, f)), this.previousItem && h(this.previousItem, f, s(this, f)), this.nextItem && h(this.nextItem, p, s(this, p)), h(this, m, void 0), h(this, f, void 0), h(this, p, void 0), (n = s(this, C)) == null || n.remove();
+    var t, n, r;
+    ((n = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : n.id) == this.id && h(this.parentItem, A, s(this, f)), this.previousItem && h(this.previousItem, f, s(this, f)), this.nextItem && h(this.nextItem, p, s(this, p)), h(this, m, void 0), h(this, f, void 0), h(this, p, void 0), (r = s(this, C)) == null || r.remove();
   }
   append(t) {
     if (t.id == this.id)
@@ -180,8 +180,8 @@ class nt {
     if (t.target.contains(this.target))
       throw new Error("Cannot append a parent into one of its children");
     t.remove();
-    const r = this.firstChildItem && [this.firstChildItem, ...V(this.firstChildItem)], n = r == null ? void 0 : r.slice(-1)[0];
-    h(t, m, this), n ? n.after(t) : (h(this, A, t), this.target.append(t.target));
+    const n = this.firstChildItem && [this.firstChildItem, ...V(this.firstChildItem)], r = n == null ? void 0 : n.slice(-1)[0];
+    h(t, m, this), r ? r.after(t) : (h(this, A, t), this.target.append(t.target));
   }
   before(t) {
     if (t.id == this.id)
@@ -199,9 +199,9 @@ class nt {
   }
 }
 S = new WeakMap(), B = new WeakMap(), m = new WeakMap(), A = new WeakMap(), f = new WeakMap(), p = new WeakMap(), C = new WeakMap();
-function F(e, t, r) {
-  const n = e.find((i) => i.parentId == t && i.previousId == r);
-  return n ? (e = e.filter((i) => i.id != n.id), 1 + F(e, n.id, void 0) + F(e, t, n.id)) : 0;
+function F(e, t, n) {
+  const r = e.find((i) => i.parentId == t && i.previousId == n);
+  return r ? (e = e.filter((i) => i.id != r.id), 1 + F(e, r.id, void 0) + F(e, t, r.id)) : 0;
 }
 function K(e) {
   if (e.filter((u) => u.parentId == null && u.previousId == null).length != 1 && e.length > 0)
@@ -213,15 +213,15 @@ function K(e) {
   if (F(e) != e.length)
     throw new Error("Linked list is not valid");
 }
-function _(e, t, r) {
-  const n = e.find((i) => i.parentId == t && i.previousId == r);
-  return n ? (e = e.filter((i) => i.id != n.id), [
-    n,
-    ..._(e, n.id, void 0),
-    ..._(e, t, n.id)
+function _(e, t, n) {
+  const r = e.find((i) => i.parentId == t && i.previousId == n);
+  return r ? (e = e.filter((i) => i.id != r.id), [
+    r,
+    ..._(e, r.id, void 0),
+    ..._(e, t, r.id)
   ]) : [];
 }
-function Q(e) {
+function X(e) {
   return K(e), _(e, void 0, void 0);
 }
 var k, a;
@@ -239,32 +239,32 @@ class rt {
   }
   get activeItem() {
     if (document.activeElement != null)
-      return G(s(this, a), document.activeElement);
+      return J(s(this, a), document.activeElement);
   }
   get value() {
-    return P(s(this, a));
+    return T(s(this, a));
   }
   set value(t) {
-    if (K(t), Q(t).length != t.length)
+    if (K(t), X(t).length != t.length)
       throw new Error("Cannot set value, invalid linked list");
-    const n = s(this, a);
+    const r = s(this, a);
     t.forEach((i, d) => {
-      this.upsert(i), d == 0 && (s(this, k).replaceChildren(s(this, a).target), n == null || n.remove());
+      this.upsert(i), d == 0 && (s(this, k).replaceChildren(s(this, a).target), r == null || r.remove());
     });
   }
   upsert(t) {
-    h(this, a, J(t, s(this, a), () => this.createItem(t.type, t.id, t.data)));
+    h(this, a, Q(t, s(this, a), () => this.createItem(t.type, t.id, t.data)));
   }
   getItemById(t) {
     return D(s(this, a), t);
   }
   deleteItemById(t) {
-    var r, n;
+    var n, r;
     if (t == s(this, a).id) {
-      const i = Z(this.rootItem);
-      (r = this.getItemById(t)) == null || r.remove(), h(this, a, i);
+      const i = G(this.rootItem);
+      (n = this.getItemById(t)) == null || n.remove(), h(this, a, i);
     } else
-      (n = this.getItemById(t)) == null || n.remove();
+      (r = this.getItemById(t)) == null || r.remove();
   }
 }
 k = new WeakMap(), a = new WeakMap();
@@ -279,29 +279,29 @@ class it {
   }
 }
 O = new WeakMap();
-const Et = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const xt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   Command: it,
   ItemContainerElement: rt,
   ItemElement: nt,
-  getChildAndNextSiblingData: P,
+  getChildAndNextSiblingData: T,
   getChildItems: z,
   getItemsBetween: tt,
   getLastChild: et,
-  getNextItem: Z,
+  getNextItem: G,
   getNextOrChildById: D,
-  getNextOrChildByTarget: G,
+  getNextOrChildByTarget: J,
   getNextSiblings: V,
-  sortList: Q,
-  upsertAndReturnRoot: J,
+  sortList: X,
+  upsertAndReturnRoot: Q,
   validateList: K
 }, Symbol.toStringTag, { value: "Module" }));
-let N;
+let L;
 const ot = new Uint8Array(16);
 function st() {
-  if (!N && (N = typeof crypto < "u" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto), !N))
+  if (!L && (L = typeof crypto < "u" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto), !L))
     throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
-  return N(ot);
+  return L(ot);
 }
 const l = [];
 for (let e = 0; e < 256; ++e)
@@ -312,72 +312,72 @@ function ht(e, t = 0) {
 const dt = typeof crypto < "u" && crypto.randomUUID && crypto.randomUUID.bind(crypto), q = {
   randomUUID: dt
 };
-function ut(e, t, r) {
+function ut(e, t, n) {
   if (q.randomUUID && !t && !e)
     return q.randomUUID();
   e = e || {};
-  const n = e.random || (e.rng || st)();
-  return n[6] = n[6] & 15 | 64, n[8] = n[8] & 63 | 128, ht(n);
+  const r = e.random || (e.rng || st)();
+  return r[6] = r[6] & 15 | 64, r[8] = r[8] & 63 | 128, ht(r);
 }
 function W() {
   return ut();
 }
 var I;
-class Ut {
+class Et {
   constructor() {
     c(this, I, {});
   }
-  On(t, r) {
-    let n = W();
-    return s(this, I)[t] = (s(this, I)[t] ?? []).concat({ Id: n, Execute: r }), n;
+  On(t, n) {
+    let r = W();
+    return s(this, I)[t] = (s(this, I)[t] ?? []).concat({ Id: r, Execute: n }), r;
   }
-  Once(t, r, n) {
+  Once(t, n, r) {
     var i = W();
     return s(this, I)[t] = (s(this, I)[t] ?? []).concat({
       Id: i,
       Execute: (d) => {
-        n && n(d) != !0 || (this.Off(t, i), r(d));
+        r && r(d) != !0 || (this.Off(t, i), n(d));
       }
     }), i;
   }
-  Off(t, r) {
+  Off(t, n) {
     var i;
-    const n = (i = s(this, I)[t]) == null ? void 0 : i.findIndex((d) => d.Id == r);
-    n >= 0 && s(this, I)[t].splice(n, 1);
+    const r = (i = s(this, I)[t]) == null ? void 0 : i.findIndex((d) => d.Id == n);
+    r >= 0 && s(this, I)[t].splice(r, 1);
   }
-  Emit(t, r) {
+  Emit(t, n) {
     var i;
-    var n = { preventDefault: !1 };
+    var r = { preventDefault: !1 };
     return (i = s(this, I)[t]) == null || i.slice().forEach((d) => d.Execute({
-      ...r,
+      ...n,
       preventDefault() {
-        n.preventDefault = !0;
+        r.preventDefault = !0;
       }
-    })), n;
+    })), r;
   }
 }
 I = new WeakMap();
 function ct(e) {
   const t = [];
-  var r = -1;
-  function n() {
+  var n = -1;
+  function r() {
     var w, v;
     if (!x())
       return;
-    const o = t[r];
-    r--, (w = o.BeforeRedo) == null || w.call(o), o.Undo(), (v = o.OnUndo) == null || v.call(o);
+    const o = t[n];
+    n--, (w = o.BeforeRedo) == null || w.call(o), o.Undo(), (v = o.OnUndo) == null || v.call(o);
   }
   function i() {
     var w, v;
     if (u()) {
-      r++;
-      var o = t[r];
+      n++;
+      var o = t[n];
       (w = o.BeforeRedo) == null || w.call(o), o.Redo(), (v = o.OnRedo) == null || v.call(o);
     }
   }
   function d(o) {
     var w, v;
-    r < t.length - 1 && t.splice(r, t.length - r), t.push({
+    n < t.length - 1 && t.splice(n, t.length - n), t.push({
       Undo: () => o.Undo(),
       BeforeUndo: () => {
         var g;
@@ -396,27 +396,27 @@ function ct(e) {
         var g;
         return (g = o.OnAction) == null ? void 0 : g.call(o);
       }
-    }), r = t.length - 1, (w = o.BeforeAction) == null || w.call(o), o.Action(), (v = o.OnAction) == null || v.call(o);
+    }), n = t.length - 1, (w = o.BeforeAction) == null || w.call(o), o.Action(), (v = o.OnAction) == null || v.call(o);
   }
   function u() {
-    return r < t.length - 1;
+    return n < t.length - 1;
   }
   function x() {
-    return r >= 0;
+    return n >= 0;
   }
   return {
     get HistoryIndex() {
-      return r;
+      return n;
     },
     //AddHistory,
     Execute: d,
-    Undo: n,
+    Undo: r,
     Redo: i,
     CanUndo: x,
     CanRedo: u
   };
 }
-class yt {
+class Ut {
   constructor(t) {
     b(this, "UndoAPI");
     b(this, "BeforeChanged");
@@ -467,152 +467,139 @@ class yt {
     });
   }
   Execute(t) {
-    t.items.forEach((r) => ({ Insert: this.Insert, Update: this.Update, Delete: this.Delete })[r.Action](r.Data));
+    t.items.forEach((n) => ({ Insert: this.Insert, Update: this.Update, Delete: this.Delete })[n.Action](n.Data));
   }
 }
-function X(e, t, r, n) {
-  return [
-    e && "ctrl",
-    t && "shift",
-    r && "alt",
-    n
-  ].filter((i) => i).join("+");
-}
 function lt(e) {
-  return e.toLowerCase().split(" ").join("").split(",").map((t) => {
-    const r = t.split("+");
-    if (r.filter((n) => n.length == 1).length != 1)
-      throw new Error("shortcut must contain one letter");
-    if (r.some((n) => n != "ctrl" && n != "shift" && n != "alt" && n.length != 1))
-      throw new Error("The shortcut string contains unrecognizable characters");
-    return X(
-      r.some((n) => n == "ctrl"),
-      r.some((n) => n == "shift"),
-      r.some((n) => n == "alt"),
-      r.find((n) => n.length == 1)
-    );
-  }).join(",");
-}
-function at(e) {
   return e.reduce(
-    (t, r) => {
-      const n = t.findIndex(
-        (i) => i[0].shortcut == r.shortcut && i.some((d) => d.target.contains(r.target) || r.target.contains(d.target))
+    (t, n) => {
+      const r = t.findIndex(
+        (i) => i[0].shortcut == n.shortcut && i.some((d) => d.target.contains(n.target) || n.target.contains(d.target))
       );
-      return n == -1 ? t.push([r]) : t[n].some((d) => d.target.contains(r.target)) && (t[n] = t[n].filter((d) => d.target.contains(r.target) == !1 && r.target.contains(d.target) == !1).concat(r)), t;
+      return r == -1 ? t.push([n]) : t[r].some((d) => d.target.contains(n.target)) && (t[r] = t[r].filter((d) => d.target.contains(n.target) == !1 && n.target.contains(d.target) == !1).concat(n)), t;
     },
     []
   ).flat();
 }
-var R, L, E, T, U, y;
-class Dt {
+function Z(e) {
+  return [e].flat().map(
+    (t) => [
+      t.ctrl && "ctrl",
+      t.shift && "shift",
+      t.alt && "alt",
+      t.key
+    ].filter((n) => n).join("+")
+  ).join(",");
+}
+var R, M, E, P, U, y;
+class yt {
   constructor(t = 1e3) {
     c(this, E);
     c(this, R, []);
-    c(this, L, void 0);
+    c(this, M, void 0);
     c(this, U, []);
     c(this, y, void 0);
-    h(this, L, t);
+    h(this, M, t);
   }
-  registerShortcut(t, r, n, i) {
+  registerShortcut(t, n, r, i) {
     s(this, R).push({
       target: t,
-      shortcut: lt(r),
-      action: n,
+      shortcut: Z(n),
+      action: r,
       get disabled() {
         return (i == null ? void 0 : i()) ?? !1;
       }
     });
   }
-  handleKeystroke(t, r) {
-    s(this, U).push(X(r.ctrl, r.shift, r.alt, r.key));
-    const n = s(this, U).join(",");
-    let i = at(
+  handleKeystroke(t, n) {
+    s(this, U).push(Z(n));
+    const r = s(this, U).join(",");
+    let i = lt(
       s(this, R).filter(
-        (d) => d.shortcut.startsWith(n) && d.disabled == !1 && d.target.contains(t)
+        (d) => d.shortcut.startsWith(r) && d.disabled == !1 && d.target.contains(t)
       )
     );
     if (clearTimeout(s(this, y)), i.length == 0) {
-      M(this, E, T).call(this);
+      N(this, E, P).call(this);
       return;
     }
-    i.length == 1 ? (M(this, E, T).call(this), i[0].action()) : h(this, y, setTimeout(() => {
-      i = i.filter((d) => d.shortcut == n), M(this, E, T).call(this), i.length == 1 && i[0].action();
-    }, s(this, L)));
+    i.length == 1 ? (N(this, E, P).call(this), i[0].action()) : h(this, y, setTimeout(() => {
+      i = i.filter((d) => d.shortcut == r), N(this, E, P).call(this), i.length == 1 && i[0].action();
+    }, s(this, M)));
   }
 }
-R = new WeakMap(), L = new WeakMap(), E = new WeakSet(), T = function() {
+R = new WeakMap(), M = new WeakMap(), E = new WeakSet(), P = function() {
   clearTimeout(s(this, y)), h(this, U, []);
 }, U = new WeakMap(), y = new WeakMap();
-function ft() {
+function at() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("width", "100%"), e.setAttribute("height", "100%"), e.setAttribute("viewBox", "0 0 24 24"), e.setAttribute("fill", "none");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M9 18L15 12L9 6"), t.setAttribute("stroke", "currentColor"), t.setAttribute("stroke-width", "2"), t.setAttribute("stroke-linecap", "round"), t.setAttribute("stroke-linejoin", "round"), e.appendChild(t), e;
 }
-function gt() {
+function ft() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("width", "100%"), e.setAttribute("height", "100%"), e.setAttribute("viewBox", "0 0 24 24"), e.setAttribute("fill", "none");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M6 9L12 15L18 9"), t.setAttribute("stroke", "currentColor"), t.setAttribute("stroke-width", "2"), t.setAttribute("stroke-linecap", "round"), t.setAttribute("stroke-linejoin", "round"), e.appendChild(t), e;
 }
-const pt = {
-  "arrow-chevron-right": ft,
-  "arrow-chevron-down": gt
+const gt = {
+  "arrow-chevron-right": at,
+  "arrow-chevron-down": ft
 };
-function It() {
+function pt() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("width", "100%"), e.setAttribute("height", "100%"), e.setAttribute("viewBox", "0 0 24 24"), e.setAttribute("fill", "none");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M14 2.26953V6.40007C14 6.96012 14 7.24015 14.109 7.45406C14.2049 7.64222 14.3578 7.7952 14.546 7.89108C14.7599 8.00007 15.0399 8.00007 15.6 8.00007H19.7305M16 13H8M16 17H8M10 9H8M14 2H8.8C7.11984 2 6.27976 2 5.63803 2.32698C5.07354 2.6146 4.6146 3.07354 4.32698 3.63803C4 4.27976 4 5.11984 4 6.8V17.2C4 18.8802 4 19.7202 4.32698 20.362C4.6146 20.9265 5.07354 21.3854 5.63803 21.673C6.27976 22 7.11984 22 8.8 22H15.2C16.8802 22 17.7202 22 18.362 21.673C18.9265 21.3854 19.3854 20.9265 19.673 20.362C20 19.7202 20 18.8802 20 17.2V8L14 2Z"), t.setAttribute("stroke", "currentColor"), t.setAttribute("stroke-width", "2"), t.setAttribute("stroke-linecap", "round"), t.setAttribute("stroke-linejoin", "round"), e.appendChild(t), e;
 }
-const wt = {
-  "file-document": It
+const It = {
+  "file-document": pt
 };
-function vt() {
+function wt() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("xmlns", "http://www.w3.org/2000/svg"), e.setAttribute("width", "16"), e.setAttribute("height", "16"), e.setAttribute("fill", "currentColor"), e.setAttribute("class", "bi bi-type-bold"), e.setAttribute("viewBox", "0 0 16 16");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M8.21 13c2.106 0 3.412-1.087 3.412-2.823 0-1.306-.984-2.283-2.324-2.386v-.055a2.176 2.176 0 0 0 1.852-2.14c0-1.51-1.162-2.46-3.014-2.46H3.843V13zM5.908 4.674h1.696c.963 0 1.517.451 1.517 1.244 0 .834-.629 1.32-1.73 1.32H5.908V4.673zm0 6.788V8.598h1.73c1.217 0 1.88.492 1.88 1.415 0 .943-.643 1.449-1.832 1.449H5.907z"), e.appendChild(t), e;
 }
-function mt() {
+function vt() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("xmlns", "http://www.w3.org/2000/svg"), e.setAttribute("width", "16"), e.setAttribute("height", "16"), e.setAttribute("fill", "currentColor"), e.setAttribute("class", "bi bi-type-italic"), e.setAttribute("viewBox", "0 0 16 16");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M7.991 11.674 9.53 4.455c.123-.595.246-.71 1.347-.807l.11-.52H7.211l-.11.52c1.06.096 1.128.212 1.005.807L6.57 11.674c-.123.595-.246.71-1.346.806l-.11.52h3.774l.11-.52c-1.06-.095-1.129-.211-1.006-.806z"), e.appendChild(t), e;
 }
-function Ct() {
+function mt() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("xmlns", "http://www.w3.org/2000/svg"), e.setAttribute("width", "16"), e.setAttribute("height", "16"), e.setAttribute("fill", "currentColor"), e.setAttribute("class", "bi bi-type-underline"), e.setAttribute("viewBox", "0 0 16 16");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M5.313 3.136h-1.23V9.54c0 2.105 1.47 3.623 3.917 3.623s3.917-1.518 3.917-3.623V3.136h-1.23v6.323c0 1.49-.978 2.57-2.687 2.57s-2.687-1.08-2.687-2.57zM12.5 15h-9v-1h9z"), e.appendChild(t), e;
 }
-const bt = {
-  "text-bold": vt,
-  "text-italic": mt,
-  "text-underline": Ct
-}, At = {
-  ...bt,
-  ...pt,
-  ...wt
+const Ct = {
+  "text-bold": wt,
+  "text-italic": vt,
+  "text-underline": mt
+}, bt = {
+  ...Ct,
+  ...gt,
+  ...It
 };
-function St(e) {
-  return At[e]();
+function Dt(e) {
+  return bt[e]();
 }
-function Bt(e, t) {
-  function r(n) {
-    e.contains(n.target) || (document.removeEventListener("click", r), t(n));
+function St(e, t) {
+  function n(r) {
+    e.contains(r.target) || (document.removeEventListener("click", n), t(r));
   }
-  document.addEventListener("click", r);
+  document.addEventListener("click", n);
 }
 export {
-  Ut as EventManager,
-  Dt as KeyboardShortcut,
-  yt as SaveManager,
+  Et as EventManager,
+  yt as KeyboardShortcut,
+  Ut as SaveManager,
   W as generateUId,
-  St as getIcon,
-  X as getShortcutString,
-  Et as linkedList,
-  Bt as onceClickOutside
+  Dt as getIcon,
+  Z as getShortcutString,
+  xt as linkedList,
+  St as onceClickOutside
 };
 //# sourceMappingURL=index.es.js.map

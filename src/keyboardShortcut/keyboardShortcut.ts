@@ -1,4 +1,3 @@
-import { getFormattedShortcut } from "./getFormattedShortcuts";
 import { getDistinctShortcuts } from "./getDistinctShortcuts";
 import { getShortcutString } from "./getShortcutString";
 
@@ -10,10 +9,10 @@ export interface ShortcutOption {
 }
 
 export type Shortcut = {
-    ctrl: boolean,
-    shift: boolean,
-    alt: boolean,
-    key: string
+    key: string,
+    ctrl?: boolean,
+    shift?: boolean,
+    alt?: boolean,
 }
 
 
@@ -25,10 +24,10 @@ export class KeyboardShortcut {
         this.#timeoutMs = timeoutMs;
     }
 
-    registerShortcut(target: HTMLElement, shortcut: string, action: () => void, disabled?: () => boolean) {
+    registerShortcut(target: HTMLElement, shortcut: Shortcut | Shortcut[], action: () => void, disabled?: () => boolean) {
         this.#shortcuts.push({
             target,
-            shortcut: getFormattedShortcut(shortcut),
+            shortcut: getShortcutString(shortcut),
             action,
             get disabled() {
                 return (disabled?.() ?? false)
@@ -44,7 +43,7 @@ export class KeyboardShortcut {
     #currentKeyStrokes: string[] = [];
     #currentTimeout: NodeJS.Timeout | undefined;
     handleKeystroke(target: HTMLElement, shortcut: Shortcut): void {
-        this.#currentKeyStrokes.push(getShortcutString(shortcut.ctrl, shortcut.shift, shortcut.alt, shortcut.key));
+        this.#currentKeyStrokes.push(getShortcutString(shortcut));
         const currentKeyStrokes = this.#currentKeyStrokes.join(",");
 
         let matchingShortcuts = getDistinctShortcuts(
