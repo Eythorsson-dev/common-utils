@@ -9,3 +9,5 @@ export * from "./icon"
 export * from "./utils"
 
 export * from "./dom/onceClickOutside"
+export * from "./dom/popup"
+export * from "./dom/onHover"
