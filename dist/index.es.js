@@ -4,11 +4,11 @@ var x = (e, t, r) => (rt(e, typeof t != "symbol" ? t + "" : t, r), r), V = (e, t
   if (!t.has(e))
     throw TypeError("Cannot " + r);
 };
-var h = (e, t, r) => (V(e, t, "read from private field"), r ? r.call(e) : t.get(e)), l = (e, t, r) => {
+var u = (e, t, r) => (V(e, t, "read from private field"), r ? r.call(e) : t.get(e)), l = (e, t, r) => {
   if (t.has(e))
     throw TypeError("Cannot add the same private member more than once");
   t instanceof WeakSet ? t.add(e) : t.set(e, r);
-}, u = (e, t, r, n) => (V(e, t, "write to private field"), n ? n.call(e, r) : t.set(e, r), r);
+}, h = (e, t, r, n) => (V(e, t, "write to private field"), n ? n.call(e, r) : t.set(e, r), r);
 var L = (e, t, r) => (V(e, t, "access private method"), r);
 function z(e) {
   return e.nextItem ? [e.nextItem, ...z(e.nextItem)] : [];
@@ -113,7 +113,7 @@ function X(e, t, r) {
   }
   return n.update(e.data), t;
 }
-var D, S, C, A, g, I, b;
+var D, S, C, A, p, I, b;
 class ot {
   constructor(t, r) {
     l(this, D, void 0);
@@ -122,7 +122,7 @@ class ot {
     // set parentItem(item: TItem | undefined) { this.#parent = item; }
     l(this, A, void 0);
     // set firstChildItem(item: TItem | undefined) { this.#firstChild = item; }
-    l(this, g, void 0);
+    l(this, p, void 0);
     // set nextItem(item: TItem | undefined) { this.#next = item; }
     l(this, I, void 0);
     l(this, b, void 0);
@@ -130,35 +130,35 @@ class ot {
       throw new Error("id is required");
     if (((r == null ? void 0 : r.trim()) ?? "").length == 0)
       throw new Error("type is required");
-    u(this, D, t), u(this, S, r);
+    h(this, D, t), h(this, S, r);
   }
   get id() {
-    return h(this, D);
+    return u(this, D);
   }
   get type() {
-    return h(this, S);
+    return u(this, S);
   }
   get parentItem() {
-    return h(this, C);
+    return u(this, C);
   }
   get firstChildItem() {
-    return h(this, A);
+    return u(this, A);
   }
   get nextItem() {
-    return h(this, g);
+    return u(this, p);
   }
   get previousItem() {
-    return h(this, I);
+    return u(this, I);
   }
   get target() {
-    if (!h(this, b))
+    if (!u(this, b))
       throw new Error("Failed to get target. Please call the .initialized(data) method before fetching the target");
-    return h(this, b);
+    return u(this, b);
   }
   init(t) {
-    if (h(this, b))
+    if (u(this, b))
       throw new Error("The target has already been initialized");
-    u(this, b, this.render(t));
+    h(this, b, this.render(t));
   }
   getDetails() {
     var t, r;
@@ -172,7 +172,7 @@ class ot {
   }
   remove() {
     var t, r, n;
-    ((r = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : r.id) == this.id && u(this.parentItem, A, h(this, g)), this.previousItem && u(this.previousItem, g, h(this, g)), this.nextItem && u(this.nextItem, I, h(this, I)), u(this, C, void 0), u(this, g, void 0), u(this, I, void 0), (n = h(this, b)) == null || n.remove();
+    ((r = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : r.id) == this.id && h(this.parentItem, A, u(this, p)), this.previousItem && h(this.previousItem, p, u(this, p)), this.nextItem && h(this.nextItem, I, u(this, I)), h(this, C, void 0), h(this, p, void 0), h(this, I, void 0), (n = u(this, b)) == null || n.remove();
   }
   append(t) {
     if (t.id == this.id)
@@ -181,24 +181,24 @@ class ot {
       throw new Error("Cannot append a parent into one of its children");
     t.remove();
     const r = this.firstChildItem && [this.firstChildItem, ...z(this.firstChildItem)], n = r == null ? void 0 : r.slice(-1)[0];
-    u(t, C, this), n ? n.after(t) : (u(this, A, t), this.target.append(t.target));
+    h(t, C, this), n ? n.after(t) : (h(this, A, t), this.target.append(t.target));
   }
   before(t) {
     if (t.id == this.id)
       throw new Error("Cannot append item before itself");
     if (t.target.contains(this.target))
       throw new Error("Cannot append a parent into one of its children");
-    t.remove(), u(t, I, this.previousItem), this.previousItem ? u(this.previousItem, g, t) : this.parentItem && u(this.parentItem, A, t), u(t, C, this.parentItem), u(t, g, this), u(this, I, t), this.target.before(t.target);
+    t.remove(), h(t, I, this.previousItem), this.previousItem ? h(this.previousItem, p, t) : this.parentItem && h(this.parentItem, A, t), h(t, C, this.parentItem), h(t, p, this), h(this, I, t), this.target.before(t.target);
   }
   after(t) {
     if (t.id == this.id)
       throw new Error("Cannot append item before itself");
     if (t.target.contains(this.target))
       throw new Error("Cannot append a parent into one of its children");
-    t.remove(), u(t, g, this.nextItem), this.nextItem && u(this.nextItem, I, t), u(t, C, this.parentItem), u(t, I, this), u(this, g, t), this.target.after(t.target);
+    t.remove(), h(t, p, this.nextItem), this.nextItem && h(this.nextItem, I, t), h(t, C, this.parentItem), h(t, I, this), h(this, p, t), this.target.after(t.target);
   }
 }
-D = new WeakMap(), S = new WeakMap(), C = new WeakMap(), A = new WeakMap(), g = new WeakMap(), I = new WeakMap(), b = new WeakMap();
+D = new WeakMap(), S = new WeakMap(), C = new WeakMap(), A = new WeakMap(), p = new WeakMap(), I = new WeakMap(), b = new WeakMap();
 function F(e, t, r) {
   const n = e.find((i) => i.parentId == t && i.previousId == r);
   return n ? (e = e.filter((i) => i.id != n.id), 1 + F(e, n.id, void 0) + F(e, t, n.id)) : 0;
@@ -229,40 +229,40 @@ class st {
   constructor(t) {
     l(this, O, void 0);
     l(this, a, void 0);
-    u(this, O, t);
+    h(this, O, t);
   }
   get rootItem() {
-    return h(this, a);
+    return u(this, a);
   }
   set rootItem(t) {
-    u(this, a, t);
+    h(this, a, t);
   }
   get activeItem() {
     if (document.activeElement != null)
-      return Q(h(this, a), document.activeElement);
+      return Q(u(this, a), document.activeElement);
   }
   get value() {
-    return R(h(this, a));
+    return R(u(this, a));
   }
   set value(t) {
     if (W(t), Y(t).length != t.length)
       throw new Error("Cannot set value, invalid linked list");
-    const n = h(this, a);
+    const n = u(this, a);
     t.forEach((i, o) => {
-      this.upsert(i), o == 0 && (h(this, O).replaceChildren(h(this, a).target), n == null || n.remove());
+      this.upsert(i), o == 0 && (u(this, O).replaceChildren(u(this, a).target), n == null || n.remove());
     });
   }
   upsert(t) {
-    u(this, a, X(t, h(this, a), () => this.createItem(t.type, t.id, t.data)));
+    h(this, a, X(t, u(this, a), () => this.createItem(t.type, t.id, t.data)));
   }
   getItemById(t) {
-    return B(h(this, a), t);
+    return B(u(this, a), t);
   }
   deleteItemById(t) {
     var r, n;
-    if (t == h(this, a).id) {
+    if (t == u(this, a).id) {
       const i = J(this.rootItem);
-      (r = this.getItemById(t)) == null || r.remove(), u(this, a, i);
+      (r = this.getItemById(t)) == null || r.remove(), h(this, a, i);
     } else
       (n = this.getItemById(t)) == null || n.remove();
   }
@@ -272,10 +272,10 @@ var P;
 class dt {
   constructor(t) {
     l(this, P, void 0);
-    u(this, P, t);
+    h(this, P, t);
   }
   get context() {
-    return h(this, P);
+    return u(this, P);
   }
 }
 P = new WeakMap();
@@ -297,11 +297,11 @@ const Tt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   validateList: W
 }, Symbol.toStringTag, { value: "Module" }));
 let N;
-const ht = new Uint8Array(16);
-function ut() {
+const ut = new Uint8Array(16);
+function ht() {
   if (!N && (N = typeof crypto < "u" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto), !N))
     throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
-  return N(ht);
+  return N(ut);
 }
 const f = [];
 for (let e = 0; e < 256; ++e)
@@ -316,7 +316,7 @@ function ft(e, t, r) {
   if (q.randomUUID && !t && !e)
     return q.randomUUID();
   e = e || {};
-  const n = e.random || (e.rng || ut)();
+  const n = e.random || (e.rng || ht)();
   return n[6] = n[6] & 15 | 64, n[8] = n[8] & 63 | 128, ct(n);
 }
 function Z() {
@@ -329,11 +329,11 @@ class Mt {
   }
   On(t, r) {
     let n = Z();
-    return h(this, w)[t] = (h(this, w)[t] ?? []).concat({ Id: n, Execute: r }), n;
+    return u(this, w)[t] = (u(this, w)[t] ?? []).concat({ Id: n, Execute: r }), n;
   }
   Once(t, r, n) {
     var i = Z();
-    return h(this, w)[t] = (h(this, w)[t] ?? []).concat({
+    return u(this, w)[t] = (u(this, w)[t] ?? []).concat({
       Id: i,
       Execute: (o) => {
         n && n(o) != !0 || (this.Off(t, i), r(o));
@@ -342,13 +342,13 @@ class Mt {
   }
   Off(t, r) {
     var i;
-    const n = (i = h(this, w)[t]) == null ? void 0 : i.findIndex((o) => o.Id == r);
-    n >= 0 && h(this, w)[t].splice(n, 1);
+    const n = (i = u(this, w)[t]) == null ? void 0 : i.findIndex((o) => o.Id == r);
+    n >= 0 && u(this, w)[t].splice(n, 1);
   }
   Emit(t, r) {
     var i;
     var n = { preventDefault: !1 };
-    return (i = h(this, w)[t]) == null || i.slice().forEach((o) => o.Execute({
+    return (i = u(this, w)[t]) == null || i.slice().forEach((o) => o.Execute({
       ...r,
       preventDefault() {
         n.preventDefault = !0;
@@ -380,21 +380,21 @@ function at(e) {
     r < t.length - 1 && t.splice(r, t.length - r), t.push({
       Undo: () => d.Undo(),
       BeforeUndo: () => {
-        var p;
-        return (p = d.BeforeUndo) == null ? void 0 : p.call(d);
+        var g;
+        return (g = d.BeforeUndo) == null ? void 0 : g.call(d);
       },
       OnUndo: () => {
-        var p;
-        return (p = d.OnUndo) == null ? void 0 : p.call(d);
+        var g;
+        return (g = d.OnUndo) == null ? void 0 : g.call(d);
       },
       Redo: () => d.Action(),
       BeforeRedo: () => {
-        var p;
-        return (p = d.BeforeAction) == null ? void 0 : p.call(d);
+        var g;
+        return (g = d.BeforeAction) == null ? void 0 : g.call(d);
       },
       OnRedo: () => {
-        var p;
-        return (p = d.OnAction) == null ? void 0 : p.call(d);
+        var g;
+        return (g = d.OnAction) == null ? void 0 : g.call(d);
       }
     }), r = t.length - 1, (v = d.BeforeAction) == null || v.call(d), d.Action(), (m = d.OnAction) == null || m.call(d);
   }
@@ -470,7 +470,7 @@ class Lt {
     t.items.forEach((r) => ({ Insert: this.Insert, Update: this.Update, Delete: this.Delete })[r.Action](r.Data));
   }
 }
-function gt(e) {
+function pt(e) {
   return e.reduce(
     (t, r) => {
       const n = t.findIndex(
@@ -499,10 +499,10 @@ class Nt {
     l(this, M, void 0);
     l(this, y, []);
     l(this, U, void 0);
-    u(this, M, t);
+    h(this, M, t);
   }
   registerShortcut(t, r, n, i) {
-    h(this, T).push({
+    u(this, T).push({
       target: t,
       shortcut: G(r),
       action: n,
@@ -512,26 +512,26 @@ class Nt {
     });
   }
   handleKeystroke(t, r) {
-    h(this, y).push(G(r));
-    const n = h(this, y).join(",");
-    let i = gt(
-      h(this, T).filter(
+    u(this, y).push(G(r));
+    const n = u(this, y).join(",");
+    let i = pt(
+      u(this, T).filter(
         (o) => o.shortcut.startsWith(n) && o.disabled == !1 && o.target.contains(t)
       )
     );
-    if (clearTimeout(h(this, U)), i.length == 0) {
+    if (clearTimeout(u(this, U)), i.length == 0) {
       L(this, E, k).call(this);
       return;
     }
-    i.length == 1 ? (L(this, E, k).call(this), i[0].action()) : u(this, U, setTimeout(() => {
+    i.length == 1 ? (L(this, E, k).call(this), i[0].action()) : h(this, U, setTimeout(() => {
       i = i.filter((o) => o.shortcut == n), L(this, E, k).call(this), i.length == 1 && i[0].action();
-    }, h(this, M)));
+    }, u(this, M)));
   }
 }
 T = new WeakMap(), M = new WeakMap(), E = new WeakSet(), k = function() {
-  clearTimeout(h(this, U)), u(this, y, []);
+  clearTimeout(u(this, U)), h(this, y, []);
 }, y = new WeakMap(), U = new WeakMap();
-function pt() {
+function gt() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("width", "100%"), e.setAttribute("height", "100%"), e.setAttribute("viewBox", "0 0 24 24"), e.setAttribute("fill", "none");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -544,7 +544,7 @@ function It() {
   return t.setAttribute("d", "M6 9L12 15L18 9"), t.setAttribute("stroke", "currentColor"), t.setAttribute("stroke-width", "2"), t.setAttribute("stroke-linecap", "round"), t.setAttribute("stroke-linejoin", "round"), e.appendChild(t), e;
 }
 const wt = {
-  "arrow-chevron-right": pt,
+  "arrow-chevron-right": gt,
   "arrow-chevron-down": It
 };
 function vt() {
@@ -638,7 +638,7 @@ function _(e, t, r) {
   return e = document.createElement("div"), e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", (n) => {
     var i;
     t.contains(n.target) || (t.remove(), (i = r.onBacksplashClick) == null || i.call(r));
-  }), e.append(t), t.remove = /* @__PURE__ */ ((n) => function() {
+  }), document.body.append(e), e.append(t), t.remove = /* @__PURE__ */ ((n) => function() {
     n.call(this), e == null || e.remove();
   })(t.remove), e;
 }

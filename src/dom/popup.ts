@@ -136,6 +136,7 @@ function addBacksplash(backsplash: HTMLElement | undefined, element: HTMLElement
         options!.onBacksplashClick?.()
     })
 
+    document.body.append(backsplash);
     backsplash.append(element)
 
     element.remove = ((baseRemove) => function () {
