@@ -129,12 +129,14 @@ function addBacksplash(backsplash: HTMLElement | undefined, element: HTMLElement
     // backsplash.className = "bg-zinc-900/10";
     backsplash.tabIndex = -1
 
-    backsplash.addEventListener("click", () => {
+    backsplash.addEventListener("click", event => {
+        if (element.contains(event.target as HTMLElement)) return;
+
         element.remove()
         options!.onBacksplashClick?.()
     })
 
-    element.before(backsplash)
+    backsplash.append(element)
 
     element.remove = ((baseRemove) => function () {
         //@ts-ignore

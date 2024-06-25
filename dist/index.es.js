@@ -635,10 +635,10 @@ function Dt(e, t, r, n) {
   }
 }
 function _(e, t, r) {
-  return e = document.createElement("div"), e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", () => {
-    var n;
-    t.remove(), (n = r.onBacksplashClick) == null || n.call(r);
-  }), t.before(e), t.remove = /* @__PURE__ */ ((n) => function() {
+  return e = document.createElement("div"), e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", (n) => {
+    var i;
+    t.contains(n.target) || (t.remove(), (i = r.onBacksplashClick) == null || i.call(r));
+  }), e.append(t), t.remove = /* @__PURE__ */ ((n) => function() {
     n.call(this), e == null || e.remove();
   })(t.remove), e;
 }
