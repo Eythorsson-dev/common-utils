@@ -32,12 +32,14 @@ function setOptions(options?: PopupOptions): PopupOptions {
     }
 }
 
+type ElementRect = { top: number; left: number; height: number; width: number };
+
 /**
  *
  * @param element The element to position
  * @param target The target of which we wish to position our {element}
  */
-export function popup(element: HTMLElement, target: HTMLElement, options?: PopupOptions) {
+export function popupRelative(element: HTMLElement, target: HTMLElement, options?: PopupOptions) {
     options = setOptions(options)
 
     const tRect = target.getBoundingClientRect();
@@ -72,7 +74,45 @@ export function popup(element: HTMLElement, target: HTMLElement, options?: Popup
             clearInterval(interval);
 
             backsplash?.remove();
-            popup(element, target, options);
+            popupRelative(element, target, options);
+        }, 100);
+    }
+}
+
+export function popupPosition(element: HTMLElement, x: number, y: number, options?: PopupOptions) {
+    options = setOptions(options)
+
+    const rect = { top: y, left: x, height: 0, width: 0 };
+
+
+    // THE ELEMENT NEEDS TO BE ON THE BODY.
+    positionElement(element, options, rect);
+
+    // ADD A BACKSPLASH TO PREVENT THE USER FROM SCROLLING THE BACKGROUND ELEMENTS
+    let backsplash: HTMLElement | undefined;
+    if (options.useBacksplash) {
+        backsplash = addBacksplash(backsplash, element, options)
+    }
+
+
+    // AUTO REPOSITION
+    if (options?.autoReposition) {
+        const bRect = document.body.getBoundingClientRect();
+
+        const interval = setInterval(() => {
+            if (!document.body.contains(element)) {
+                clearInterval(interval);
+                return;
+            }
+
+            const _bRect = document.body.getBoundingClientRect();
+            // TODO: CHECK BASED ON THE PopupOption ALIGN TYPE...
+            if (_bRect.top == bRect.top && _bRect.left == bRect.left) return;
+
+            clearInterval(interval);
+
+            backsplash?.remove();
+            popupPosition(element, x, y, options);
         }, 100);
     }
 }
@@ -105,13 +145,17 @@ function addBacksplash(backsplash: HTMLElement | undefined, element: HTMLElement
     return backsplash
 }
 
-function positionElement(element: HTMLElement, options: PopupOptions, targetRect: { top: number; left: number; height: number; width: number }) {
+function positionElement(
+    element: HTMLElement,
+    options: PopupOptions,
+    targetRect: ElementRect
+) {
     if (!document.contains(element))
         document.body.append(element)
 
     element.style.setProperty("position", "absolute")
 
-    const eRect = element.getBoundingClientRect()
+    const eRect = element.getBoundingClientRect();
 
     const { bottom, top } = alignVertically(options, targetRect, eRect)
     const { left, right } = alignHorizontally(options, targetRect, eRect)
@@ -123,7 +167,11 @@ function positionElement(element: HTMLElement, options: PopupOptions, targetRect
     else if (right > 0) element.style.setProperty("right", right + "px")
 }
 
-function alignHorizontally(options: PopupOptions, targetRect: { top: number; left: number; height: number; width: number }, eRect: DOMRect) {
+function alignHorizontally(
+    options: PopupOptions,
+    targetRect: ElementRect,
+    eRect: DOMRect
+) {
     let left = 0, right = 0;
 
     if ([PopupAlign.START, PopupAlign.END, PopupAlign.CENTER].includes(options.align!)) {
@@ -148,7 +196,11 @@ function alignHorizontally(options: PopupOptions, targetRect: { top: number; lef
     return { left, right }
 }
 
-function alignVertically(options: PopupOptions, targetRect: { top: number; left: number; height: number; width: number }, eRect: DOMRect) {
+function alignVertically(
+    options: PopupOptions,
+    targetRect: ElementRect,
+    eRect: DOMRect
+) {
     let top = 0, bottom = 0;
 
     if ([PopupDirection.TOP, PopupDirection.BOTTOM].includes(options.direction!)) {
@@ -157,7 +209,7 @@ function alignVertically(options: PopupOptions, targetRect: { top: number; left:
 
         var _direction = options.direction
 
-        // VALIDATE THAT THERE IS SPLACE FOR THE ELEMENT.
+        // VALIDATE THAT THERE IS SPACE FOR THE ELEMENT.
         if (_direction == PopupDirection.BOTTOM && mBottom < eRect.height && mTop > mBottom) _direction = PopupDirection.TOP
         else if (_direction == PopupDirection.TOP && mTop < eRect.height && mTop < mBottom) _direction = PopupDirection.BOTTOM
         else if (mTop <= 0 && mBottom <= 0 && mTop > mBottom) _direction = PopupDirection.TOP
@@ -169,7 +221,7 @@ function alignVertically(options: PopupOptions, targetRect: { top: number; left:
         if (options.popOver && _direction == PopupDirection.TOP) bottom -= targetRect.height
         else if (options.popOver) top -= targetRect.height
     }
-    else throw "Invalid PupupDirection: " + options.direction
+    else throw "Invalid PopupDirection: " + options.direction
     return { bottom, top }
 }
 
