@@ -14,7 +14,7 @@ export interface PopupOptions {
     autoReposition?: boolean;
     popOver?: boolean;
     useBacksplash?: boolean;
-    backskpachClassName?: string;
+    backsplachClassName?: string;
     onBacksplashClick?(): void;
     closeOnEsc?: boolean;
 }

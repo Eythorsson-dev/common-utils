@@ -644,7 +644,7 @@ function Ot(e, t, r, n) {
   };
 }
 function _(e, t, r) {
-  return e = document.createElement("div"), e.className = r.backskpachClassName ?? "", e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", (n) => {
+  return e = document.createElement("div"), e.className = r.backsplachClassName ?? "", e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", (n) => {
     var i;
     t.contains(n.target) || (t.remove(), (i = r.onBacksplashClick) == null || i.call(r));
   }), r.closeOnEsc && e.addEventListener("keydown", (n) => {
