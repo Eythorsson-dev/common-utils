@@ -138,6 +138,14 @@ function addBacksplash(backsplash: HTMLElement | undefined, element: HTMLElement
         options!.onBacksplashClick?.()
     })
 
+    if (options.closeOnEsc) {
+        backsplash.addEventListener("keydown", event => {
+            if (event.key != "Escape") return
+            element.remove();
+            event.stopPropagation();
+        });
+    }
+    
     document.body.append(backsplash);
     backsplash.append(element)
 
@@ -172,7 +180,11 @@ function positionElement(
     else if (right > 0) element.style.setProperty("right", right + "px")
 
     if (options.closeOnEsc) {
-        element.addEventListener("keydown", event => event.key == "Escape" && element.remove());
+        element.addEventListener("keydown", event => {
+            if (event.key != "Escape") return
+            element.remove();
+            event.stopPropagation();
+        });
     }
 }
 
