@@ -9,7 +9,7 @@ var u = (e, t, r) => (V(e, t, "read from private field"), r ? r.call(e) : t.get(
     throw TypeError("Cannot add the same private member more than once");
   t instanceof WeakSet ? t.add(e) : t.set(e, r);
 }, h = (e, t, r, n) => (V(e, t, "write to private field"), n ? n.call(e, r) : t.set(e, r), r);
-var M = (e, t, r) => (V(e, t, "access private method"), r);
+var N = (e, t, r) => (V(e, t, "access private method"), r);
 function z(e) {
   return e.nextItem ? [e.nextItem, ...z(e.nextItem)] : [];
 }
@@ -296,12 +296,12 @@ const Tt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   upsertAndReturnRoot: X,
   validateList: W
 }, Symbol.toStringTag, { value: "Module" }));
-let N;
+let M;
 const ut = new Uint8Array(16);
 function ht() {
-  if (!N && (N = typeof crypto < "u" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto), !N))
+  if (!M && (M = typeof crypto < "u" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto), !M))
     throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
-  return N(ut);
+  return M(ut);
 }
 const f = [];
 for (let e = 0; e < 256; ++e)
@@ -416,7 +416,7 @@ function at(e) {
     CanRedo: d
   };
 }
-class Mt {
+class Nt {
   constructor(t) {
     E(this, "UndoAPI");
     E(this, "BeforeChanged");
@@ -492,7 +492,7 @@ function G(e) {
   ).join(",");
 }
 var T, L, A, H, y, U;
-class Nt {
+class Mt {
   constructor(t = 1e3) {
     l(this, A);
     l(this, T, []);
@@ -520,11 +520,11 @@ class Nt {
       )
     );
     if (clearTimeout(u(this, U)), i.length == 0) {
-      M(this, A, H).call(this);
+      N(this, A, H).call(this);
       return;
     }
-    i.length == 1 ? (M(this, A, H).call(this), i[0].action()) : h(this, U, setTimeout(() => {
-      i = i.filter((o) => o.shortcut == n), M(this, A, H).call(this), i.length == 1 && i[0].action();
+    i.length == 1 ? (N(this, A, H).call(this), i[0].action()) : h(this, U, setTimeout(() => {
+      i = i.filter((o) => o.shortcut == n), N(this, A, H).call(this), i.length == 1 && i[0].action();
     }, u(this, L)));
   }
 }
@@ -644,7 +644,7 @@ function Ot(e, t, r, n) {
   };
 }
 function _(e, t, r) {
-  return e = document.createElement("div"), e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", (n) => {
+  return e = document.createElement("div"), e.className = r.backskpachClassName ?? "", e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", (n) => {
     var i;
     t.contains(n.target) || (t.remove(), (i = r.onBacksplashClick) == null || i.call(r));
   }), r.closeOnEsc && e.addEventListener("keydown", (n) => {
@@ -703,10 +703,10 @@ function zt(e, t, r, n = 200, i = 300) {
 }
 export {
   Lt as EventManager,
-  Nt as KeyboardShortcut,
+  Mt as KeyboardShortcut,
   Ut as PopupAlign,
   yt as PopupDirection,
-  Mt as SaveManager,
+  Nt as SaveManager,
   Z as generateUId,
   kt as getIcon,
   G as getShortcutString,

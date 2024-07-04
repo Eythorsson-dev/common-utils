@@ -132,6 +132,7 @@ export function popupPosition(element: HTMLElement, x: number, y: number, option
 
 function addBacksplash(backsplash: HTMLElement | undefined, element: HTMLElement, options: PopupOptions) {
     backsplash = document.createElement("div")
+    backsplash.className = options.backskpachClassName ?? "";
     backsplash.style.setProperty("position", "absolute")
     backsplash.style.setProperty("top", "0")
     backsplash.style.setProperty("right", "0")
