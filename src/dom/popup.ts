@@ -18,6 +18,7 @@ export interface PopupOptions {
     useBacksplash?: boolean
     backskpachClassName?: string
     onBacksplashClick?(): void
+    closeOnEsc?: boolean
 }
 
 function setOptions(options?: PopupOptions): PopupOptions {
@@ -28,6 +29,7 @@ function setOptions(options?: PopupOptions): PopupOptions {
         autoReposition: true,
         popOver: false,
         useBacksplash: true,
+        closeOnEsc: true,
         ...options
     }
 }
@@ -168,6 +170,10 @@ function positionElement(
 
     if (left > 0) element.style.setProperty("left", left + "px")
     else if (right > 0) element.style.setProperty("right", right + "px")
+
+    if (options.closeOnEsc) {
+        element.addEventListener("keydown", event => event.key == "Escape" && element.remove());
+    }
 }
 
 function alignHorizontally(

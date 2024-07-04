@@ -16,6 +16,7 @@ export interface PopupOptions {
     useBacksplash?: boolean;
     backskpachClassName?: string;
     onBacksplashClick?(): void;
+    closeOnEsc?: boolean;
 }
 /**
  *
