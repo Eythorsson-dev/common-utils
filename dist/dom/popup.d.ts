@@ -23,8 +23,14 @@ export interface PopupOptions {
  * @param element The element to position
  * @param target The target of which we wish to position our {element}
  */
-export declare function popupRelative(element: HTMLElement, target: HTMLElement, options?: PopupOptions): void;
-export declare function popupPosition(element: HTMLElement, x: number, y: number, options?: PopupOptions): void;
+export declare function popupRelative(element: HTMLElement, target: HTMLElement, options?: PopupOptions): {
+    element: HTMLElement;
+    backsplash: HTMLElement | undefined;
+};
+export declare function popupPosition(element: HTMLElement, x: number, y: number, options?: PopupOptions): {
+    element: HTMLElement;
+    backsplash: HTMLElement | undefined;
+};
 /**
  * @returns The popup container
  */

@@ -620,6 +620,10 @@ function Bt(e, t, r) {
       d.top == n.top && d.left == n.left || (clearInterval(o), i == null || i.remove(), Bt(e, t, r));
     }, 100);
   }
+  return {
+    element: e,
+    backsplash: i
+  };
 }
 function Ot(e, t, r, n) {
   n = $(n), tt(e, n, { top: r, left: t, height: 0, width: 0 });
@@ -634,6 +638,10 @@ function Ot(e, t, r, n) {
       s.top == d.top && s.left == d.left || (clearInterval(c), o == null || o.remove(), Ot(e, t, r, n));
     }, 100);
   }
+  return {
+    element: e,
+    backsplash: o
+  };
 }
 function _(e, t, r) {
   return e = document.createElement("div"), e.style.setProperty("position", "absolute"), e.style.setProperty("top", "0"), e.style.setProperty("right", "0"), e.style.setProperty("bottom", "0"), e.style.setProperty("left", "0"), e.style.setProperty("z-index", "10"), e.tabIndex = -1, e.addEventListener("click", (n) => {

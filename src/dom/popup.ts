@@ -79,6 +79,11 @@ export function popupRelative(element: HTMLElement, target: HTMLElement, options
             popupRelative(element, target, options);
         }, 100);
     }
+
+    return {
+        element,
+        backsplash
+    }
 }
 
 export function popupPosition(element: HTMLElement, x: number, y: number, options?: PopupOptions) {
@@ -117,6 +122,11 @@ export function popupPosition(element: HTMLElement, x: number, y: number, option
             popupPosition(element, x, y, options);
         }, 100);
     }
+
+    return {
+        element,
+        backsplash
+    }
 }
 
 
@@ -145,7 +155,7 @@ function addBacksplash(backsplash: HTMLElement | undefined, element: HTMLElement
             event.stopPropagation();
         });
     }
-    
+
     document.body.append(backsplash);
     backsplash.append(element)
 
