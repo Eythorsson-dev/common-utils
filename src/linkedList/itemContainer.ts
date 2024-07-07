@@ -40,7 +40,7 @@ export abstract class ItemContainerElement<
             throw new Error("Cannot set value, invalid linked list");
 
         const oldRoot = this.#rootItem;
-        items.forEach((item, index) => {
+        sortedList.forEach((item, index) => {
             this.upsert(item);
 
             if (index == 0) {

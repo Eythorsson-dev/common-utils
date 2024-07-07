@@ -9,7 +9,7 @@ var u = (e, t, r) => (V(e, t, "read from private field"), r ? r.call(e) : t.get(
     throw TypeError("Cannot add the same private member more than once");
   t instanceof WeakSet ? t.add(e) : t.set(e, r);
 }, h = (e, t, r, n) => (V(e, t, "write to private field"), n ? n.call(e, r) : t.set(e, r), r);
-var N = (e, t, r) => (V(e, t, "access private method"), r);
+var L = (e, t, r) => (V(e, t, "access private method"), r);
 function z(e) {
   return e.nextItem ? [e.nextItem, ...z(e.nextItem)] : [];
 }
@@ -245,10 +245,12 @@ class st {
     return R(u(this, a));
   }
   set value(t) {
-    if (W(t), Y(t).length != t.length)
+    W(t);
+    const r = Y(t);
+    if (r.length != t.length)
       throw new Error("Cannot set value, invalid linked list");
     const n = u(this, a);
-    t.forEach((i, o) => {
+    r.forEach((i, o) => {
       this.upsert(i), o == 0 && (u(this, S).replaceChildren(u(this, a).target), n == null || n.remove());
     });
   }
@@ -323,7 +325,7 @@ function Z() {
   return ft();
 }
 var w;
-class Lt {
+class Nt {
   constructor() {
     l(this, w, {});
   }
@@ -416,7 +418,7 @@ function at(e) {
     CanRedo: d
   };
 }
-class Nt {
+class Lt {
   constructor(t) {
     E(this, "UndoAPI");
     E(this, "BeforeChanged");
@@ -491,15 +493,15 @@ function G(e) {
     ].filter((r) => r).join("+")
   ).join(",");
 }
-var T, L, A, H, y, U;
+var T, N, A, H, y, U;
 class Mt {
   constructor(t = 1e3) {
     l(this, A);
     l(this, T, []);
-    l(this, L, void 0);
+    l(this, N, void 0);
     l(this, y, []);
     l(this, U, void 0);
-    h(this, L, t);
+    h(this, N, t);
   }
   registerShortcut(t, r, n, i) {
     u(this, T).push({
@@ -520,15 +522,15 @@ class Mt {
       )
     );
     if (clearTimeout(u(this, U)), i.length == 0) {
-      N(this, A, H).call(this);
+      L(this, A, H).call(this);
       return;
     }
-    i.length == 1 ? (N(this, A, H).call(this), i[0].action()) : h(this, U, setTimeout(() => {
-      i = i.filter((o) => o.shortcut == n), N(this, A, H).call(this), i.length == 1 && i[0].action();
-    }, u(this, L)));
+    i.length == 1 ? (L(this, A, H).call(this), i[0].action()) : h(this, U, setTimeout(() => {
+      i = i.filter((o) => o.shortcut == n), L(this, A, H).call(this), i.length == 1 && i[0].action();
+    }, u(this, N)));
   }
 }
-T = new WeakMap(), L = new WeakMap(), A = new WeakSet(), H = function() {
+T = new WeakMap(), N = new WeakMap(), A = new WeakSet(), H = function() {
   clearTimeout(u(this, U)), h(this, y, []);
 }, y = new WeakMap(), U = new WeakMap();
 function gt() {
@@ -702,11 +704,11 @@ function zt(e, t, r, n = 200, i = 300) {
   }));
 }
 export {
-  Lt as EventManager,
+  Nt as EventManager,
   Mt as KeyboardShortcut,
   Ut as PopupAlign,
   yt as PopupDirection,
-  Nt as SaveManager,
+  Lt as SaveManager,
   Z as generateUId,
   kt as getIcon,
   G as getShortcutString,
