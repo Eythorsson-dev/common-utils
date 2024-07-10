@@ -324,18 +324,18 @@ function ft(e, t, r) {
 function Z() {
   return ft();
 }
-var w;
+var v;
 class Nt {
   constructor() {
-    l(this, w, {});
+    l(this, v, {});
   }
   On(t, r) {
     let n = Z();
-    return u(this, w)[t] = (u(this, w)[t] ?? []).concat({ Id: n, Execute: r }), n;
+    return u(this, v)[t] = (u(this, v)[t] ?? []).concat({ Id: n, Execute: r }), n;
   }
   Once(t, r, n) {
     var i = Z();
-    return u(this, w)[t] = (u(this, w)[t] ?? []).concat({
+    return u(this, v)[t] = (u(this, v)[t] ?? []).concat({
       Id: i,
       Execute: (o) => {
         n && n(o) != !0 || (this.Off(t, i), r(o));
@@ -344,13 +344,13 @@ class Nt {
   }
   Off(t, r) {
     var i;
-    const n = (i = u(this, w)[t]) == null ? void 0 : i.findIndex((o) => o.Id == r);
-    n >= 0 && u(this, w)[t].splice(n, 1);
+    const n = (i = u(this, v)[t]) == null ? void 0 : i.findIndex((o) => o.Id == r);
+    n >= 0 && u(this, v)[t].splice(n, 1);
   }
   Emit(t, r) {
     var i;
     var n = { preventDefault: !1 };
-    return (i = u(this, w)[t]) == null || i.slice().forEach((o) => o.Execute({
+    return (i = u(this, v)[t]) == null || i.slice().forEach((o) => o.Execute({
       ...r,
       preventDefault() {
         n.preventDefault = !0;
@@ -358,27 +358,27 @@ class Nt {
     })), n;
   }
 }
-w = new WeakMap();
+v = new WeakMap();
 function at(e) {
   const t = [];
   var r = -1;
   function n() {
-    var v, m;
+    var w, m;
     if (!c())
       return;
     const s = t[r];
-    r--, (v = s.BeforeRedo) == null || v.call(s), s.Undo(), (m = s.OnUndo) == null || m.call(s);
+    r--, (w = s.BeforeRedo) == null || w.call(s), s.Undo(), (m = s.OnUndo) == null || m.call(s);
   }
   function i() {
-    var v, m;
+    var w, m;
     if (d()) {
       r++;
       var s = t[r];
-      (v = s.BeforeRedo) == null || v.call(s), s.Redo(), (m = s.OnRedo) == null || m.call(s);
+      (w = s.BeforeRedo) == null || w.call(s), s.Redo(), (m = s.OnRedo) == null || m.call(s);
     }
   }
   function o(s) {
-    var v, m;
+    var w, m;
     r < t.length - 1 && t.splice(r, t.length - r), t.push({
       Undo: () => s.Undo(),
       BeforeUndo: () => {
@@ -398,7 +398,7 @@ function at(e) {
         var g;
         return (g = s.OnAction) == null ? void 0 : g.call(s);
       }
-    }), r = t.length - 1, (v = s.BeforeAction) == null || v.call(s), s.Action(), (m = s.OnAction) == null || m.call(s);
+    }), r = t.length - 1, (w = s.BeforeAction) == null || w.call(s), s.Action(), (m = s.OnAction) == null || m.call(s);
   }
   function d() {
     return r < t.length - 1;
@@ -545,18 +545,18 @@ function It() {
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M6 9L12 15L18 9"), t.setAttribute("stroke", "currentColor"), t.setAttribute("stroke-width", "2"), t.setAttribute("stroke-linecap", "round"), t.setAttribute("stroke-linejoin", "round"), e.appendChild(t), e;
 }
-const wt = {
+const vt = {
   "arrow-chevron-right": gt,
   "arrow-chevron-down": It
 };
-function vt() {
+function wt() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("width", "100%"), e.setAttribute("height", "100%"), e.setAttribute("viewBox", "0 0 24 24"), e.setAttribute("fill", "none");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return t.setAttribute("d", "M14 2.26953V6.40007C14 6.96012 14 7.24015 14.109 7.45406C14.2049 7.64222 14.3578 7.7952 14.546 7.89108C14.7599 8.00007 15.0399 8.00007 15.6 8.00007H19.7305M16 13H8M16 17H8M10 9H8M14 2H8.8C7.11984 2 6.27976 2 5.63803 2.32698C5.07354 2.6146 4.6146 3.07354 4.32698 3.63803C4 4.27976 4 5.11984 4 6.8V17.2C4 18.8802 4 19.7202 4.32698 20.362C4.6146 20.9265 5.07354 21.3854 5.63803 21.673C6.27976 22 7.11984 22 8.8 22H15.2C16.8802 22 17.7202 22 18.362 21.673C18.9265 21.3854 19.3854 20.9265 19.673 20.362C20 19.7202 20 18.8802 20 17.2V8L14 2Z"), t.setAttribute("stroke", "currentColor"), t.setAttribute("stroke-width", "2"), t.setAttribute("stroke-linecap", "round"), t.setAttribute("stroke-linejoin", "round"), e.appendChild(t), e;
 }
 const mt = {
-  "file-document": vt
+  "file-document": wt
 };
 function Ct() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -582,17 +582,20 @@ const xt = {
   "text-underline": Et
 }, At = {
   ...xt,
-  ...wt,
+  ...vt,
   ...mt
 };
 function kt(e) {
   return At[e]();
 }
 function Ht(e, t) {
-  function r(n) {
-    e.contains(n.target) || (document.removeEventListener("click", r), t(n));
+  function r(i) {
+    e.contains(i.target) || (n(), t(i));
   }
-  document.addEventListener("click", r);
+  function n() {
+    document.removeEventListener("click", r);
+  }
+  return document.addEventListener("click", r), n;
 }
 var yt = /* @__PURE__ */ ((e) => (e.TOP = "top", e.BOTTOM = "bottom", e))(yt || {}), Ut = /* @__PURE__ */ ((e) => (e.START = "start", e.CENTER = "center", e.END = "end", e))(Ut || {});
 function $(e) {
