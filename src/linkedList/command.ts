@@ -1,7 +1,12 @@
+import { IconElement } from "../icon";
 
 
 export abstract class Command<TContext, TId> {
     abstract get id(): TId
+
+    abstract get name(): string
+
+    abstract get icon(): IconElement
 
     #context: TContext
     get context(): TContext { return this.#context }
