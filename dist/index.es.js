@@ -113,30 +113,31 @@ function X(e, t, r) {
   }
   return n.update(e.data), t;
 }
-var O, D, C, x, p, I, b;
+var S, O, C, x, g, I, b;
 class ot {
   constructor(t, r) {
+    l(this, S, void 0);
     l(this, O, void 0);
-    l(this, D, void 0);
     l(this, C, void 0);
     // set parentItem(item: TItem | undefined) { this.#parent = item; }
     l(this, x, void 0);
     // set firstChildItem(item: TItem | undefined) { this.#firstChild = item; }
-    l(this, p, void 0);
+    l(this, g, void 0);
     // set nextItem(item: TItem | undefined) { this.#next = item; }
     l(this, I, void 0);
     l(this, b, void 0);
-    if (((t == null ? void 0 : t.trim()) ?? "").length == 0)
+    var n, i;
+    if ((((n = t == null ? void 0 : t.toString()) == null ? void 0 : n.trim()) ?? "").length == 0)
       throw new Error("id is required");
-    if (((r == null ? void 0 : r.trim()) ?? "").length == 0)
+    if ((((i = r == null ? void 0 : r.toString()) == null ? void 0 : i.trim()) ?? "").length == 0)
       throw new Error("type is required");
-    h(this, O, t), h(this, D, r);
+    h(this, S, t), h(this, O, r);
   }
   get id() {
-    return u(this, O);
+    return u(this, S);
   }
   get type() {
-    return u(this, D);
+    return u(this, O);
   }
   get parentItem() {
     return u(this, C);
@@ -145,7 +146,7 @@ class ot {
     return u(this, x);
   }
   get nextItem() {
-    return u(this, p);
+    return u(this, g);
   }
   get previousItem() {
     return u(this, I);
@@ -172,7 +173,7 @@ class ot {
   }
   remove() {
     var t, r, n;
-    ((r = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : r.id) == this.id && h(this.parentItem, x, u(this, p)), this.previousItem && h(this.previousItem, p, u(this, p)), this.nextItem && h(this.nextItem, I, u(this, I)), h(this, C, void 0), h(this, p, void 0), h(this, I, void 0), (n = u(this, b)) == null || n.remove();
+    ((r = (t = this.parentItem) == null ? void 0 : t.firstChildItem) == null ? void 0 : r.id) == this.id && h(this.parentItem, x, u(this, g)), this.previousItem && h(this.previousItem, g, u(this, g)), this.nextItem && h(this.nextItem, I, u(this, I)), h(this, C, void 0), h(this, g, void 0), h(this, I, void 0), (n = u(this, b)) == null || n.remove();
   }
   append(t) {
     if (t.id == this.id)
@@ -188,17 +189,17 @@ class ot {
       throw new Error("Cannot append item before itself");
     if (t.target.contains(this.target))
       throw new Error("Cannot append a parent into one of its children");
-    t.remove(), h(t, I, this.previousItem), this.previousItem ? h(this.previousItem, p, t) : this.parentItem && h(this.parentItem, x, t), h(t, C, this.parentItem), h(t, p, this), h(this, I, t), this.target.before(t.target);
+    t.remove(), h(t, I, this.previousItem), this.previousItem ? h(this.previousItem, g, t) : this.parentItem && h(this.parentItem, x, t), h(t, C, this.parentItem), h(t, g, this), h(this, I, t), this.target.before(t.target);
   }
   after(t) {
     if (t.id == this.id)
       throw new Error("Cannot append item before itself");
     if (t.target.contains(this.target))
       throw new Error("Cannot append a parent into one of its children");
-    t.remove(), h(t, p, this.nextItem), this.nextItem && h(this.nextItem, I, t), h(t, C, this.parentItem), h(t, I, this), h(this, p, t), this.target.after(t.target);
+    t.remove(), h(t, g, this.nextItem), this.nextItem && h(this.nextItem, I, t), h(t, C, this.parentItem), h(t, I, this), h(this, g, t), this.target.after(t.target);
   }
 }
-O = new WeakMap(), D = new WeakMap(), C = new WeakMap(), x = new WeakMap(), p = new WeakMap(), I = new WeakMap(), b = new WeakMap();
+S = new WeakMap(), O = new WeakMap(), C = new WeakMap(), x = new WeakMap(), g = new WeakMap(), I = new WeakMap(), b = new WeakMap();
 function F(e, t, r) {
   const n = e.find((i) => i.parentId == t && i.previousId == r);
   return n ? (e = e.filter((i) => i.id != n.id), 1 + F(e, n.id, void 0) + F(e, t, n.id)) : 0;
@@ -224,12 +225,12 @@ function K(e, t, r) {
 function Y(e) {
   return W(e), K(e, void 0, void 0);
 }
-var S, a;
+var D, a;
 class st {
   constructor(t) {
-    l(this, S, void 0);
+    l(this, D, void 0);
     l(this, a, void 0);
-    h(this, S, t);
+    h(this, D, t);
   }
   get rootItem() {
     return u(this, a);
@@ -251,7 +252,7 @@ class st {
       throw new Error("Cannot set value, invalid linked list");
     const n = u(this, a);
     r.forEach((i, o) => {
-      this.upsert(i), o == 0 && (u(this, S).replaceChildren(u(this, a).target), n == null || n.remove());
+      this.upsert(i), o == 0 && (u(this, D).replaceChildren(u(this, a).target), n == null || n.remove());
     });
   }
   upsert(t) {
@@ -269,7 +270,7 @@ class st {
       (n = this.getItemById(t)) == null || n.remove();
   }
 }
-S = new WeakMap(), a = new WeakMap();
+D = new WeakMap(), a = new WeakMap();
 var P;
 class dt {
   constructor(t) {
@@ -382,21 +383,21 @@ function at(e) {
     r < t.length - 1 && t.splice(r, t.length - r), t.push({
       Undo: () => s.Undo(),
       BeforeUndo: () => {
-        var g;
-        return (g = s.BeforeUndo) == null ? void 0 : g.call(s);
+        var p;
+        return (p = s.BeforeUndo) == null ? void 0 : p.call(s);
       },
       OnUndo: () => {
-        var g;
-        return (g = s.OnUndo) == null ? void 0 : g.call(s);
+        var p;
+        return (p = s.OnUndo) == null ? void 0 : p.call(s);
       },
       Redo: () => s.Action(),
       BeforeRedo: () => {
-        var g;
-        return (g = s.BeforeAction) == null ? void 0 : g.call(s);
+        var p;
+        return (p = s.BeforeAction) == null ? void 0 : p.call(s);
       },
       OnRedo: () => {
-        var g;
-        return (g = s.OnAction) == null ? void 0 : g.call(s);
+        var p;
+        return (p = s.OnAction) == null ? void 0 : p.call(s);
       }
     }), r = t.length - 1, (w = s.BeforeAction) == null || w.call(s), s.Action(), (m = s.OnAction) == null || m.call(s);
   }
@@ -472,7 +473,7 @@ class Lt {
     t.items.forEach((r) => ({ Insert: this.Insert, Update: this.Update, Delete: this.Delete })[r.Action](r.Data));
   }
 }
-function pt(e) {
+function gt(e) {
   return e.reduce(
     (t, r) => {
       const n = t.findIndex(
@@ -516,7 +517,7 @@ class Mt {
   handleKeystroke(t, r) {
     u(this, y).push(G(r));
     const n = u(this, y).join(",");
-    let i = pt(
+    let i = gt(
       u(this, T).filter(
         (o) => o.shortcut.startsWith(n) && o.disabled == !1 && o.target.contains(t)
       )
@@ -533,7 +534,7 @@ class Mt {
 T = new WeakMap(), N = new WeakMap(), A = new WeakSet(), H = function() {
   clearTimeout(u(this, U)), h(this, y, []);
 }, y = new WeakMap(), U = new WeakMap();
-function gt() {
+function pt() {
   const e = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   e.setAttribute("width", "100%"), e.setAttribute("height", "100%"), e.setAttribute("viewBox", "0 0 24 24"), e.setAttribute("fill", "none");
   const t = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -546,7 +547,7 @@ function It() {
   return t.setAttribute("d", "M6 9L12 15L18 9"), t.setAttribute("stroke", "currentColor"), t.setAttribute("stroke-width", "2"), t.setAttribute("stroke-linecap", "round"), t.setAttribute("stroke-linejoin", "round"), e.appendChild(t), e;
 }
 const vt = {
-  "arrow-chevron-right": gt,
+  "arrow-chevron-right": pt,
   "arrow-chevron-down": It
 };
 function wt() {
@@ -630,7 +631,7 @@ function Bt(e, t, r) {
     backsplash: i
   };
 }
-function Ot(e, t, r, n) {
+function St(e, t, r, n) {
   n = $(n), tt(e, n, { top: r, left: t, height: 0, width: 0 });
   let o;
   if (n.useBacksplash && (o = _(o, e, n)), n != null && n.autoReposition) {
@@ -640,7 +641,7 @@ function Ot(e, t, r, n) {
         return;
       }
       const s = document.body.getBoundingClientRect();
-      s.top == d.top && s.left == d.left || (clearInterval(c), o == null || o.remove(), Ot(e, t, r, n));
+      s.top == d.top && s.left == d.left || (clearInterval(c), o == null || o.remove(), St(e, t, r, n));
     }, 100);
   }
   return {
@@ -660,12 +661,12 @@ function _(e, t, r) {
 }
 function tt(e, t, r) {
   document.contains(e) || document.body.append(e), e.style.setProperty("position", "absolute");
-  const n = e.getBoundingClientRect(), { bottom: i, top: o } = St(t, r, n), { left: d, right: c } = Dt(t, r, n);
+  const n = e.getBoundingClientRect(), { bottom: i, top: o } = Dt(t, r, n), { left: d, right: c } = Ot(t, r, n);
   o > 0 ? e.style.setProperty("top", o + "px") : i > 0 && e.style.setProperty("bottom", i + "px"), d > 0 ? e.style.setProperty("left", d + "px") : c > 0 && e.style.setProperty("right", c + "px"), t.closeOnEsc && e.addEventListener("keydown", (s) => {
     s.key == "Escape" && (e.remove(), s.stopPropagation());
   });
 }
-function Dt(e, t, r) {
+function Ot(e, t, r) {
   let n = 0, i = 0;
   if ([
     "start",
@@ -680,7 +681,7 @@ function Dt(e, t, r) {
     throw "Invalid PopupAlign: " + e.align;
   return { left: n, right: i };
 }
-function St(e, t, r) {
+function Dt(e, t, r) {
   let n = 0, i = 0;
   if ([
     "top",
@@ -719,7 +720,7 @@ export {
   zt as onHover,
   Ht as onceClickOutside,
   Rt as popupContainer,
-  Ot as popupPosition,
+  St as popupPosition,
   Bt as popupRelative
 };
 //# sourceMappingURL=index.es.js.map

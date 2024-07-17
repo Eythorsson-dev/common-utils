@@ -190,8 +190,8 @@ export abstract class ItemElement<TData, TItem extends ItemElement<TData, TItem>
     }
 
     constructor(id: string, type: string) {
-        if ((id?.trim() ?? "").length == 0) throw new Error("id is required");
-        if ((type?.trim() ?? "").length == 0) throw new Error("type is required");
+        if ((id?.toString()?.trim() ?? "").length == 0) throw new Error("id is required");
+        if ((type?.toString()?.trim() ?? "").length == 0) throw new Error("type is required");
 
         this.#id = id
         this.#type = type
